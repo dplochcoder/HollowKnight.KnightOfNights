@@ -4,3 +4,7 @@
 
 /.vs
 /KnightOfNights/Unity/Assets/Assemblies/**.dll
+/BuldScript/bin/Debug/net472
+/BuldScript/obj
+/UnityScriptShims/bin/Debug/net472
+/UnityScriptShims/obj
