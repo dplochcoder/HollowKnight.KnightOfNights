@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.SharedLib
@@ -13,20 +12,6 @@ namespace KnightOfNights.Scripts.SharedLib
         public Shim(Type baseType = null)
         {
             this.baseType = baseType ?? typeof(MonoBehaviour);
-        }
-    }
-
-    [AttributeUsage(AttributeTargets.Class)]
-    internal class ShimPreload : Attribute
-    {
-        public readonly string[] names;
-
-        public ShimPreload(params string[] names) => this.names = names;
-
-        public List<string> GetNames(Type baseType)
-        {
-            if (names.Length > 0) return new List<string>(names);
-            else return new List<string>(new string[] { baseType.Name });
         }
     }
 

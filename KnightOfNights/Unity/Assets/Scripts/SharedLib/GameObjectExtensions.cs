@@ -1,5 +1,4 @@
-﻿using KnightOfNights.Scripts.SharedLib.Geom;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -88,28 +87,6 @@ namespace KnightOfNights.Scripts.SharedLib
                 }
             }
             else throw new ArgumentException($"Unknown collider type: {self.GetType()}");
-        }
-
-        public static IEnumerable<LineSegment2> EnumerateLineSegemnts(this Collider2D self)
-        {
-            bool first = true;
-            Vector2 firstPoint = Vector2.zero;
-            Vector2 prevPoint = Vector2.zero;
-            foreach (var point in self.EnumeratePoints())
-            {
-                if (first)
-                {
-                    firstPoint = point;
-                    prevPoint = point;
-                    first = false;
-                    continue;
-                }
-
-                yield return LineSegment2.FromPoints(point, prevPoint);
-                prevPoint = point;
-            }
-
-            if (!first) yield return LineSegment2.FromPoints(prevPoint, firstPoint);
         }
 
         public static T GetOrAddComponent<T>(this GameObject self) where T : Component => self.GetComponent<T>() ?? self.AddComponent<T>();

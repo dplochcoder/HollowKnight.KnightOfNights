@@ -20,27 +20,6 @@
     <ExportDir>bin\Publish</ExportDir>
   </PropertyGroup>
   <Import Project="../LocalOverrides.targets" Condition="Exists('../LocalOverrides.targets')" />
-  <Target Name="CopyMod" AfterTargets="PostBuildEvent">
-    <ItemGroup>
-      <OutputFiles Include="$(TargetPath)" />
-      <OutputFiles Include="$(TargetDir)/$(TargetName).pdb" />
-    </ItemGroup>
-    <RemoveDir Directories="$(ExportDir)/" />
-    <MakeDir Directories="$(ExportDir)/" />
-    <MakeDir Directories="$(ExportDir)/zip/" />
-    <MakeDir Condition="!Exists('$(HollowKnightRefs)/Mods/$(TargetName)/')" Directories="$(HollowKnightRefs)/Mods/$(TargetName)/" />
-    <Copy SourceFiles="@(OutputFiles)" DestinationFolder="$(HollowKnightRefs)/Mods/$(TargetName)/" />
-    <Copy SourceFiles="$(SolutionDir)/README.md;@(OutputFiles)" DestinationFolder="$(ExportDir)/zip/" />
-    <ZipDirectory SourceDirectory="$(ExportDir)/zip/" DestinationFile="$(ExportDir)/$(TargetName).zip" />
-    <RemoveDir Directories="$(ExportDir)/zip/" />
-    <GetAssemblyIdentity AssemblyFiles="$(TargetPath)">
-      <Output TaskParameter="Assemblies" ItemName="Targets" />
-    </GetAssemblyIdentity>
-    <ItemGroup>
-      <VersionNumber Include="@(Targets->'%(Version)')" />
-    </ItemGroup>
-    <WriteLinesToFile File="$(ExportDir)/VERSION.txt" Lines="@(VersionNumber)" Overwrite="true" Encoding="UTF-8" />
-  </Target>
   <ItemGroup>
     <Compile Remove="Unity\**" />
     <Compile Remove="**/Generated.tmp/**" />
@@ -100,6 +79,15 @@
     </Reference>
     <Reference Include="PurenailCore">
       <HintPath>$(HollowKnightRefs)/Mods/PurenailCore/PurenailCore.dll</HintPath>
+    </Reference>
+    <Reference Include="RandomizerCore">
+      <HintPath>$(HollowKnightRefs)/Mods/RandomizerCore/RandomizerCore.dll</HintPath>
+    </Reference>
+    <Reference Include="RandomizerCore.Json">
+      <HintPath>$(HollowKnightRefs)/Mods/RandomizerCore.Json/RandomizerCore.Json.dll</HintPath>
+    </Reference>
+    <Reference Include="SFCore">
+      <HintPath>$(HollowKnightRefs)/Mods/SFCore/SFCore.dll</HintPath>
     </Reference>
     <Reference Include="System.ComponentModel.Composition">
       <HintPath>$(HollowKnightRefs)/System.ComponentModel.Composition.dll</HintPath>
@@ -341,5 +329,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="IC\" />
+    <Folder Include="Resources\Data\" />
   </ItemGroup>
 </Project>

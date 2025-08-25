@@ -1,3 +1,4 @@
+using KnightOfNights.Scripts.Proxy;
 using KnightOfNights.Scripts.SharedLib;
 using SFCore.MonoBehaviours;
 using System.Collections.Generic;

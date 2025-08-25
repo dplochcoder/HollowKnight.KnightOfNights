@@ -7,6 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "KnightOfNights", "KnightOfN
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Files", "Solution Files", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BuldScript", "..\BuldScript\BuldScript.csproj", "{B7C0E110-288F-4082-ADE8-6A8F1A09BDB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnityScriptShims", "..\UnityScriptShims\UnityScriptShims.csproj", "{DB9A1F16-AC90-4B9A-9333-0FB7FD048AD0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -17,6 +21,14 @@ Global
 		{31B5752F-5760-4D2D-9B4C-09C1A8DBCB8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{31B5752F-5760-4D2D-9B4C-09C1A8DBCB8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{31B5752F-5760-4D2D-9B4C-09C1A8DBCB8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B7C0E110-288F-4082-ADE8-6A8F1A09BDB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B7C0E110-288F-4082-ADE8-6A8F1A09BDB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B7C0E110-288F-4082-ADE8-6A8F1A09BDB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B7C0E110-288F-4082-ADE8-6A8F1A09BDB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DB9A1F16-AC90-4B9A-9333-0FB7FD048AD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DB9A1F16-AC90-4B9A-9333-0FB7FD048AD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DB9A1F16-AC90-4B9A-9333-0FB7FD048AD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DB9A1F16-AC90-4B9A-9333-0FB7FD048AD0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,6 +1,5 @@
 ItemChanger
-PurenailCore
 RandomizerCore.Json
-SFCore
+PurenailCore
 
 RandomizerCore
