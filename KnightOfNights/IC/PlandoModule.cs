@@ -1,6 +1,4 @@
 ﻿using ItemChanger;
-using ItemChanger.Extensions;
-using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.SharedLib;
 using System;
 using System.Linq;
