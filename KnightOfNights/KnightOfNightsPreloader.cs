@@ -17,6 +17,9 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Town, "_Managers/PlayMaker Unity 2D")]
     public GameObject? PlayMaker { get; private set; }
 
+    [Preload(SceneNames.RestingGrounds_08, "Ghost Battle Revek")]
+    public GameObject? Revek { get; private set; }
+
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }
 

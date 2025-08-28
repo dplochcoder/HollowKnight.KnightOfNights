@@ -44,6 +44,9 @@
     <Reference Include="Assembly-CSharp-firstpass">
       <HintPath>$(HollowKnightRefs)/Assembly-CSharp-firstpass.dll</HintPath>
     </Reference>
+    <Reference Include="DebugMod">
+      <HintPath>$(HollowKnightRefs)/Mods/DebugMod/DebugMod.dll</HintPath>
+    </Reference>
     <Reference Include="GalaxyCSharp">
       <HintPath>$(HollowKnightRefs)/GalaxyCSharp.dll</HintPath>
     </Reference>
@@ -328,7 +331,6 @@
     <None Include=".gitignore" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="IC\" />
     <Folder Include="Resources\Data\" />
   </ItemGroup>
 </Project>

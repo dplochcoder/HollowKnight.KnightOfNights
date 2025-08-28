@@ -4,3 +4,4 @@ RandomizerCore.Json
 SFCore
 
 RandomizerCore
+DebugMod

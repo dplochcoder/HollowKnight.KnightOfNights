@@ -50,7 +50,7 @@ namespace KnightOfNights.Scripts.SharedLib  // TODO: SharedLib
         void PrintSize()
         {
             var tilemap = GetComponent<Tilemap>();
-            Debug.Log($"Tilemap size: {tilemap.size.x}, {tilemap.size.y}");
+            UnityEngine.Debug.Log($"Tilemap size: {tilemap.size.x}, {tilemap.size.y}");
         }
 
 #if UNITY_EDITOR
