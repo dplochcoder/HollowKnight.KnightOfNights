@@ -36,15 +36,15 @@ internal class RevekFixes : MonoBehaviour, IHitResponder
         switch (damageInstance.AttackType)
         {
             case AttackTypes.Nail:
-            case AttackTypes.NailBeam:
-            case AttackTypes.SharpShadow:
             case AttackTypes.Spell:
                 if (damageInstance.AttackType == AttackTypes.Nail) SpawnSoul();
                 fsm.SetState("Hit");
                 break;
             case AttackTypes.Acid:
             case AttackTypes.Generic:
+            case AttackTypes.NailBeam:
             case AttackTypes.RuinsWater:
+            case AttackTypes.SharpShadow:
                 break;
         }
     }
