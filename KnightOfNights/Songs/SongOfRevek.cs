@@ -69,7 +69,6 @@ internal class RevekFixes : MonoBehaviour, IHitResponder
         };
         FlingUtils.SpawnAndFling(config, transform, Vector3.zero);
 
-        StartDef
         // Heal on parry.
         HeroController.instance.AddHealth(1);
 
