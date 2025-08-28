@@ -5,3 +5,4 @@ SFCore
 
 RandomizerCore
 DebugMod
+Randomizer 4

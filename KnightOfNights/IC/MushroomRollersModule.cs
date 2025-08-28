@@ -16,14 +16,12 @@ internal class MushroomRollersModule : AbstractModule<MushroomRollersModule>
     public override void Initialize()
     {
         base.Initialize();
-
         Events.AddSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
     }
 
     public override void Unload()
     {
         Events.RemoveSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
-
         base.Unload();
     }
 
