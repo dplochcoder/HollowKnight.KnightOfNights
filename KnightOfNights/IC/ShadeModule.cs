@@ -37,7 +37,7 @@ internal class ShadeModule : AbstractModule<ShadeModule>
             pd.SetString(nameof(pd.shadeScene), SceneNames.RestingGrounds_08);
             pd.SetString(nameof(pd.shadeMapZone), nameof(MapZone.RESTING_GROUNDS));
             pd.SetFloat(nameof(pd.shadePositionX), 196.5f);
-            pd.SetFloat(nameof(pd.shadePositionY), 33f);
+            pd.SetFloat(nameof(pd.shadePositionY), 35.5f);
         }));
     }
 }
