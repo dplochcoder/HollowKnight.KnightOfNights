@@ -1,5 +1,6 @@
 using KnightOfNights.IC;
 using Modding;
+using SFCore;
 using System.Collections.Generic;
 
 namespace KnightOfNights;
@@ -12,7 +13,13 @@ public class KnightOfNightsMod : Mod
 
     public override string GetVersion() => VERSION;
 
-    public KnightOfNightsMod() : base("KnightOfNights") { Instance = this; }
+    public KnightOfNightsMod() : base("KnightOfNights")
+    {
+        Instance = this;
+
+        RevekSongModule.HookItemHelper();
+        StoneKeyModule.HookItemHelper();
+    }
 
     private static void SetupDebug() => Debug.DebugInterop.Setup();
 

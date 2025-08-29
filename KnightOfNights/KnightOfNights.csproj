@@ -335,5 +335,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\Data\" />
+    <Folder Include="Resources\Sprites\" />
   </ItemGroup>
 </Project>

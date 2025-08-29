@@ -1,10 +1,19 @@
 ﻿using ItemChanger;
+using ItemChanger.UIDefs;
 
 namespace KnightOfNights.IC;
 
 internal class StoneKeyItem : AbstractItem
 {
-    // TODO: UI
+    public override void ResolveItem(GiveEventArgs args)
+    {
+        UIDef = new MsgUIDef()
+        {
+            name = new BoxedString("Stone Key"),
+            shopDesc = new BoxedString("Stone Key"),
+            sprite = new EmbeddedSprite("stonekey")
+        };
+    }
 
     public override void GiveImmediate(GiveInfo info)
     {

@@ -2,12 +2,11 @@
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using ItemChanger.Internal;
-using KnightOfNights.IC;
 using PurenailCore.CollectionUtil;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KnightOfNights.Songs;
+namespace KnightOfNights.IC;
 
 internal class RevekFixes : MonoBehaviour, IHitResponder
 {
@@ -75,19 +74,13 @@ internal class RevekFixes : MonoBehaviour, IHitResponder
     }
 }
 
-internal class SongOfRevek : IFluteSong
+internal class RevekSongSummon
 {
-    internal const string NAME = "Revek";
-
-    public string Name() => NAME;
-
-    public List<FluteNote> Notes() => [FluteNote.Up, FluteNote.Up, FluteNote.Left, FluteNote.Right];
-
     private static bool revekActive = false;
 
-    public void Summon()
+    internal static void Summon(List<FluteNote> notes)
     {
-        if (revekActive) return;
+        if (notes.Count < 3 || revekActive) return;
 
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
         revek.AddComponent<RevekFixes>();
@@ -134,7 +127,6 @@ internal class SongOfRevek : IFluteSong
             damagedWait.timeMax.Value = wait;
         }));
 
-        Wrapped<bool> right = new(false);
         fsm.GetState("Set Angle").AddLastAction(new Lambda(() =>
         {
             if (consecutiveHits.Value == 3)
@@ -144,16 +136,15 @@ internal class SongOfRevek : IFluteSong
                 Object.Destroy(fsm.gameObject);
                 return;
             }
-            else if (consecutiveHits.Value == 0) right.Value = HeroController.instance.cState.facingRight;
 
-            audioSrc.transform.localPosition = new(right.Value ? -12 : 12, 0, 0);
-            fsm.FsmVariables.GetFsmFloat("X Distance").Value = right.Value ? -12f : 12f;
+            bool flyRight = notes[consecutiveHits.Value] == FluteNote.Right;
+            audioSrc.transform.localPosition = new(flyRight ? -12 : 12, 0, 0);
+            fsm.FsmVariables.GetFsmFloat("X Distance").Value = flyRight ? -12f : 12f;
             fsm.FsmVariables.GetFsmFloat("Y Distance").Value = 3f;
         }));
 
         var slashState = fsm.GetState("Slash");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = new(0, -1.5f, 0);
-        var decelerate = slashState.GetFirstActionOfType<DecelerateV2>();
-        slashState.AddFirstAction(new Lambda(() => decelerate.deceleration.Value = consecutiveHits.Value > 0 ? 0.92f : 0.9f));
+        slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = 0.925f;
     }
 }

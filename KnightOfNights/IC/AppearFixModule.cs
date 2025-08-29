@@ -1,10 +1,7 @@
-﻿using HutongGames.PlayMaker.Actions;
-using ItemChanger;
+﻿using ItemChanger;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using SFCore.Utils;
-using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace KnightOfNights.IC;
 
