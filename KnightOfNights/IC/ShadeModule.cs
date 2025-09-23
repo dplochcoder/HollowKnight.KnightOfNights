@@ -28,16 +28,14 @@ internal class ShadeModule : AbstractModule<ShadeModule>
     private void ModifyDeathAnim(PlayMakerFSM fsm)
     {
         fsm.GetState("Remove Geo").ClearActions();
+        fsm.GetState("Limit Soul").ClearActions();
 
         var setShadeState = fsm.GetState("Set Shade");
-        setShadeState.RemoveActionsOfType<SendEventByName>();
-        setShadeState.AddLastAction(new Lambda(() =>
+        setShadeState.AddTransition("SKIP", "Save");
+        setShadeState.AddFirstAction(new Lambda(() =>
         {
-            var pd = PlayerData.instance;
-            pd.SetString(nameof(pd.shadeScene), SceneNames.RestingGrounds_08);
-            pd.SetString(nameof(pd.shadeMapZone), nameof(MapZone.RESTING_GROUNDS));
-            pd.SetFloat(nameof(pd.shadePositionX), 196.5f);
-            pd.SetFloat(nameof(pd.shadePositionY), 35.5f);
+            fsm.FsmVariables.GetFsmGameObject("Self").Value = fsm.gameObject;
+            fsm.SendEvent("SKIP");
         }));
     }
 }
