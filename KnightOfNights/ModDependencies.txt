@@ -1,8 +1,7 @@
+DebugMod
 ItemChanger
 PurenailCore
+Randomizer 4
+RandomizerCore
 RandomizerCore.Json
 SFCore
-
-RandomizerCore
-DebugMod
-Randomizer 4
