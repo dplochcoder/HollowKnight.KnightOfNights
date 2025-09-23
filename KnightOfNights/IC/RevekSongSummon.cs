@@ -81,6 +81,7 @@ internal class RevekSongSummon
     internal static void Summon(List<FluteNote> notes)
     {
         if (notes.Count < 3 || revekActive) return;
+        revekActive = true;
 
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
         revek.AddComponent<RevekFixes>();
