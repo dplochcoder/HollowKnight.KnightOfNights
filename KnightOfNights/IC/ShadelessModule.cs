@@ -1,4 +1,5 @@
-﻿using ItemChanger;
+﻿using HutongGames.PlayMaker.Actions;
+using ItemChanger;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using Modding;
@@ -56,6 +57,8 @@ internal class ShadelessModule : AbstractModule<ShadelessModule>
             fsm.FsmVariables.GetFsmGameObject("Self").Value = fsm.gameObject;
             fsm.SendEvent("SKIP");
         }));
+
+        fsm.GetState("End").RemoveFirstActionOfType<SendMessage>();
     }
 
     private static void FillName(ref string value) => value = "Shadeless";

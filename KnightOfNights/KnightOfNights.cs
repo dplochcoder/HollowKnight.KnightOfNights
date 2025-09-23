@@ -16,6 +16,7 @@ public class KnightOfNightsMod : Mod
     {
         Instance = this;
 
+        ShadelessModule.HookItemHelper();
         RevekSongModule.HookItemHelper();
     }
 
