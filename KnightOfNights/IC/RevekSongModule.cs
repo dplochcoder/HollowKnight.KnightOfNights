@@ -100,14 +100,6 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         }
     }
 
-    private bool PlayedSong(List<FluteNote> song)
-    {
-        if (finishedNotes.Count != song.Count) return false;
-
-        for (int i = 0; i < song.Count; i++) if (finishedNotes[i] != song[i]) return false;
-        return true;
-    }
-
     private void UpdateRevekSong()
     {
         if (!inSession) return;

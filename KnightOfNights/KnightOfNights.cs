@@ -18,6 +18,7 @@ public class KnightOfNightsMod : Mod
 
         ShadelessModule.HookItemHelper();
         RevekSongModule.HookItemHelper();
+        WarriorsNotesModule.HookItemHelper();
     }
 
     private static void SetupDebug() => Debug.DebugInterop.Setup();

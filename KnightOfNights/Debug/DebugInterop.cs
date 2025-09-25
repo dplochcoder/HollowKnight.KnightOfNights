@@ -35,6 +35,22 @@ internal static class DebugInterop
         mod.HasRevekSong = false;
     }
 
+    [BindableMethod(name = "Give Warriors Notes", category = CATEGORY)]
+    public static void GiveWarriorsNotes()
+    {
+        if (!GetModule<WarriorsNotesModule>(out var mod)) return;
+
+        mod.HasWarriorsNotes = true;
+    }
+
+    [BindableMethod(name = "Take Warriors Notes", category = CATEGORY)]
+    public static void TakeWarriorsNotes()
+    {
+        if (!GetModule<WarriorsNotesModule>(out var mod)) return;
+
+        mod.HasWarriorsNotes = false;
+    }
+
     private static int GetAndCountAccessibleItems()
     {
         var rs = RandomizerMod.RandomizerMod.RS;
