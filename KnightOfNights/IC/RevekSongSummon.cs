@@ -1,4 +1,5 @@
-﻿using HutongGames.PlayMaker.Actions;
+﻿using GlobalEnums;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using ItemChanger.Internal;
@@ -80,6 +81,9 @@ internal class RevekSongSummon
 
     internal static void Summon(List<FluteNote> notes)
     {
+        var mapZone = GameManager.instance.GetCurrentMapZone();
+        if (mapZone == nameof(MapZone.DREAM_WORLD) || mapZone == nameof(MapZone.WHITE_PALACE) || mapZone == nameof(MapZone.GODS_GLORY)) return;
+
         if (notes.Count < 3 || revekActive) return;
         revekActive = true;
 
