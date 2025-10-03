@@ -336,6 +336,5 @@
   <ItemGroup>
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Sprites\" />
-    <Folder Include="Scripts\FallenGuardian\" />
   </ItemGroup>
 </Project>

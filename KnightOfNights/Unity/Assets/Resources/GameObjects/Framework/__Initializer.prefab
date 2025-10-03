@@ -1,0 +1,183 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3609734008868612309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3609734008868612310}
+  - component: {fileID: 8573360536410406466}
+  - component: {fileID: 1863016987034810921}
+  m_Layer: 0
+  m_Name: __Initializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3609734008868612310
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609734008868612309}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8573360536410406466
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609734008868612309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 189551051, guid: 7e421e5300487df47af875ce19c9ead1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  mapZone: 0
+  isWindy: 0
+  isTremorZone: 0
+  environmentType: 0
+  darknessLevel: -1
+  noLantern: 0
+  saturation: 0.7
+  ignorePlatformSaturationModifiers: 0
+  redChannel:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  greenChannel:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  blueChannel:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 1
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 1
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  defaultColor: {r: 1, g: 1, b: 1, a: 1}
+  defaultIntensity: 0.8
+  heroLightColor: {r: 1, g: 1, b: 1, a: 0.48}
+  noParticles: 0
+  overrideParticlesWith: 0
+  AtmosCueSet: 
+  AtmosCueSnapshotName: 
+  AtmosCueSnapshotIndex: 0
+  AtmosCueIsChannelEnabled: 00010001000101000000000000000000
+  MusicCueSet: 
+  MusicCueSnapshotName: Silent
+  MusicCueSnapshotIndex: 9
+  MusicCueChannelInfoClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  MusicCueChannelInfoSyncs: 000000000000000000000000000000000000000000000000
+  InfectedMusicCueSet: 
+  InfectedMusicCueSnapshotName: Silent
+  InfectedMusicCueSnapshotIndex: 9
+  InfectedMusicCueChannelInfoClips:
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  InfectedMusicCueChannelInfoSyncs: 000000000000000000000000000000000000000000000000
+  MsSnapshotName: Silent
+  MsSnapshotIndex: 9
+  musicDelayTime: 0
+  musicTransitionTime: 3
+  AtsSnapshotName: at Surface
+  AtsSnapshotIndex: 2
+  EsSnapshotName: en Cliffs
+  EsSnapshotIndex: 8
+  AcsSnapshotName: On
+  AcsSnapshotIndex: 0
+  SsSnapshotName: Away
+  SsSnapshotIndex: 0
+  transitionTime: 0.5
+  manualMapTrigger: 0
+--- !u!114 &1863016987034810921
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3609734008868612309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1565034733, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
