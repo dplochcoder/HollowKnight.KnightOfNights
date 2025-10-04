@@ -140,7 +140,7 @@ internal class XeroModule : AbstractGhostWarriorModule<XeroModule>
             if (UpdatePhase(fsm, baseHp, phase3, 0.6f))
             {
                 SetSpeed(10f, 55f, 0.75f, 4.5f);
-                SetWait(0.55f, 0.65f, 0.8f);
+                SetWait(0.6f, 0.7f, 0.85f);
                 SummonSwords(0.5f, 0.5f, [5, 6]);
                 FixSwordPos(fsm, 1, 3, 5);
                 FixSwordPos(fsm, 2, 4, 6);
