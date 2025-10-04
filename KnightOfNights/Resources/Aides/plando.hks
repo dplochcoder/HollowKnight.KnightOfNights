@@ -71690,167 +71690,160 @@
       },
       {
         "id": 135,
-        "location": "Boss_Essence-No_Eyes",
-        "item": "MoreDoors-Crown_Key",
-        "costs": [],
-        "vanilla": false
-      },
-      {
-        "id": 136,
         "location": "Soul_Totem-Path_of_Pain_Below_Lever",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 137,
+        "id": 136,
         "location": "Soul_Totem-Path_of_Pain_Entrance",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 138,
+        "id": 137,
         "location": "Soul_Totem-Path_of_Pain_Below_Thornskip",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 139,
+        "id": 138,
         "location": "Soul_Totem-Path_of_Pain_Final",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 140,
+        "id": 139,
         "location": "Soul_Totem-Path_of_Pain_Hidden",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 141,
+        "id": 140,
         "location": "Soul_Totem-Path_of_Pain_Left_of_Lever",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 142,
+        "id": 141,
         "location": "Soul_Totem-Path_of_Pain_Second",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 143,
+        "id": 142,
         "location": "Soul_Totem-White_Palace_Entrance",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 144,
+        "id": 143,
         "location": "Soul_Totem-White_Palace_Final",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 145,
+        "id": 144,
         "location": "Soul_Totem-White_Palace_Hub",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 146,
+        "id": 145,
         "location": "Soul_Totem-White_Palace_Left",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 147,
+        "id": 146,
         "location": "Soul_Totem-White_Palace_Right",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 148,
+        "id": 147,
         "location": "Journal_Entry-Seal_of_Binding",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 149,
+        "id": 148,
         "location": "Ghost_Essence-Vespa",
         "item": "Hiveblood",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 150,
+        "id": 149,
         "location": "Ghost_Essence-Gravedigger",
         "item": "Sprintmaster",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 151,
+        "id": 150,
         "location": "Ghost_Essence-Poggy_Thorax",
         "item": "Defender's_Crest",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 152,
+        "id": 151,
         "location": "Ghost_Essence-Cloth",
         "item": "Queen_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 153,
+        "id": 152,
         "location": "Shade_Cloak",
         "item": "King_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 154,
+        "id": 153,
         "location": "Vengeful_Spirit",
         "item": "Soul_Catcher",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 155,
+        "id": 154,
         "location": "Whispering_Root-Crystal_Peak",
         "item": "Mantis_Claw",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 156,
+        "id": 155,
         "location": "Spell_Twister",
         "item": "City_Storerooms_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 157,
+        "id": 156,
         "location": "Mask_Shard-Crossroads_Goam",
         "item": "Crossroads_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 158,
+        "id": 157,
         "location": "Iselda",
         "item": "Dirtmouth_Stag",
         "costs": [
@@ -71863,42 +71856,42 @@
         "vanilla": false
       },
       {
-        "id": 159,
+        "id": 158,
         "location": "Cyclone_Slash",
         "item": "Stag_Nest_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 160,
+        "id": 159,
         "location": "King_Fragment",
         "item": "Resting_Grounds_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 161,
+        "id": 160,
         "location": "Charm_Notch-Colosseum",
         "item": "Nail_Upgrade",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 162,
+        "id": 161,
         "location": "Pale_Ore-Colosseum",
         "item": "Nail_Upgrade",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 163,
+        "id": 162,
         "location": "Mark_of_Pride",
         "item": "Nail_Upgrade",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 164,
+        "id": 163,
         "location": "Sly_(Key)",
         "item": "Nail_Upgrade",
         "costs": [
@@ -71911,98 +71904,98 @@
         "vanilla": false
       },
       {
-        "id": 165,
+        "id": 164,
         "location": "Mask_Shard-Hive",
         "item": "Arcane_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 166,
+        "id": 165,
         "location": "Mask_Shard-Stone_Sanctuary",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 167,
+        "id": 166,
         "location": "Mantis_Claw",
         "item": "Fury_of_the_Fallen",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 168,
+        "id": 167,
         "location": "Geo_Chest-False_Knight",
         "item": "Gathering_Swarm",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 169,
+        "id": 168,
         "location": "City_Crest",
         "item": "Wayward_Compass",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 170,
+        "id": 169,
         "location": "Sharp_Shadow",
         "item": "Dashmaster",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 171,
+        "id": 170,
         "location": "Boss_Geo-Crystal_Guardian",
         "item": "Deep_Focus",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 172,
+        "id": 171,
         "location": "Wanderer's_Journal-Kingdom's_Edge_Requires_Dive",
         "item": "Dreamshield",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 173,
+        "id": 172,
         "location": "Defender's_Crest",
         "item": "Flukenest",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 174,
+        "id": 173,
         "location": "Crossroads_Map",
         "item": "Fragile_Heart",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 175,
+        "id": 174,
         "location": "Greenpath_Map",
         "item": "Unbreakable_Heart",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 176,
+        "id": 175,
         "location": "Arcane_Egg-Birthplace",
         "item": "MoreDoors-Pain_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 177,
+        "id": 176,
         "location": "Soul_Totem-Deepnest_Vessel",
         "item": "Charm_Notch",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 178,
+        "id": 177,
         "location": "Dash_Slash",
         "item": "Vessel_Fragment",
         "costs": [
@@ -72015,91 +72008,91 @@
         "vanilla": false
       },
       {
-        "id": 179,
+        "id": 178,
         "location": "Whispering_Root-Hive",
         "item": "Charm_Notch",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 180,
+        "id": 179,
         "location": "Charm_Notch-Fog_Canyon",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 181,
+        "id": 180,
         "location": "King's_Idol-Pale_Lurker",
         "item": "Arcane_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 182,
+        "id": 181,
         "location": "Journal_Entry-Goam",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 183,
+        "id": 182,
         "location": "Hallownest_Seal-Crossroads_Well",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 184,
+        "id": 183,
         "location": "Glowing_Womb",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 185,
+        "id": 184,
         "location": "Hunter's_Journal",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 186,
+        "id": 185,
         "location": "Geo_Chest-Greenpath",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 187,
+        "id": 186,
         "location": "Fog_Canyon_Map",
         "item": "Fragile_Strength",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 188,
+        "id": 187,
         "location": "Ancient_Basin_Map",
         "item": "Unbreakable_Strength",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 189,
+        "id": 188,
         "location": "City_of_Tears_Map",
         "item": "Fragile_Greed",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 190,
+        "id": 189,
         "location": "Queen's_Gardens_Map",
         "item": "Unbreakable_Greed",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 191,
+        "id": 190,
         "location": "Unbreakable_Heart",
         "item": "Lifeblood_Core",
         "costs": [
@@ -72112,7 +72105,7 @@
         "vanilla": false
       },
       {
-        "id": 192,
+        "id": 191,
         "location": "Unbreakable_Strength",
         "item": "Quick_Slash",
         "costs": [
@@ -72125,7 +72118,7 @@
         "vanilla": false
       },
       {
-        "id": 193,
+        "id": 192,
         "location": "Unbreakable_Greed",
         "item": "Quick_Focus",
         "costs": [
@@ -72138,49 +72131,49 @@
         "vanilla": false
       },
       {
-        "id": 194,
+        "id": 193,
         "location": "Journal_Entry-Void_Tendrils",
         "item": "World_Sense",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 195,
+        "id": 194,
         "location": "Royal_Waterways_Map",
         "item": "Waterways_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 196,
+        "id": 195,
         "location": "Thorns_of_Agony",
         "item": "Baldur_Shell",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 197,
+        "id": 196,
         "location": "Baldur_Shell",
         "item": "Thorns_of_Agony",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 198,
+        "id": 197,
         "location": "Ghost_Essence-Caelif_Fera_Orthop",
         "item": "Longnail",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 199,
+        "id": 198,
         "location": "Shopkeeper's_Key",
         "item": "Collector's_Map",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 200,
+        "id": 199,
         "location": "Crossroads_Stag",
         "item": "Hallownest_Seal",
         "costs": [
@@ -72193,49 +72186,49 @@
         "vanilla": false
       },
       {
-        "id": 201,
+        "id": 200,
         "location": "Lifeblood_Core",
         "item": "Joni's_Blessing",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 202,
+        "id": 201,
         "location": "Soul_Totem-Crossroads_Mawlek_Upper",
         "item": "Boss_Geo-Vengefly_King",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 203,
+        "id": 202,
         "location": "Soul_Totem-Crossroads_Mawlek_Lower",
         "item": "Lifeblood_Cocoon_Small",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 204,
+        "id": 203,
         "location": "Soul_Totem-Crossroads_Shops",
         "item": "Boss_Geo-Gruz_Mother",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 205,
+        "id": 204,
         "location": "Isma's_Tear",
         "item": "Pleasure_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 206,
+        "id": 205,
         "location": "Rancid_Egg-Tuk_Defender's_Crest",
         "item": "Coffin_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 207,
+        "id": 206,
         "location": "Seer",
         "item": "Resting_Grounds_Map",
         "costs": [
@@ -72248,35 +72241,35 @@
         "vanilla": false
       },
       {
-        "id": 208,
+        "id": 207,
         "location": "Ghost_Essence-Marissa",
         "item": "MoreDoors-Archive_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 209,
+        "id": 208,
         "location": "Pale_Ore-Basin",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 210,
+        "id": 209,
         "location": "Vessel_Fragment-City",
         "item": "Pale_Ore",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 211,
+        "id": 210,
         "location": "Boss_Geo-Enraged_Guardian",
         "item": "Shopkeeper's_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 212,
+        "id": 211,
         "location": "Sly",
         "item": "Shape_of_Unn",
         "costs": [
@@ -72289,7 +72282,7 @@
         "vanilla": false
       },
       {
-        "id": 213,
+        "id": 212,
         "location": "Sly",
         "item": "Stalwart_Shell",
         "costs": [
@@ -72302,7 +72295,7 @@
         "vanilla": false
       },
       {
-        "id": 214,
+        "id": 213,
         "location": "Salubra",
         "item": "Geo_Chest-False_Knight",
         "costs": [
@@ -72320,7 +72313,7 @@
         "vanilla": false
       },
       {
-        "id": 215,
+        "id": 214,
         "location": "Salubra",
         "item": "Boss_Geo-Crystal_Guardian",
         "costs": [
@@ -72338,7 +72331,7 @@
         "vanilla": false
       },
       {
-        "id": 216,
+        "id": 215,
         "location": "Salubra",
         "item": "Geo_Chest-Mantis_Lords",
         "costs": [
@@ -72356,7 +72349,7 @@
         "vanilla": false
       },
       {
-        "id": 217,
+        "id": 216,
         "location": "Salubra",
         "item": "Geo_Chest-Watcher_Knights",
         "costs": [
@@ -72374,273 +72367,273 @@
         "vanilla": false
       },
       {
-        "id": 218,
+        "id": 217,
         "location": "Rancid_Egg-Crystal_Peak_Dark_Room",
         "item": "Geo_Chest-Crystal_Peak",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 219,
+        "id": 218,
         "location": "King's_Idol-Dung_Defender",
         "item": "Godtuner",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 220,
+        "id": 219,
         "location": "Whispering_Root-Waterways",
         "item": "Vessel_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 221,
+        "id": 220,
         "location": "Hallownest_Seal-Deepnest_By_Mantis_Lords",
         "item": "Vessel_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 222,
+        "id": 221,
         "location": "Whispering_Root-Deepnest",
         "item": "Vessel_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 223,
+        "id": 222,
         "location": "Whispering_Root-Mantis_Village",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 224,
+        "id": 223,
         "location": "Rancid_Egg-Sheo",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 225,
+        "id": 224,
         "location": "King's_Idol-Cliffs",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 226,
+        "id": 225,
         "location": "Whispering_Root-Howling_Cliffs",
         "item": "Steady_Body",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 227,
+        "id": 226,
         "location": "King's_Idol-Great_Hopper",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 228,
+        "id": 227,
         "location": "Soul_Totem-Oro",
         "item": "Soul_Totem-Path_of_Pain",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 229,
+        "id": 228,
         "location": "Soul_Totem-Oro_Dive_1",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 230,
+        "id": 229,
         "location": "Soul_Totem-Oro_Dive_2",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 231,
+        "id": 230,
         "location": "Whispering_Root-Queens_Gardens",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 232,
+        "id": 231,
         "location": "Hiveblood",
         "item": "MoreDoors-Bardoon's_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 233,
+        "id": 232,
         "location": "Hallownest_Seal-Greenpath",
         "item": "Mark_of_Pride",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 234,
+        "id": 233,
         "location": "Crystal_Peak_Map",
         "item": "Salubra's_Blessing",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 235,
+        "id": 234,
         "location": "Boss_Geo-Elegant_Soul_Warrior",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 236,
+        "id": 235,
         "location": "Whispering_Root-Leg_Eater",
         "item": "Sharp_Shadow",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 237,
+        "id": 236,
         "location": "Geo_Chest-Soul_Master",
         "item": "Nailmaster's_Glory",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 238,
+        "id": 237,
         "location": "Fury_of_the_Fallen",
         "item": "Heavy_Blow",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 239,
+        "id": 238,
         "location": "Kingdom's_Edge_Map",
         "item": "Glowing_Womb",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 240,
+        "id": 239,
         "location": "Howling_Cliffs_Map",
         "item": "Lifeblood_Heart",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 241,
+        "id": 240,
         "location": "Deepnest_Map-Upper",
         "item": "Journal_Entry-Goam",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 242,
+        "id": 241,
         "location": "Deepnest_Map-Right",
         "item": "Journal_Entry-Garpede",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 243,
+        "id": 242,
         "location": "Rancid_Egg-Dark_Deepnest",
         "item": "Lifeblood_Cocoon_Small",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 244,
+        "id": 243,
         "location": "King's_Idol-Crystal_Peak",
         "item": "Lifeblood_Cocoon_Large",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 245,
+        "id": 244,
         "location": "Grimmchild",
         "item": "Lifeblood_Cocoon_Large",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 246,
+        "id": 245,
         "location": "Soul_Totem-Fungal_Core",
         "item": "Lifeblood_Cocoon_Large",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 247,
+        "id": 246,
         "location": "Soul_Totem-Cliffs_Joni's",
         "item": "Lifeblood_Cocoon_Small",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 248,
+        "id": 247,
         "location": "Soul_Totem-Pale_Lurker",
         "item": "Lifeblood_Cocoon_Small",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 249,
+        "id": 248,
         "location": "Mask_Shard-Grey_Mourner",
         "item": "Mask_Shard",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 250,
+        "id": 249,
         "location": "Queen_Fragment",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 251,
+        "id": 250,
         "location": "Mask_Shard-Waterways",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 252,
+        "id": 251,
         "location": "Soul_Totem-Resting_Grounds",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 253,
+        "id": 252,
         "location": "Resting_Grounds_Stag",
         "item": "Geo_Chest-Greenpath",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 254,
+        "id": 253,
         "location": "Shape_of_Unn",
         "item": "Arcane_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 255,
+        "id": 254,
         "location": "Arcane_Egg-Shade_Cloak",
         "item": "Journal_Entry-Void_Tendrils",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 256,
+        "id": 255,
         "location": "Hidden_Station_Stag",
         "item": "Rancid_Egg",
         "costs": [
@@ -72653,7 +72646,7 @@
         "vanilla": false
       },
       {
-        "id": 257,
+        "id": 256,
         "location": "Egg_Shop",
         "item": "Spore_Shroom",
         "costs": [
@@ -72666,7 +72659,7 @@
         "vanilla": false
       },
       {
-        "id": 258,
+        "id": 257,
         "location": "Egg_Shop",
         "item": "Soul_Eater",
         "costs": [
@@ -72679,7 +72672,7 @@
         "vanilla": false
       },
       {
-        "id": 259,
+        "id": 258,
         "location": "Egg_Shop",
         "item": "Mask_Shard",
         "costs": [
@@ -72692,7 +72685,7 @@
         "vanilla": false
       },
       {
-        "id": 260,
+        "id": 259,
         "location": "Egg_Shop",
         "item": "Vessel_Fragment",
         "costs": [
@@ -72705,7 +72698,7 @@
         "vanilla": false
       },
       {
-        "id": 261,
+        "id": 260,
         "location": "Egg_Shop",
         "item": "Grimmchild2",
         "costs": [
@@ -72718,140 +72711,140 @@
         "vanilla": false
       },
       {
-        "id": 262,
+        "id": 261,
         "location": "Whispering_Root-Kingdoms_Edge",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 263,
+        "id": 262,
         "location": "Whispering_Root-Crossroads",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 264,
+        "id": 263,
         "location": "Soul_Totem-Below_Xero",
         "item": "Right_Elevator_Pass",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 265,
+        "id": 264,
         "location": "Simple_Key-City",
         "item": "Left_Elevator_Pass",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 266,
+        "id": 265,
         "location": "Vessel_Fragment-Crossroads",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 267,
+        "id": 266,
         "location": "King's_Idol-Deepnest",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 268,
+        "id": 267,
         "location": "Lifeblood_Cocoon-King's_Pass",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 269,
+        "id": 268,
         "location": "Joni's_Blessing",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 270,
+        "id": 269,
         "location": "Quick_Slash",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 271,
+        "id": 270,
         "location": "Wanderer's_Journal-Kingdom's_Edge_Camp",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 272,
+        "id": 271,
         "location": "Geo_Chest-Resting_Grounds",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 273,
+        "id": 272,
         "location": "Wanderer's_Journal-Ancient_Basin",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 274,
+        "id": 273,
         "location": "Soul_Totem-Crossroads_Acid",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 275,
+        "id": 274,
         "location": "Geo_Chest-Crystal_Peak",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 276,
+        "id": 275,
         "location": "Soul_Catcher",
         "item": "Lifeblood_Cocoon_Small",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 277,
+        "id": 276,
         "location": "Arcane_Egg-Lifeblood_Core",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 278,
+        "id": 277,
         "location": "Soul_Totem-Crystallized_Mound",
         "item": "King's_Idol",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 279,
+        "id": 278,
         "location": "Geo_Chest-Mantis_Lords",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 280,
+        "id": 279,
         "location": "Journal_Entry-Garpede",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 281,
+        "id": 280,
         "location": "King's_Station_Stag",
         "item": "Hallownest_Seal",
         "costs": [
@@ -72864,91 +72857,91 @@
         "vanilla": false
       },
       {
-        "id": 282,
+        "id": 281,
         "location": "Soul_Totem-Hallownest_Crown",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 283,
+        "id": 282,
         "location": "Split_Elevator_Pass",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 284,
+        "id": 283,
         "location": "Soul_Totem-Mask_Maker",
         "item": "Journal_Entry-Seal_of_Binding",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 285,
+        "id": 284,
         "location": "Spore_Shroom",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 286,
+        "id": 285,
         "location": "Tram_Pass",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 287,
+        "id": 286,
         "location": "Soul_Totem-Pilgrim's_Way",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 288,
+        "id": 287,
         "location": "Wanderer's_Journal-Crystal_Peak_Crawlers",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 289,
+        "id": 288,
         "location": "Soul_Totem-Beast's_Den",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 290,
+        "id": 289,
         "location": "Pale_Ore-Crystal_Peak",
         "item": "Crystal_Heart",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 291,
+        "id": 290,
         "location": "Lifeblood_Cocoon-Ancestral_Mound",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 292,
+        "id": 291,
         "location": "Lifeblood_Cocoon-Greenpath",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 293,
+        "id": 292,
         "location": "Vessel_Fragment-Stag_Nest",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 294,
+        "id": 293,
         "location": "Queen's_Gardens_Stag",
         "item": "Hallownest_Seal",
         "costs": [
@@ -72961,119 +72954,119 @@
         "vanilla": false
       },
       {
-        "id": 295,
+        "id": 294,
         "location": "Soul_Totem-Top_Left_Waterways",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 296,
+        "id": 295,
         "location": "Wanderer's_Journal-Cliffs",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 297,
+        "id": 296,
         "location": "Soul_Totem-Upper_Crystal_Peak",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 298,
+        "id": 297,
         "location": "Desolate_Dive",
         "item": "Spell_Twister",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 299,
+        "id": 298,
         "location": "Abyss_Shriek",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 300,
+        "id": 299,
         "location": "Hallownest_Seal-Fog_Canyon_East",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 301,
+        "id": 300,
         "location": "Rancid_Egg-Fungal_Core",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 302,
+        "id": 301,
         "location": "Soul_Totem-Before_Pilgrim's_Way",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 303,
+        "id": 302,
         "location": "Rancid_Egg-Upper_Kingdom's_Edge",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 304,
+        "id": 303,
         "location": "Soul_Totem-Top_Left_Queen's_Gardens",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 305,
+        "id": 304,
         "location": "Soul_Totem-Lower_Kingdom's_Edge_2",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 306,
+        "id": 305,
         "location": "Boss_Geo-Massive_Moss_Charger",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 307,
+        "id": 306,
         "location": "Soul_Totem-Waterways_Entrance",
         "item": "Hallownest_Seal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 308,
+        "id": 307,
         "location": "Soul_Totem-Crystal_Heart_1",
         "item": "Geo_Chest-Junk_Pit_1",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 309,
+        "id": 308,
         "location": "Rancid_Egg-City_of_Tears_Pleasure_House",
         "item": "Geo_Chest-Junk_Pit_2",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 310,
+        "id": 309,
         "location": "Rancid_Egg-City_of_Tears_Left",
         "item": "Geo_Chest-Junk_Pit_3",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 311,
+        "id": 310,
         "location": "Elevator_Pass",
         "item": "Geo_Chest-Junk_Pit_5",
         "costs": [
@@ -73086,49 +73079,49 @@
         "vanilla": false
       },
       {
-        "id": 312,
+        "id": 311,
         "location": "Soul_Totem-Cliffs_Gorb",
         "item": "Geo_Chest-Resting_Grounds",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 313,
+        "id": 312,
         "location": "Hallownest_Seal-Resting_Grounds_Catacombs",
         "item": "Geo_Chest-Weavers_Den",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 314,
+        "id": 313,
         "location": "Soul_Totem-Below_Marmu",
         "item": "Geo_Chest-Soul_Master",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 315,
+        "id": 314,
         "location": "Soul_Totem-Basin",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 316,
+        "id": 315,
         "location": "Rancid_Egg-Near_Quick_Slash",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 317,
+        "id": 316,
         "location": "Soul_Totem-Waterways_East",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 318,
+        "id": 317,
         "location": "Greenpath_Stag",
         "item": "Ghost_Essence",
         "costs": [
@@ -73141,77 +73134,77 @@
         "vanilla": false
       },
       {
-        "id": 319,
+        "id": 318,
         "location": "Soul_Totem-Greenpath_MMC",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 320,
+        "id": 319,
         "location": "Soul_Totem-Crossroads_Myla",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 321,
+        "id": 320,
         "location": "Soul_Totem-Crystal_Heart_2",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 322,
+        "id": 321,
         "location": "Wanderer's_Journal-Pleasure_House",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 323,
+        "id": 322,
         "location": "Wanderer's_Journal-City_Storerooms",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 324,
+        "id": 323,
         "location": "Hallownest_Seal-Soul_Sanctum",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 325,
+        "id": 324,
         "location": "Hallownest_Seal-City_Rafters",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 326,
+        "id": 325,
         "location": "Soul_Totem-Lower_Kingdom's_Edge_1",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 327,
+        "id": 326,
         "location": "Soul_Totem-Upper_Kingdom's_Edge",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 328,
+        "id": 327,
         "location": "Soul_Totem-Kingdom's_Edge_Camp",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 329,
+        "id": 328,
         "location": "Queen's_Station_Stag",
         "item": "Ghost_Essence",
         "costs": [
@@ -73224,280 +73217,280 @@
         "vanilla": false
       },
       {
-        "id": 330,
+        "id": 329,
         "location": "Hallownest_Seal-Fungal_Wastes_Sporgs",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 331,
+        "id": 330,
         "location": "Simple_Key-Basin",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 332,
+        "id": 331,
         "location": "Soul_Totem-Sanctum_Above_Grub",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 333,
+        "id": 332,
         "location": "Soul_Totem-Sanctum_Below_Chest",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 334,
+        "id": 333,
         "location": "Soul_Totem-Outside_Crystallized_Mound",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 335,
+        "id": 334,
         "location": "Soul_Totem-Ancestral_Mound",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 336,
+        "id": 335,
         "location": "Soul_Totem-Crossroads_Goam_Journal",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 337,
+        "id": 336,
         "location": "Soul_Totem-Greenpath_Hunter's_Journal",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 338,
+        "id": 337,
         "location": "Soul_Totem-Greenpath_Below_Toll",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 339,
+        "id": 338,
         "location": "Soul_Totem-Cliffs_Main",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 340,
+        "id": 339,
         "location": "Soul_Totem-Waterways_Flukemarm",
         "item": "Ghost_Essence",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 341,
+        "id": 340,
         "location": "Hallownest_Seal-Mantis_Lords",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 342,
+        "id": 341,
         "location": "Wanderer's_Journal-Above_Mantis_Village",
         "item": "Soul_Totem-D",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 343,
+        "id": 342,
         "location": "Wanderer's_Journal-Greenpath_Stag",
         "item": "Soul_Totem-E",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 344,
+        "id": 343,
         "location": "Rancid_Egg-Waterways_West_Pickup",
         "item": "Soul_Totem-F",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 345,
+        "id": 344,
         "location": "Wanderer's_Journal-Greenpath_Lower",
         "item": "Soul_Totem-D",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 346,
+        "id": 345,
         "location": "Rancid_Egg-Crystal_Peak_Tall_Room",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 347,
+        "id": 346,
         "location": "Wanderer's_Journal-King's_Station",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 348,
+        "id": 347,
         "location": "Boss_Geo-Sanctum_Soul_Warrior",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 349,
+        "id": 348,
         "location": "Wanderer's_Journal-Resting_Grounds_Catacombs",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 350,
+        "id": 349,
         "location": "Rancid_Egg-Crystal_Peak_Dive_Entrance",
         "item": "Soul_Totem-A",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 351,
+        "id": 350,
         "location": "Hallownest_Seal-Beast's_Den",
         "item": "Soul_Totem-A",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 352,
+        "id": 351,
         "location": "Geo_Chest-Junk_Pit_1",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 353,
+        "id": 352,
         "location": "Lifeblood_Cocoon-Kingdom's_Edge",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 354,
+        "id": 353,
         "location": "Rancid_Egg-Waterways_West_Bluggsac",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 355,
+        "id": 354,
         "location": "Geo_Chest-Junk_Pit_5",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 356,
+        "id": 355,
         "location": "Geo_Chest-Junk_Pit_3",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 357,
+        "id": 356,
         "location": "Lumafly_Escape-Junk_Pit_Chest_4",
         "item": "Soul_Totem-C",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 358,
+        "id": 357,
         "location": "Geo_Chest-Junk_Pit_2",
         "item": "Soul_Totem-B",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 359,
+        "id": 358,
         "location": "Vessel_Fragment-Basin",
         "item": "Lumafly_Escape",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 360,
+        "id": 359,
         "location": "Whispering_Root-Resting_Grounds",
         "item": "Boss_Essence-Lost_Kin",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 361,
+        "id": 360,
         "location": "Soul_Totem-Sanctum_Below_Soul_Master",
         "item": "Charm_Notch",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 362,
+        "id": 361,
         "location": "Boss_Geo-Gorgeous_Husk",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 363,
+        "id": 362,
         "location": "Hallownest_Seal-Queen's_Gardens",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 364,
+        "id": 363,
         "location": "Whispering_Root-City",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 365,
+        "id": 364,
         "location": "Lifeblood_Cocoon-Galien",
         "item": "Charm_Notch",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 366,
+        "id": 365,
         "location": "Soul_Totem-420_Geo_Rock",
         "item": "Charm_Notch",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 367,
+        "id": 366,
         "location": "Start",
         "item": "Shadeless",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 368,
+        "id": 367,
         "location": "Start",
         "item": "666_Geo",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 369,
+        "id": 368,
         "location": "Nailsmith_Upgrade_1",
         "item": "Pale_Ore",
         "costs": [
@@ -73510,7 +73503,7 @@
         "vanilla": false
       },
       {
-        "id": 370,
+        "id": 369,
         "location": "Nailsmith_Upgrade_2",
         "item": "Pale_Ore",
         "costs": [
@@ -73523,7 +73516,7 @@
         "vanilla": false
       },
       {
-        "id": 371,
+        "id": 370,
         "location": "Nailsmith_Upgrade_3",
         "item": "Pale_Ore",
         "costs": [
@@ -73536,7 +73529,7 @@
         "vanilla": false
       },
       {
-        "id": 372,
+        "id": 371,
         "location": "Nailsmith_Upgrade_4",
         "item": "City_of_Tears_Map",
         "costs": [
@@ -73549,93 +73542,100 @@
         "vanilla": false
       },
       {
-        "id": 373,
+        "id": 372,
         "location": "Mask_Shard-Queen's_Station",
         "item": "King's_Station_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 374,
+        "id": 373,
         "location": "Hallownest_Seal-Queen's_Station",
         "item": "Dream_Wielder",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 375,
+        "id": 374,
         "location": "Soul_Eater",
         "item": "Queen's_Gardens_Stag",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 376,
+        "id": 375,
         "location": "Boss_Essence-Grey_Prince_Zote",
         "item": "Boss_Essence-Lost_Kin",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 377,
+        "id": 376,
         "location": "Boss_Essence-White_Defender",
         "item": "Boss_Essence-Lost_Kin",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 378,
+        "id": 377,
         "location": "Geo_Chest-Weavers_Den",
         "item": "MoreDoors-Shade_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 379,
+        "id": 378,
         "location": "Mask_Shard-Deepnest",
         "item": "Deepnest_Map",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 380,
+        "id": 379,
         "location": "Lifeblood_Cocoon-Failed_Tramway",
         "item": "MoreDoors-Sanctum_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 381,
+        "id": 380,
         "location": "Whispering_Root-Greenpath",
         "item": "MoreDoors-Broken_Key",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 382,
+        "id": 381,
         "location": "Hallownest_Seal-King's_Station",
         "item": "Warriors_Notes",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 383,
+        "id": 382,
         "location": "Descending_Dark",
         "item": "Rancid_Egg",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 384,
+        "id": 383,
         "location": "Charm_Notch-Shrumal_Ogres",
         "item": "Vessel_Fragment",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 385,
+        "id": 384,
         "location": "Monarch_Wings",
         "item": "Arcane_Egg",
+        "costs": [],
+        "vanilla": false
+      },
+      {
+        "id": 385,
+        "location": "Boss_Essence-No_Eyes",
+        "item": "Void_Heart",
         "costs": [],
         "vanilla": false
       },
