@@ -59,5 +59,5 @@ internal abstract class AbstractGhostWarriorModule<M> : AbstractModule<M> where 
         return false;
     }
 
-    protected abstract void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHP);
+    protected abstract void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp);
 }
