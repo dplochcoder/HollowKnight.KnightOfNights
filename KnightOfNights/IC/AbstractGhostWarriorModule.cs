@@ -3,12 +3,15 @@ using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using PurenailCore.CollectionUtil;
 using SFCore.Utils;
+using UnityEngine;
 
 namespace KnightOfNights.IC;
 
 internal abstract class AbstractGhostWarriorModule<M> : AbstractModule<M> where M : AbstractGhostWarriorModule<M>
 {
     protected abstract FsmID FsmID();
+
+    protected virtual float HPBoost() => 2;
 
     public override void Initialize()
     {
@@ -34,7 +37,7 @@ internal abstract class AbstractGhostWarriorModule<M> : AbstractModule<M> where 
         for (int i = 1; i <= 5; i++)
         {
             var hp = healthFsmVars.GetFsmInt($"Level {i}");
-            hp.Value *= 2;
+            hp.Value = Mathf.CeilToInt(hp.Value * HPBoost());
 
             healthFsm.GetFsmState($"Set {i}").AddLastAction(new Lambda(() => baseHp.Value = hp.Value));
         }
