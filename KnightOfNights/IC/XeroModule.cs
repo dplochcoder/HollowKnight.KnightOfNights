@@ -13,21 +13,9 @@ using UnityEngine;
 namespace KnightOfNights.IC;
 
 [PlandoSubmodule]
-internal class XeroModule : AbstractModule<XeroModule>
+internal class XeroModule : AbstractGhostWarriorModule<XeroModule>
 {
-    private static readonly FsmID fsmId = new("Ghost Warrior Xero", "Attacking");
-
-    public override void Initialize()
-    {
-        base.Initialize();
-        Events.AddFsmEdit(fsmId, ModifyXero);
-    }
-
-    public override void Unload()
-    {
-        Events.RemoveFsmEdit(fsmId, ModifyXero);
-        base.Unload();
-    }
+    protected override FsmID FsmID() => new("Ghost Warrior Xero", "Attacking");
 
     private void AddSword(PlayMakerFSM fsm, int a, int b, int newNum)
     {
@@ -61,7 +49,7 @@ internal class XeroModule : AbstractModule<XeroModule>
         bObj.transform.localPosition = (aPos + cPos) / 2;
     }
 
-    private void ModifyXero(PlayMakerFSM fsm)
+    protected override void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp)
     {
         var obj = fsm.gameObject;
 
@@ -71,20 +59,7 @@ internal class XeroModule : AbstractModule<XeroModule>
 
         for (int i = 1; i <= 6; i++) obj.FindChild($"S{i} Home")!.transform.Translate(new(0, -0.5f, 0));
 
-        // Buff HP
-        Wrapped<int> baseHp = new(0);
-
-        var healthFsm = obj.LocateMyFSM("FSM");
-        var healthFsmVars = healthFsm.FsmVariables;
-        for (int i = 1; i <= 5; i++)
-        {
-            var hp = healthFsmVars.GetFsmInt($"Level {i}");
-            hp.Value *= 2;
-
-            healthFsm.GetFsmState($"Set {i}").AddLastAction(new Lambda(() => baseHp.Value = hp.Value));
-        }
-
-        UnityEngine.Object.Destroy(obj.LocateMyFSM("Sword Summon"));
+        Object.Destroy(obj.LocateMyFSM("Sword Summon"));
 
         var movementFsm = obj.LocateMyFSM("Movement");
         void SetSpeed(float speed, float accel, float minChange, float maxChange)
@@ -141,20 +116,6 @@ internal class XeroModule : AbstractModule<XeroModule>
             swordSummons.Value = toSummon;
         }
 
-        bool UpdatePhase(Wrapped<bool> activated, float pct)
-        {
-            if (activated.Value || baseHp.Value == 0) return false;
-
-            var hp = obj.GetComponent<HealthManager>().hp;
-            if (hp <= baseHp.Value * pct)
-            {
-                activated.Value = true;
-                return true;
-            }
-
-            return false;
-        }
-
         IEnumerable<PlayMakerFSM> GetAllSwords()
         {
             for (int i = 1; i <= 6; i++) yield return fsm.FsmVariables.GetFsmGameObject($"Sword {i}").Value.LocateMyFSM("xero_nail")!;
@@ -166,7 +127,7 @@ internal class XeroModule : AbstractModule<XeroModule>
         Wrapped<int> numAttacks = new(1);
         anticState.AddFirstAction(new Lambda(() =>
         {
-            if (UpdatePhase(phase2, 0.75f))
+            if (UpdatePhase(fsm, baseHp, phase2, 0.75f))
             {
                 SetSpeed(9.5f, 50f, 1f, 5f);
                 SetWait(0.65f, 0.75f, 0.9f);
@@ -174,7 +135,7 @@ internal class XeroModule : AbstractModule<XeroModule>
                 fsm.SendEvent("SUMMON");
                 return;
             }
-            if (UpdatePhase(phase3, 0.5f))
+            if (UpdatePhase(fsm, baseHp, phase3, 0.5f))
             {
                 SetSpeed(10f, 55f, 0.75f, 4.5f);
                 SetWait(0.7f, 0.8f, 0.85f);
