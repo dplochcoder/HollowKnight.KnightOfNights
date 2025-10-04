@@ -13,7 +13,7 @@ internal class NoEyesModule : AbstractGhostWarriorModule<NoEyesModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior No Eyes", "Damage Response");
 
-    protected override float HPBoost() => 2.75f;
+    protected override float HPBoost() => 2.6f;
 
     protected override void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp)
     {

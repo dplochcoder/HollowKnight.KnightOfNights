@@ -20,7 +20,7 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Slug", "Attacking");
 
-    protected override float HPBoost() => 2.25f;
+    protected override float HPBoost() => 2.6f;
 
     private void SpawnSpears(PlayMakerFSM src, GameObject template, float baseAngle, int count, float speedup, AudioPlayerOneShotSingle audio, float pitch)
     {
@@ -157,7 +157,7 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
                     if (Random.Range(0, 3) == 0)
                     {
                         SpawnSpears(fsm, spear, angle, 16, 1.1f, audio, 1.1f);
-                        yield return new WaitForSeconds(0.25f);
+                        yield return new WaitForSeconds(0.225f);
                     }
                     else
                     {
@@ -200,7 +200,7 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
                     else
                     {
                         int count = Random.Range(7, 9);
-                        int len = Random.Range(0, 3) == 0 ? 5 : 4;
+                        int len = Random.Range(0, 3) == 0 ? 4 : 5;
                         List<float> offs = [];
                         for (int i = 0; i < len; i++) offs.Add(Offset(count, len) * i);
                         offs.Shuffle(new());
@@ -208,7 +208,7 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
                         for (int i = 0; i < len; i++)
                         {
                             SpawnSpears(fsm, spear, angle + offs[i], count, 1.2f, audio, 1 + (i * 0.1f));
-                            yield return new WaitForSeconds(0.75f / len);
+                            yield return new WaitForSeconds(0.7f / len);
                         }
                     }
                     fsm.SendEvent("DONE");

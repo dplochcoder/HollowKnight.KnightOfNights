@@ -11,7 +11,7 @@ internal abstract class AbstractGhostWarriorModule<M> : AbstractModule<M> where 
 {
     protected abstract FsmID FsmID();
 
-    protected virtual float HPBoost() => 2;
+    protected abstract float HPBoost();
 
     public override void Initialize()
     {

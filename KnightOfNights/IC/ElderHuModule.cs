@@ -20,6 +20,8 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Hu", "Attacking");
 
+    protected override float HPBoost() => 2.25f;
+
     private IEnumerable<PlayMakerFSM> GetAllRings(PlayMakerFSM fsm)
     {
         for (int i = 1; i <= 17; i++) yield return fsm.FsmVariables.GetFsmGameObject($"Ring {i}").Value.LocateMyFSM("Control");
@@ -88,7 +90,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                 {
                     for (int i = 0; i < 17; i++) if (i % 2 != off) controls[i].gameObject.SetActive(true);
                     PlayRingSounds(fsm);
-                }, 0.4f);
+                }, 0.3f);
                 break;
             case 2:
                 // Shade dodge.
@@ -207,7 +209,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
             }
             else
             {
-                const float HALF_STEP = 0.4f;
+                const float HALF_STEP = 0.375f;
 
                 IEnumerator DubStep()
                 {

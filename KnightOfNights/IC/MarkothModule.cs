@@ -14,7 +14,7 @@ internal class MarkothModule : AbstractGhostWarriorModule<MarkothModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Markoth", "Attacking");
 
-    protected override float HPBoost() => 1.6f;
+    protected override float HPBoost() => 1.75f;
 
     private void SetupSpawnShield(FsmState state, string name, GameObject src, Quaternion rot, Vector3 target)
     {
@@ -141,7 +141,7 @@ internal class MarkothModule : AbstractGhostWarriorModule<MarkothModule>
         Wrapped<bool> phase3 = new(false);
         waitState.AddFirstAction(new Lambda(() =>
         {
-            if (UpdatePhase(fsm, baseHp, phase2, 2f / 3f))
+            if (UpdatePhase(fsm, baseHp, phase2, 0.7f))
             {
                 SetNailWait(0.75f, 1.25f);
                 SetShieldWait(12f, 15f);
@@ -150,7 +150,7 @@ internal class MarkothModule : AbstractGhostWarriorModule<MarkothModule>
                 shieldTemplate.Value = Object.Instantiate(shieldAttackFsm.FsmVariables.GetFsmGameObject("Shield 1").Value.LocateMyFSM("Summon Shield").FsmVariables.GetFsmGameObject("Shield 2").Value);
                 shieldAttackFsm.FsmVariables.GetFsmBool("Rage").Value = true;
             }
-            else if (UpdatePhase(fsm, baseHp, phase3, 1f / 3f))
+            else if (UpdatePhase(fsm, baseHp, phase3, 0.4f))
             {
                 SetPhase3NailWait();
                 SetShieldWait(14f, 17f);
