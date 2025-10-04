@@ -13,7 +13,7 @@ internal class NoEyesModule : AbstractGhostWarriorModule<NoEyesModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior No Eyes", "Damage Response");
 
-    protected override float HPBoost() => 2.6f;
+    protected override float HPBoost() => 2.4f;
 
     protected override void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp)
     {
@@ -64,7 +64,7 @@ internal class NoEyesModule : AbstractGhostWarriorModule<NoEyesModule>
             warpWait.timeMin = 3.5f - pct * 2.25f;
             warpWait.timeMax = 5f - pct * 3f;
 
-            shotSpawnFsm.FsmVariables.GetFsmFloat("Spawn Pause").Value = 2.25f - 1.35f * Mathf.Pow(pct, 0.7f);
+            shotSpawnFsm.FsmVariables.GetFsmFloat("Spawn Pause").Value = 2.25f - 1.3f * Mathf.Pow(pct, 0.65f);
         }));
     }
 

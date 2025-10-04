@@ -72,15 +72,16 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
         }, delay);
     }
 
-    private void ExecuteSpecialAttack(PlayMakerFSM fsm)
+    private void ExecuteSpecialAttack(PlayMakerFSM fsm, Wrapped<bool> didShadeDodge)
     {
         List<PlayMakerFSM> controls = [.. GetAllRings(fsm)];
-        switch (Random.Range(0, 3))
+        switch (Random.Range(0, didShadeDodge.Value ? 2 : 3))
         {
             case 0:
                 // Don't move.
                 int gap = Random.Range(7, 10);
                 for (int i = 0; i < 17; i++) if (i != gap) controls[i].gameObject.SetActive(true);
+                didShadeDodge.Value = false;
                 break;
             case 1:
                 // Quick step.
@@ -91,6 +92,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                     for (int i = 0; i < 17; i++) if (i % 2 != off) controls[i].gameObject.SetActive(true);
                     PlayRingSounds(fsm);
                 }, 0.3f);
+                didShadeDodge.Value = false;
                 break;
             case 2:
                 // Shade dodge.
@@ -106,6 +108,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                         if (copy != 0) PlayMegaRingSounds(fsm, 0.1f);
                     }, flip ? (SPAN - delay) : delay);
                 }
+                didShadeDodge.Value = true;
                 break;
         }
     }
@@ -120,6 +123,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
         Wrapped<bool> phase2 = new(false);
         Wrapped<bool> phase3 = new(false);
         Wrapped<int> skippedMegas = new(0);
+        Wrapped<bool> didShadeDodge = new(false);
         fsm.GetFsmState("Place Rings").AddLastAction(new Lambda(() =>
         {
             if (UpdatePhase(fsm, baseHP, phase2, 0.7f))
@@ -127,7 +131,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                 SetSpeed(fsm, 9f, 0.5f, 1.15f);
                 SetWait(fsm, 0.8f, 1.2f);
             }
-            else if (UpdatePhase(fsm, baseHP, phase3, 0.4f))
+            else if (UpdatePhase(fsm, baseHP, phase3, 0.35f))
             {
                 SetSpeed(fsm, 10f, 0.4f, 1.3f);
                 SetWait(fsm, 0.7f, 0.9f);
@@ -141,7 +145,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                     int b = Random.Range(1, 7);
                     ExecuteAttack(fsm.GetFsmState($"{a} {b}"));
                 }
-                else ExecuteSpecialAttack(fsm);
+                else ExecuteSpecialAttack(fsm, didShadeDodge);
 
                 fsm.SendEvent("ATTACK");
                 ++skippedMegas.Value;
@@ -221,7 +225,7 @@ internal class ElderHuModule : AbstractGhostWarriorModule<ElderHuModule>
                         yield return new WaitForSeconds(HALF_STEP);
 
                         int first = j % 2 == off ? 1 : 0;
-                        yield return new WaitUntil(() => !controls[j].gameObject.activeSelf);
+                        yield return new WaitUntil(() => !controls[first].gameObject.activeSelf);
                     }
 
                     yield return new WaitForSeconds(0.3f);

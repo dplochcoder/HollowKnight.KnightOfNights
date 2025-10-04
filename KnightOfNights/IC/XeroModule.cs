@@ -17,7 +17,7 @@ internal class XeroModule : AbstractGhostWarriorModule<XeroModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Xero", "Attacking");
 
-    protected override float HPBoost() => 2.25f;
+    protected override float HPBoost() => 2.4f;
 
     private void AddSword(PlayMakerFSM fsm, int a, int b, int newNum)
     {
@@ -129,7 +129,7 @@ internal class XeroModule : AbstractGhostWarriorModule<XeroModule>
         Wrapped<int> numAttacks = new(1);
         anticState.AddFirstAction(new Lambda(() =>
         {
-            if (UpdatePhase(fsm, baseHp, phase2, 0.8f))
+            if (UpdatePhase(fsm, baseHp, phase2, 0.7f))
             {
                 SetSpeed(9.5f, 50f, 1f, 5f);
                 SetWait(0.65f, 0.75f, 0.9f);
@@ -137,7 +137,7 @@ internal class XeroModule : AbstractGhostWarriorModule<XeroModule>
                 fsm.SendEvent("SUMMON");
                 return;
             }
-            if (UpdatePhase(fsm, baseHp, phase3, 0.6f))
+            if (UpdatePhase(fsm, baseHp, phase3, 0.4f))
             {
                 SetSpeed(10f, 55f, 0.75f, 4.5f);
                 SetWait(0.6f, 0.7f, 0.85f);

@@ -13,7 +13,7 @@ internal class MarmuModule : AbstractGhostWarriorModule<MarmuModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Marmu", "Control");
 
-    protected override float HPBoost() => 2.6f;
+    protected override float HPBoost() => 2.5f;
 
     protected override void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp)
     {

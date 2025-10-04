@@ -20,7 +20,7 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Slug", "Attacking");
 
-    protected override float HPBoost() => 2.6f;
+    protected override float HPBoost() => 2.5f;
 
     private void SpawnSpears(PlayMakerFSM src, GameObject template, float baseAngle, int count, float speedup, AudioPlayerOneShotSingle audio, float pitch)
     {
@@ -105,12 +105,12 @@ internal class GorbModule : AbstractGhostWarriorModule<GorbModule>
                 SetSpeeds(0.75f, 1.75f, 0.25f, 1.1f, 0.5f);
                 SetMoveSpeeds(5f, 0.35f, 0.25f, 0.25f);
             }
-            else if (UpdatePhase(fsm, baseHp, phase3, 0.6f))
+            else if (UpdatePhase(fsm, baseHp, phase3, 0.55f))
             {
                 SetSpeeds(0.75f, 1.25f, 0.2f, 1.3f, 0.35f);
                 SetMoveSpeeds(5.5f, 0.35f, 0.3f, 0.2f);
             }
-            else if (UpdatePhase(fsm, baseHp, phase4, 0.4f))
+            else if (UpdatePhase(fsm, baseHp, phase4, 0.35f))
             {
                 SetSpeeds(0.7f, 1f, 0.2f, 1.5f, 0.25f);
                 SetMoveSpeeds(6.5f, 0.4f, 0.45f, 0.15f);

@@ -18,7 +18,7 @@ internal class GalienModule : AbstractGhostWarriorModule<GalienModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Galien", "Movement");
 
-    protected override float HPBoost() => 2.5f;
+    protected override float HPBoost() => 2.6f;
 
     protected override void ModifyGhostWarrior(PlayMakerFSM fsm, Wrapped<int> baseHp)
     {
@@ -106,19 +106,19 @@ internal class GalienModule : AbstractGhostWarriorModule<GalienModule>
 
             Wrapped<bool> secondHammer = new(false);
             Wrapped<GameObject?> secondHammerObj = new(null);
-            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, secondHammer, 0.6f));
+            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, secondHammer, 0.55f));
             yield return fsm.StartCoroutine(SummonHammer([hammer], secondHammerObj));
 
             Wrapped<bool> mini3 = new(false);
-            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, mini3, 0.45f));
+            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, mini3, 0.4f));
             yield return fsm.StartCoroutine(SummonMiniHammer());
 
             Wrapped<bool> mini4 = new(false);
-            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, mini4, 0.3f));
+            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, mini4, 0.25f));
             yield return fsm.StartCoroutine(SummonMiniHammer());
 
             Wrapped<bool> thirdHammer = new(false);
-            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, thirdHammer, 0.15f));
+            yield return new WaitUntil(() => UpdatePhase(fsm, baseHp, thirdHammer, 0.1f));
             yield return fsm.StartCoroutine(SummonHammer([hammer, secondHammerObj.Value], new(null)));
         }
         fsm.StartCoroutine(DoSummons());
