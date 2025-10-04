@@ -14,7 +14,7 @@ internal class MarkothModule : AbstractGhostWarriorModule<MarkothModule>
 {
     protected override FsmID FsmID() => new("Ghost Warrior Markoth", "Attacking");
 
-    protected override float HPBoost() => 1.75f;
+    protected override float HPBoost() => 1.7f;
 
     private void SetupSpawnShield(FsmState state, string name, GameObject src, Quaternion rot, Vector3 target)
     {
