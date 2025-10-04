@@ -84,9 +84,29 @@ internal static class FsmExtensions
         action.accel = accel;
     }
 
-    private static MethodInfo doPlayRandomClip = typeof(AudioPlayerOneShotSingle).GetMethod("DoPlayRandomClip", BindingFlags.NonPublic | BindingFlags.Instance);
+    private static MethodInfo doPlayRandomClipSingle = typeof(AudioPlayerOneShotSingle).GetMethod("DoPlayRandomClip", BindingFlags.NonPublic | BindingFlags.Instance);
 
     private static void DoPlayRandomClipImpl(this AudioPlayerOneShotSingle self, float? volume = null)
+    {
+        if (volume.HasValue)
+        {
+            var prev = self.volume;
+            self.volume = volume.Value;
+            doPlayRandomClipSingle.Invoke(self, []);
+            self.volume = prev;
+        }
+        else doPlayRandomClipSingle.Invoke(self, []);
+    }
+
+    public static void DoPlayRandomClip(this AudioPlayerOneShotSingle self, float? volume = null)
+    {
+        if (self.delay.Value <= 0) self.DoPlayRandomClipImpl(volume);
+        else self.Fsm.FsmComponent.gameObject.DoAfter(() => self.DoPlayRandomClipImpl(volume), self.delay.Value);
+    }
+
+    private static MethodInfo doPlayRandomClip = typeof(AudioPlayerOneShot).GetMethod("DoPlayRandomClip", BindingFlags.NonPublic | BindingFlags.Instance);
+
+    private static void DoPlayRandomClipImpl(this AudioPlayerOneShot self, float? volume = null)
     {
         if (volume.HasValue)
         {
@@ -98,7 +118,7 @@ internal static class FsmExtensions
         else doPlayRandomClip.Invoke(self, []);
     }
 
-    public static void DoPlayRandomClip(this AudioPlayerOneShotSingle self, float? volume = null)
+    public static void DoPlayRandomClip(this AudioPlayerOneShot self, float? volume = null)
     {
         if (self.delay.Value <= 0) self.DoPlayRandomClipImpl(volume);
         else self.Fsm.FsmComponent.gameObject.DoAfter(() => self.DoPlayRandomClipImpl(volume), self.delay.Value);
