@@ -37,6 +37,8 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
 
     private bool HookHasRevekSong(string name, bool orig) => name == nameof(HasRevekSong) ? HasRevekSong : orig;
 
+    private void FixRevekSong(Transition t) => RevekSongSummon.revekActive = false;
+
     public override void Initialize()
     {
         base.Initialize();
@@ -46,6 +48,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         Events.AddLanguageEdit(new(NAME_KEY), FillName);
         Events.AddLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook += HookHasRevekSong;
+        Events.OnBeginSceneTransition += FixRevekSong;
     }
 
     public override void Unload()
@@ -55,6 +58,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         Events.RemoveLanguageEdit(new(NAME_KEY), FillName);
         Events.RemoveLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook -= HookHasRevekSong;
+        Events.OnBeginSceneTransition -= FixRevekSong;
 
         base.Unload();
     }

@@ -11,7 +11,7 @@ namespace KnightOfNights.IC;
 
 internal class RevekSongSummon
 {
-    private static bool revekActive = false;
+    internal static bool revekActive = false;
 
     internal static void Summon(List<FluteNote> notes)
     {
