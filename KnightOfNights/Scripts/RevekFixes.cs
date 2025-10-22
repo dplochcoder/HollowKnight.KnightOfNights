@@ -4,7 +4,6 @@ using UnityEngine;
 
 namespace KnightOfNights.Scripts;
 
-
 internal class RevekFixes : MonoBehaviour, IHitResponder
 {
     public bool HealOnParry = false;
