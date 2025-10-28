@@ -88,7 +88,21 @@ internal class SlashAttack(PlayMakerFSM fsm)
     {
         Result = SlashAttackResult.NOT_PARRIED;
 
-        if (fsm.ActiveStateName == "Slash Idle" || fsm.ActiveStateName == "Slash Antic") fsm.SetState("Slash Tele Out");
-        else fsm.GetFsmState("Slash Idle").AddFirstAction(new Lambda(() => fsm.SetState("Slash Tele Out")));
+        void TeleOut()
+        {
+            fsm.GetFsmState("Slash Tele Out").AddLastAction(new LambdaEveryFrame(() =>
+            {
+                // Fix clip fighting.
+                var animator = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
+                if (animator.CurrentClip.name != "Tele Out") animator.Play("Tele Out");
+            }));
+            fsm.SetState("Slash Tele Out");
+
+            var emission = fsm.FsmVariables.GetFsmGameObject("Idle Pt").Value.GetComponent<ParticleSystem>().emission;
+            emission.enabled = false;
+        }
+
+        if (fsm.ActiveStateName == "Slash Idle" || fsm.ActiveStateName == "Slash Antic") TeleOut();
+        else fsm.GetFsmState("Slash Idle").AddFirstAction(new Lambda(TeleOut));
     }
 }

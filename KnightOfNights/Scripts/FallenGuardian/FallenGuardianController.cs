@@ -10,8 +10,7 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 internal class FallenGuardianController : MonoBehaviour
 {
     [ShimField] public float SequenceDelay;
-    [ShimField] public float NormalTelegraph;
-    [ShimField] public float ShortTelegraph;
+    [ShimField] public float Telegraph;
     [ShimField] public float Deceleration;
     [ShimField] public float LongWait;
     [ShimField] public float ShortWait;
@@ -22,33 +21,33 @@ internal class FallenGuardianController : MonoBehaviour
     private IEnumerator<SlashAttackSequence> SpecTutorial()
     {
         yield return new FlippableSlashAttackSequence([
-            (0f, SlashAttackSpec.LEFT.WithTelegraph(NormalTelegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(NormalTelegraph)),
-            (LongWait, SlashAttackSpec.LEFT.WithTelegraph(NormalTelegraph))
+            (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.LEFT.WithTelegraph(Telegraph))
         ]);
 
         yield return new FlippableSlashAttackSequence([
-            (0f, SlashAttackSpec.LEFT.WithTelegraph(NormalTelegraph)),
-            (LongWait, SlashAttackSpec.LEFT.WithTelegraph(NormalTelegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(NormalTelegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(ShortTelegraph))
+            (0f, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph))
         ]);
 
         yield return new FlippableSlashAttackSequence([
-            (0f, SlashAttackSpec.RIGHT.WithTelegraph(NormalTelegraph)),
-            (LongWait, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(NormalTelegraph)),
-            (ShortWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(ShortTelegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(NormalTelegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(ShortTelegraph))
+            (0f, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph))
         ]);
 
         yield return new FlippableSlashAttackSequence([
-            (0f, SlashAttackSpec.LEFT.WithTelegraph(NormalTelegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.WithTelegraph(ShortTelegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(NormalTelegraph)),
-            (ShortWait, SlashAttackSpec.LEFT.WithTelegraph(ShortTelegraph)),
-            (ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(ShortTelegraph)),
-            (0f, SlashAttackSpec.HIGH_RIGHT.WithTelegraph(ShortTelegraph))
+            (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
+            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
+            (ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
+            (0f, SlashAttackSpec.HIGH_RIGHT.WithTelegraph(Telegraph))
         ]);
 
         // FIXME: More
