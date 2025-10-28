@@ -89,6 +89,10 @@ namespace KnightOfNights.Scripts.SharedLib
             return ret;
         }
 
+        public static T Choose<T>(this T[] self) => self[UnityEngine.Random.Range(0, self.Length)];
+
+        public static T Choose<T>(this List<T> self) => self[UnityEngine.Random.Range(0, self.Count)];
+
 #pragma warning disable CS8600 // Converting null literal or possible null value to non-nullable type.
 #pragma warning disable CS8619 // Nullability of reference types in value doesn't match target type.
         private static IEnumerable<(T, T)> Pairs<T>(this IEnumerable<T> self, bool circular)

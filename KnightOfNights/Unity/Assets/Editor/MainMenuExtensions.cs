@@ -377,10 +377,10 @@ public class MainMenuExtensions
     static void BuildSceneSpecificBundleLinux() => BuildSceneSpecificBundle(BuildTarget.StandaloneLinux64);
 
     [MenuItem("KnightOfNights/Objects Bundle/Build")]
-    static void BuildObjectsBundle() => BuildSpecificBundle("objectsbundle", BuildTarget.StandaloneWindows);
+    static void BuildObjectsBundle() => BuildSpecificBundle("knightofnightsbundle", BuildTarget.StandaloneWindows);
 
     [MenuItem("KnightOfNights/Objects Bundle/Build (Linux)")]
-    static void BuildObjectsBundleLinux() => BuildSpecificBundle("objectsbundle", BuildTarget.StandaloneLinux64);
+    static void BuildObjectsBundleLinux() => BuildSpecificBundle("knightofnightsbundle", BuildTarget.StandaloneLinux64);
 
     [MenuItem("KnightOfNights/All Scenes/Build")]
     static void BuildAllAssetBundles()

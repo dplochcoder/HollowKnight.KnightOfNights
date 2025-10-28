@@ -1,4 +1,11 @@
-﻿namespace KnightOfNights.Scripts.FallenGuardian;
+﻿using HutongGames.PlayMaker.Actions;
+using ItemChanger.Extensions;
+using ItemChanger.FsmStateActions;
+using KnightOfNights.Scripts.SharedLib;
+using SFCore.Utils;
+using UnityEngine;
+
+namespace KnightOfNights.Scripts.FallenGuardian;
 
 internal enum SlashAttackResult
 {
@@ -7,17 +14,80 @@ internal enum SlashAttackResult
     NOT_PARRIED,
 }
 
-internal class SlashAttack
+internal class SlashAttack(PlayMakerFSM fsm)
 {
     public SlashAttackResult Result { get; private set; }
 
-    public static void Spawn(SlashAttackSpec spec)
+    public Vector2 ParryPos { get; private set; }
+
+    public static SlashAttack Spawn(SlashAttackSpec spec)
     {
-        // FIXME
+        var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
+        revek.transform.position = new(-100, -100);
+
+        SlashAttack attack = new(revek.LocateMyFSM("Control"));
+        attack.SpawnImpl(spec);
+        return attack;
+    }
+
+    private void SpawnImpl(SlashAttackSpec spec)
+    {
+        var revek = fsm.gameObject;
+        revek.AddComponent<RevekAddons>();
+
+        fsm.Fsm.GlobalTransitions = [];
+        foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
+
+        var slashTeleInState = fsm.GetFsmState("Slash Tele In");
+
+        var initState = fsm.GetFsmState("Init");
+        initState.ClearTransitions();
+        initState.AddFsmTransition("FINISHED", "Slash Tele In");
+
+        GameObject audioSrc = new("RevekAudioSource");
+        audioSrc.transform.parent = HeroController.instance.transform;
+        slashTeleInState.GetFirstActionOfType<AudioPlayerOneShotSingle>().spawnPoint = audioSrc;
+
+        slashTeleInState.AddFirstAction(new Lambda(() =>
+        {
+            audioSrc.transform.localPosition = spec.SpawnOffset;
+            fsm.FsmVariables.GetFsmFloat("X Distance").Value = spec.SpawnOffset.x;
+            fsm.FsmVariables.GetFsmFloat("Y Distance").Value = spec.SpawnOffset.y;
+        }));
+
+        var idleWait = fsm.GetFsmState("Slash Idle").GetFirstActionOfType<WaitRandom>();
+        idleWait.timeMin = spec.Telegraph;
+        idleWait.timeMax = spec.Telegraph;
+
+        var slashState = fsm.GetFsmState("Slash");
+        slashState.GetFirstActionOfType<FireAtTarget>().position.Value = spec.TargetOffset;
+        slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = spec.Deceleration;
+
+        fsm.GetFsmState("Slash Tele Out").AddFirstAction(new Lambda(() => Result = SlashAttackResult.NOT_PARRIED));
+        fsm.GetFsmState("Damaged Pause").AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
+
+        var attackPause = fsm.GetFsmState("Attack Pause");
+        var attackWait = attackPause.GetFirstActionOfType<WaitRandom>();
+        attackWait.timeMin = 5;
+        attackWait.timeMax = 5;
+        attackPause.AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
+
+        var hitState = fsm.GetFsmState("Hit");
+        hitState.AddFirstAction(new Lambda(() =>
+        {
+            ParryPos = fsm.gameObject.transform.position;
+            Result = SlashAttackResult.PARRIED;
+        }));
+        hitState.GetFirstActionOfType<AudioPlayerOneShot>().Enabled = false;
+
+        revek.SetActive(true);
     }
 
     internal void Cancel()
     {
-        // FIXME
+        Result = SlashAttackResult.NOT_PARRIED;
+
+        if (fsm.ActiveStateName == "Slash Idle" || fsm.ActiveStateName == "Slash Antic") fsm.SetState("Slash Tele Out");
+        else fsm.GetFsmState("Slash Idle").AddFirstAction(new Lambda(() => fsm.SetState("Slash Tele Out")));
     }
 }

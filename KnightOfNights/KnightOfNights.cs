@@ -47,4 +47,6 @@ public class KnightOfNightsMod : Mod
     public static new void Log(string msg) => (Instance as ILogger)!.Log(msg);
 
     public static new void LogError(string msg) => (Instance as ILogger)!.LogError(msg);
+
+    public static void BUG(string msg) => (Instance as ILogger)!.LogError($"BUG: {msg}");
 }

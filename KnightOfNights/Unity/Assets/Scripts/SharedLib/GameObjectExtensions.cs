@@ -162,6 +162,8 @@ namespace KnightOfNights.Scripts.SharedLib
             self.GetOrAddComponent<Dummy>().StartCoroutine(Routine());
         }
 
+        public static void DestroyAfter(this GameObject self, float delay) => self.DoAfter(() => UnityEngine.Object.Destroy(self), delay);
+
         public static GameObject ResetCompiled(this GameObject self, string name = "Compiled")
         {
             var compiled = self.SharedFindChild(name);

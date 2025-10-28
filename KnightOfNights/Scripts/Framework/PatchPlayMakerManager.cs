@@ -8,7 +8,7 @@ public class PatchPlayMakerManager : MonoBehaviour
 {
     private void Awake()
     {
-        var go = Object.Instantiate(KnightOfNightsPreloader.Instance.PlayMaker);
+        var go = Instantiate(KnightOfNightsPreloader.Instance.PlayMaker);
         go.SetActive(true);
         go.name = "PlayMaker Unity 2D";
     }

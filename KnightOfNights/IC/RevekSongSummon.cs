@@ -22,7 +22,7 @@ internal class RevekSongSummon
         revekActive = true;
 
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
-        revek.AddComponent<RevekFixes>().HealOnParry = true;
+        revek.AddComponent<RevekAddons>().HealOnNailParry = true;
 
         revek.transform.position = new(-100, -100);
         revek.SetActive(true);
