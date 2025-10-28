@@ -60,6 +60,7 @@ internal class SlashAttack(PlayMakerFSM fsm)
         idleWait.timeMax = spec.Telegraph;
 
         var slashState = fsm.GetFsmState("Slash");
+        slashState.AddFsmTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = spec.TargetOffset;
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = spec.Deceleration;
 

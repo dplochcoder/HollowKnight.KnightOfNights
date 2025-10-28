@@ -83,6 +83,7 @@ internal class RevekSongSummon
         }));
 
         var slashState = fsm.GetState("Slash");
+        slashState.AddTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = new(0, -1.5f, 0);
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = 0.925f;
     }
