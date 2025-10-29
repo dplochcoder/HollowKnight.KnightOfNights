@@ -1,12 +1,22 @@
 ﻿using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.GOUtil;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
 
 internal static class GameObjectExtensions
 {
+    public static void StartLibCoroutine(this MonoBehaviour self, CoroutineElement co) => self.StartCoroutine(EvaluateLibCoroutine(co));
+
+    public static void StartLibCoroutine(this MonoBehaviour self, IEnumerator<CoroutineElement> enumerator) => self.StartCoroutine(EvaluateLibCoroutine(CoroutineSequence.Create(enumerator)));
+
+    private static IEnumerator EvaluateLibCoroutine(CoroutineElement co)
+    {
+        while (!co.Update(Time.deltaTime).done) yield return 0;
+    }
+
     public static void PlayAtPosition(this AudioClip self, Vector2 pos)
     {
         var obj = new GameObject();

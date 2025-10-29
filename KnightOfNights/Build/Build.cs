@@ -112,14 +112,13 @@ public static class Build
                 WindowStyle = ProcessWindowStyle.Hidden,
                 FileName = "dotnet",
                 Arguments = $@"build ""{Path.Combine(root, project, $"{project}.csproj")}"" --configuration {(release ? "Release" : "Debug")}",
-                UseShellExecute = false,
-                RedirectStandardError = true
+                UseShellExecute = false
             }
         };
         process.Start();
         process.WaitForExit();
 
-        if (process.ExitCode != 0) throw new Exception($"Failed to build {project}: {process.StandardError.ReadToEnd()}");
+        if (process.ExitCode != 0) throw new Exception($"Failed to build {project}");
     }
 
     private static string ReadLocalOverrides(string root)

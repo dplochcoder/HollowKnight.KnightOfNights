@@ -5,3 +5,5 @@ Randomizer 4
 RandomizerCore
 RandomizerCore.Json
 SFCore
+
+Satchel

@@ -28,23 +28,24 @@ public static class KnightOfNightsBundleAPI
         throw new ArgumentException($"Unknown Prefab: {name}");
     }
 
-    private const string BUNDLE = "KnightOfNights.Unity.Assets.AssetBundles.knightofnightsbundle";
+    private const string BUNDLE_NAME = "knightofnightsbundle";
+    private const string BUNDLE_PATH = $"KnightOfNights.Unity.Assets.AssetBundles.{BUNDLE_NAME}";
 
     private static AssetBundle LoadCoreBundle()
     {
 #if DEBUG
         try
         {
-            KnightOfNightsMod.Log($"Loading {BUNDLE} from disk");
+            KnightOfNightsMod.Log($"Loading {BUNDLE_NAME} from disk");
             var debugData = PurenailCore.SystemUtil.JsonUtil<KnightOfNightsMod>.DeserializeEmbedded<Build.DebugData>("KnightOfNights.Resources.Data.debug.json");
-            var bundle = AssetBundle.LoadFromFile($"{debugData.LocalAssetBundlesPath}/{BUNDLE}");
-            KnightOfNightsMod.Log($"Loading {BUNDLE} from disk: success!");
+            var bundle = AssetBundle.LoadFromFile($"{debugData.LocalAssetBundlesPath}/{BUNDLE_NAME}");
+            KnightOfNightsMod.Log($"Loading {BUNDLE_NAME} from disk: success!");
             return bundle;
         }
-        catch (Exception e) { KnightOfNightsMod.BUG($"Failed to load {BUNDLE} from local assets: {e}"); }
+        catch (Exception e) { KnightOfNightsMod.BUG($"Failed to load {BUNDLE_NAME} from local assets: {e}"); }
 #endif
 
-        using StreamReader sr = new(typeof(KnightOfNightsBundleAPI).Assembly.GetManifestResourceStream(BUNDLE));
+        using StreamReader sr = new(typeof(KnightOfNightsBundleAPI).Assembly.GetManifestResourceStream(BUNDLE_PATH));
         return AssetBundle.LoadFromStream(sr.BaseStream);
     }
 }

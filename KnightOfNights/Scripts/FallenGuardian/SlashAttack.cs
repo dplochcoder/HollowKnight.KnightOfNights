@@ -17,8 +17,9 @@ internal enum SlashAttackResult
 internal class SlashAttack(PlayMakerFSM fsm)
 {
     public SlashAttackResult Result { get; private set; }
-
     public Vector2 ParryPos { get; private set; }
+
+    private ParticleClock? clock;
 
     public static SlashAttack Spawn(SlashAttackSpec spec)
     {
@@ -30,10 +31,17 @@ internal class SlashAttack(PlayMakerFSM fsm)
         return attack;
     }
 
+    private const float ANIM_FRACTION = 0.35f;
+    private const float FADE_FRACTION = 0.25f;
+
     private void SpawnImpl(SlashAttackSpec spec)
     {
         var revek = fsm.gameObject;
         revek.AddComponent<RevekAddons>();
+
+        var timeToStrike = (5f / 18f) + spec.Telegraph + 0.15f;
+        clock = ParticleClock.Spawn(revek.transform, timeToStrike * ANIM_FRACTION, timeToStrike * (1 - ANIM_FRACTION), timeToStrike * FADE_FRACTION);
+        KnightOfNightsMod.Log($"Hi I spawned clock: {clock.transform.position}");
 
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
@@ -90,6 +98,7 @@ internal class SlashAttack(PlayMakerFSM fsm)
 
         void TeleOut()
         {
+            clock?.Cancel();
             fsm.GetFsmState("Slash Tele Out").AddLastAction(new LambdaEveryFrame(() =>
             {
                 // Fix clip fighting.
