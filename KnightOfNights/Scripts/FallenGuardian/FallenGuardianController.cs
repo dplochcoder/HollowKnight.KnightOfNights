@@ -198,6 +198,9 @@ internal class FallenGuardianController : MonoBehaviour
 
     private IEnumerator<CoroutineElement> ExecuteAttack(AttackChoice choice)
     {
+        // FIXME: Remove.
+        yield return Coroutines.SleepSeconds(1);
+
         switch (choice)
         {
             case AttackChoice.AxeHopscotch:

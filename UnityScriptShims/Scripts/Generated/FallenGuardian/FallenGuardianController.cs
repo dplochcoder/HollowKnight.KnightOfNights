@@ -9,6 +9,10 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float ShortWait;
         public float VeryShortWait;
         public float SplitOffset;
+        public float EscalationPause;
+        public int StaggerCount;
+        public int HP;
+        public System.Collections.Generic.List<FallenGuardianPhaseStats> PhaseStats;
         
     }
 }
