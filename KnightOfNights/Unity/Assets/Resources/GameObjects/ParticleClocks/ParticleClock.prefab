@@ -64,7 +64,7 @@ MonoBehaviour:
   - {fileID: 8333069706894340139, guid: 8bd640838423d6d48b23fa10a1b8c4e5, type: 3}
   - {fileID: 7766016902883491494, guid: 3e690b32f1ba6a04abbd30cbfb102170, type: 3}
   - {fileID: 72616070555656842, guid: 837bb3a2eb893434bb62bfe3cf8b8013, type: 3}
-  ClockRadius: 2.25
+  ClockRadius: 1.9
   SpokeRadius: 0.25
-  FadeSpeed: 7
-  NumSpokes: 12
+  FadeSpeed: 9
+  NumSpokes: 24

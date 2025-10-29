@@ -14,6 +14,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float Deceleration;
     [ShimField] public float LongWait;
     [ShimField] public float ShortWait;
+    [ShimField] public float VeryShortWait;
     [ShimField] public float SplitOffset;
 
     private void OnEnable() => StartCoroutine(RunBoss());
@@ -30,27 +31,34 @@ internal class FallenGuardianController : MonoBehaviour
             (0f, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(Telegraph)),
             (LongWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph)),
             (LongWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph))
-        ]);
+            (0f, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph + ShortWait))
+        ], ShortWait);
 
         yield return new FlippableSlashAttackSequence([
             (0f, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
             (LongWait, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph))
-        ]);
+            (0f, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph + ShortWait)),
+            (LongWait + ShortWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (0f, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph + ShortWait))
+        ], ShortWait);
 
         yield return new FlippableSlashAttackSequence([
             (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
-            (ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
+            (0f, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph + ShortWait)),
+            (LongWait + ShortWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
+            (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph + ShortWait)),
+            (2 * ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
             (0f, SlashAttackSpec.HIGH_RIGHT.WithTelegraph(Telegraph))
         ]);
 
-        // FIXME: More
+        yield return new FlippableSlashAttackSequence([
+            (0f, SlashAttackSpec.LEFT.Up(SplitOffset).WithTelegraph(Telegraph)),
+            (VeryShortWait, SlashAttackSpec.RIGHT.Up(SplitOffset).WithTelegraph(Telegraph)),
+            (VeryShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
+            (VeryShortWait, SlashAttackSpec.RIGHT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (VeryShortWait, SlashAttackSpec.LEFT.Down(SplitOffset).WithTelegraph(Telegraph)),
+            (VeryShortWait, SlashAttackSpec.HIGH_RIGHT.WithTelegraph(Telegraph))
+        ]);
     }
 
     private IEnumerator RunBoss()

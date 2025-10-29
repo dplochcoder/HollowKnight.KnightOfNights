@@ -9,6 +9,8 @@ internal abstract class SlashAttackSequence
 {
     public abstract IEnumerable<(float, SlashAttackSpec)> AttackSequence();
 
+    public abstract float Tail();
+
     // Returns a cancellation callback.
     public System.Action Play(System.Action<SlashAttackResult> callback)
     {
@@ -20,7 +22,7 @@ internal abstract class SlashAttackSequence
     }
 }
 
-internal class FlippableSlashAttackSequence(List<(float, SlashAttackSpec)> specs) : SlashAttackSequence
+internal class FlippableSlashAttackSequence(List<(float, SlashAttackSpec)> specs, float tail = 0) : SlashAttackSequence
 {
     private bool flipped = Random.Range(0, 2) == 0;
 
@@ -37,6 +39,8 @@ internal class FlippableSlashAttackSequence(List<(float, SlashAttackSpec)> specs
             yield return (total, spec);
         }
     }
+
+    public override float Tail() => tail;
 }
 
 internal class SlashAttackSequenceBehaviour : MonoBehaviour

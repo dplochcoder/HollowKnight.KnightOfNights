@@ -2,6 +2,7 @@
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.SharedLib;
+using PurenailCore.CollectionUtil;
 using SFCore.Utils;
 using UnityEngine;
 
@@ -19,6 +20,7 @@ internal class SlashAttack(PlayMakerFSM fsm)
     public SlashAttackResult Result { get; private set; }
     public Vector2 ParryPos { get; private set; }
 
+    private bool cancelled = false;
     private ParticleClock? clock;
 
     public static SlashAttack Spawn(SlashAttackSpec spec)
@@ -31,17 +33,31 @@ internal class SlashAttack(PlayMakerFSM fsm)
         return attack;
     }
 
-    private const float ANIM_FRACTION = 0.35f;
-    private const float FADE_FRACTION = 0.25f;
+    private const float ANIM_TIME = 0.15f;
+    private const float CIRCLE_TIME = 0.45f;
+    private const float FADE_TIME = 0.4f;
 
     private void SpawnImpl(SlashAttackSpec spec)
     {
         var revek = fsm.gameObject;
         revek.AddComponent<RevekAddons>();
 
-        var timeToStrike = (5f / 18f) + spec.Telegraph + 0.15f;
-        clock = ParticleClock.Spawn(revek.transform, timeToStrike * ANIM_FRACTION, timeToStrike * (1 - ANIM_FRACTION), timeToStrike * FADE_FRACTION);
-        KnightOfNightsMod.Log($"Hi I spawned clock: {clock.transform.position}");
+        var timeToStrike = (5f / 18f) + spec.Telegraph;
+        float clockDuration = ANIM_TIME + CIRCLE_TIME;
+        Wrapped<float> compress = new(1);
+
+        void SpawnClock()
+        {
+            if (cancelled) return;
+            clock = ParticleClock.Spawn(revek.transform, compress.Value * ANIM_TIME, compress.Value * CIRCLE_TIME, compress.Value * FADE_TIME);
+        }
+
+        if (clockDuration >= timeToStrike)
+        {
+            compress.Value = timeToStrike / clockDuration;
+            SpawnClock();
+        }
+        else revek.DoAfter(SpawnClock, timeToStrike - clockDuration);
 
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
@@ -99,6 +115,8 @@ internal class SlashAttack(PlayMakerFSM fsm)
         void TeleOut()
         {
             clock?.Cancel();
+            cancelled = true;
+
             fsm.GetFsmState("Slash Tele Out").AddLastAction(new LambdaEveryFrame(() =>
             {
                 // Fix clip fighting.
