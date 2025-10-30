@@ -1,4 +1,5 @@
 ﻿using ItemChanger;
+using KnightOfNights.Scripts.InternalLib;
 using PurenailCore.ModUtil;
 using UnityEngine;
 
@@ -11,8 +12,14 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Mines_11, "Crystal Crawler")]
     public GameObject? CrystalCrawler { get; private set; }
 
+    private readonly Lazy<AudioClip> dreamEnterClip = new(() => Resources.Load<AudioClip>("dream_enter_pt_2"));
+    public AudioClip DreamEnterClip => dreamEnterClip.Get();
+
     [Preload(SceneNames.Fungus2_32, "Ring Holder/1")]
     public GameObject? ElderHuPancake { get; private set; }
+
+    [PrefabPreload(SceneNames.Fungus2_32, "Elder_Hu_Ring_Appear")]
+    public AudioClip? ElderHuRingClip { get; private set; }
 
     [Preload(SceneNames.Deepnest_40, "Warrior/Galien Hammer")]
     public GameObject? GalienAxe { get; private set; }
@@ -25,6 +32,12 @@ internal class KnightOfNightsPreloader : Preloader
 
     [PrefabPreload(SceneNames.Fungus1_35, "Shot Slug Spear")]
     public GameObject? GorbSpear { get; private set; }
+
+    [PrefabPreload(SceneNames.Room_Colosseum_Gold, "mage_knight_projectile_shoot")]
+    public AudioClip? MageShotClip { get; private set; }
+
+    [PrefabPreload(SceneNames.Tutorial_01, "mage_knight_teleport")]
+    public AudioClip? MageTeleportClip { get; private set; }
 
     [PrefabPreload(SceneNames.Deepnest_East_10, "Shot Markoth Nail")]
     public GameObject? MarkothNail { get; private set; }
