@@ -110,11 +110,25 @@ internal class FallenGuardianController : MonoBehaviour
         ]);
     }
 
+#if DEBUG
+    private const bool SkipTutorial = true;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
+#else
+    private const bool SkipTutorial = false;
+    private static readonly AttackChoice? ForceAttack = null;
+#endif
+
     private IEnumerator<CoroutineElement> RunBoss()
     {
         // TODO: Aura farm intro.
 
         IEnumerator<SlashAttackSequence> tutorial = SpecTutorial();
+        if (SkipTutorial)
+        {
+            List<SlashAttackSequence> empty = [];
+            tutorial = empty.GetEnumerator();
+        }
+
         while (tutorial.MoveNext())
         {
             var sequence = tutorial.Current;
@@ -132,6 +146,7 @@ internal class FallenGuardianController : MonoBehaviour
             }
         }
 
+        if (SkipTutorial) EscalationPause = 1f;
         yield return Coroutines.SleepSeconds(EscalationPause);
 
         AttackChoice previousAttack = AttackChoice.UltraInstinct;
@@ -143,7 +158,7 @@ internal class FallenGuardianController : MonoBehaviour
 
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
-                Coroutines.Sequence(ExecuteAttack(attack)),
+                ExecuteAttack(ForceAttack ?? attack),
                 Coroutines.SleepUntil(() => healthManager!.hp <= 0),
                 Coroutines.SleepUntil(() => multiParries >= StaggerCount));
             yield return oneof;
@@ -204,29 +219,29 @@ internal class FallenGuardianController : MonoBehaviour
         return choices.Sample();
     }
 
-    private IEnumerator<CoroutineElement> ExecuteAttack(AttackChoice choice)
+    private CoroutineElement ExecuteAttack(AttackChoice choice)
     {
-        // FIXME: Remove.
-        yield return Coroutines.SleepSeconds(1);
-
         switch (choice)
         {
             case AttackChoice.AxeHopscotch:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.GorbFireworks:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.GorbNuclear:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.PancakeDiveStorm:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.PancakeWaveSlash:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.ShieldCyclone:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.UltraInstinct:
-                yield break;
+                return Coroutines.SleepSeconds(1);
             case AttackChoice.XeroArmada:
-                yield break;
+                return Coroutines.SleepSeconds(1);
+            default:
+                KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
+                return Coroutines.SleepSeconds(1);
         }
     }
 }
