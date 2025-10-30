@@ -88,6 +88,9 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         idleWait.timeMin = spec.Telegraph;
         idleWait.timeMax = spec.Telegraph;
 
+        var tink = revek.FindChild("Slash Hit").LocateMyFSM("nail_clash_tink");
+        tink.GetFsmState("Blocked Hit").RemoveFirstActionOfType<SendMessage>();  // Disable freeze for the fight.  Doesn't work?
+
         var slashState = fsm.GetFsmState("Slash");
         slashState.AddFsmTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = spec.TargetOffset;

@@ -149,7 +149,7 @@ Animator:
   m_GameObject: {fileID: 7989141326161804240}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: eb3efaa58dad0dd429640f5482ce9810, type: 2}
+  m_Controller: {fileID: 9100000, guid: 8b36ca2caa5ee5e40973c4dfb2946a33, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -249,12 +249,11 @@ MonoBehaviour:
   SequenceDelay: 1.9
   Telegraph: 0.55
   Deceleration: 0.91
-  LongWait: 0.85
-  ShortWait: 0.35
-  VeryShortWait: 0.275
+  LongWait: 0.9
+  ShortWait: 0.45
   SplitOffset: 1.15
   EscalationPause: 3.5
-  StaggerCount: 3
+  StaggerCount: 1
   SpellStartController: {fileID: 9100000, guid: 7ff6afe9add6250408888dbdf8c8af2f, type: 2}
   SpellLoopController: {fileID: 9100000, guid: f972f190f1a69be489f21a4302db3b10, type: 2}
   SpellEndController: {fileID: 9100000, guid: 1d2d93f7624414c46a94ecce34ce8f96, type: 2}

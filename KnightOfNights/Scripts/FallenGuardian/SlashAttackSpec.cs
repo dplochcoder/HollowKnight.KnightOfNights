@@ -4,9 +4,9 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 
 internal record SlashAttackSpec
 {
-    public static readonly SlashAttackSpec LEFT = new(new(-11f, 2.5f), Vector2.zero);
+    public static readonly SlashAttackSpec LEFT = new(new(-11f, 2.5f), new(0, -0.5f));
     public static readonly SlashAttackSpec RIGHT = LEFT.Flipped();
-    public static readonly SlashAttackSpec HIGH_LEFT = new(new(-2f, 10f), Vector2.zero);
+    public static readonly SlashAttackSpec HIGH_LEFT = new(new(-2f, 10f), new(0, -0.5f));
     public static readonly SlashAttackSpec HIGH_RIGHT = HIGH_LEFT.Flipped();
 
     public readonly Vector2 SpawnOffset;

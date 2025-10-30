@@ -56,7 +56,6 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float Deceleration;
     [ShimField] public float LongWait;
     [ShimField] public float ShortWait;
-    [ShimField] public float VeryShortWait;
     [ShimField] public float SplitOffset;
     [ShimField] public float EscalationPause;
     [ShimField] public int StaggerCount;
@@ -81,9 +80,19 @@ internal class FallenGuardianController : MonoBehaviour
         recoil = GetComponent<Recoil>();
         animator = GetComponent<Animator>();
         stats = PhaseStats[0];
+
+        On.GameManager.FreezeMoment_int += NoFreezeMoment;
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
+
+    private void OnDestroy() => On.GameManager.FreezeMoment_int -= NoFreezeMoment;
+
+    private static void NoFreezeMoment(On.GameManager.orig_FreezeMoment_int orig, GameManager self, int type)
+    {
+        if (type == 3) return;
+        orig(self, type);
+    }
 
     private Vector2 lastPos;
 
@@ -168,19 +177,13 @@ internal class FallenGuardianController : MonoBehaviour
         AttackChoice previousAttack = AttackChoice.UltraInstinct;
         while (true)
         {
-            AttackChoice attack;
-            if (!stats!.DidFirstAttack)
-            {
-                attack = stats!.FirstAttack;
-                stats!.DidFirstAttack = true;
-            }
-            else attack = ChooseAttack(previousAttack);
+            var attack = ChooseAttack(previousAttack);
 
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
-                ExecuteAttack(ForceAttack ?? attack),
+                ExecuteAttack(attack),
                 Coroutines.SleepUntil(() => healthManager!.hp <= 0),
-                Coroutines.SleepUntil(() => staggered));
+                Coroutines.SleepUntil(() => staggerAttack != null));
             yield return oneof;
 
             if (oneof.Choice == 1)
@@ -188,8 +191,7 @@ internal class FallenGuardianController : MonoBehaviour
                 OnDeath?.Invoke();
                 yield break;
             }
-
-            if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger());
+            else if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger());
 
             // Continue to next attack.
         }
@@ -210,6 +212,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         OnStagger?.Invoke();
         OnStagger = null;
+        staggerAttack = null;
 
         transform.position = staggerAttack!.ParryPos;
         transform.localScale = new(staggerAttack!.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
@@ -224,7 +227,7 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
 
         var prev = healthManager!.hp;
-        yield return Coroutines.OneOf(Coroutines.SleepSeconds(stats!.StaggerMaxWait), Coroutines.SleepUntil(() => healthManager!.hp < prev));
+        yield return Coroutines.SleepUntilTimeout(() => healthManager!.hp < prev, stats!.StaggerMaxWait);
 
         yield return Coroutines.PlayAnimation(animator, StaggerToRecoverController!);
 
@@ -240,6 +243,8 @@ internal class FallenGuardianController : MonoBehaviour
 
     private void RecordChoice(AttackChoice choice)
     {
+        stats!.DidFirstAttack = true;
+
         foreach (var c in stats!.Attacks)
         {
             if (c.Choice == choice)
@@ -257,6 +262,9 @@ internal class FallenGuardianController : MonoBehaviour
 
     private AttackChoice ChooseAttack(AttackChoice previous)
     {
+        if (ForceAttack.HasValue) return ForceAttack.Value;
+        if (!stats!.DidFirstAttack) return stats.FirstAttack;
+
         IndexedWeightedSet<AttackChoice> choices = new();
         foreach (var c in stats!.Attacks)
         {
@@ -360,11 +368,15 @@ internal class FallenGuardianController : MonoBehaviour
             yield return Coroutines.SleepSeconds(stats!.UltraInstinctInterval);
         }
 
-        Wrapped<SlashAttack> lastAttack = new(attacks.First());
+        Wrapped<SlashAttack> lastAttack = new(activeAttacks.First());
         yield return Coroutines.SleepUntil(() => {
-            lastAttack.Value = attacks.First();
-            attacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
-            return attacks.Count == 0;
+            if (activeAttacks.Count > 0)
+            {
+                lastAttack.Value = activeAttacks.First();
+                activeAttacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
+            }
+
+            return activeAttacks.Count == 0;
         });
 
         if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))

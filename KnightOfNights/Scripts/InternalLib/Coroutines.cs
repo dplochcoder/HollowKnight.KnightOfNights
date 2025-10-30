@@ -304,7 +304,21 @@ public class CoroutineOneOf : CoroutineElement
 
     public CoroutineOneOf(List<CoroutineElement> choices) => this.choices = choices;
 
-    protected override CoroutineUpdate UpdateImpl(float deltaTime) => choices.Select(c => c.Update(deltaTime)).OrderBy(c => c.done ? -c.extraTime : 1).First();
+    protected override CoroutineUpdate UpdateImpl(float deltaTime)
+    {
+        CoroutineUpdate update = new(false, 0);
+        for (int i = 0; i < choices.Count; i++)
+        {
+            var u = choices[i].Update(deltaTime);
+            if (u.done && (!update.done || u.extraTime < update.extraTime))
+            {
+                update = u;
+                Choice = i;
+            }
+        }
+
+        return update;
+    }
 }
 
 public class CoroutineAllOf : CoroutineElement

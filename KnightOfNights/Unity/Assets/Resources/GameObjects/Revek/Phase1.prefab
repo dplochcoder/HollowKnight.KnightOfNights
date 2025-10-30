@@ -48,7 +48,11 @@ MonoBehaviour:
   FirstAttack: 6
   Attacks:
   - {fileID: 5596897245960897113}
-  UltraInstinctInterval: 0.285
+  StaggerGracePeriod: 0.35
+  StaggerInvuln: 0.15
+  StaggerMaxWait: 2.25
+  StaggerNextAttackDelay: 0.9
+  UltraInstinctInterval: 0.35
   UltraInstinctTail: 1.5
   UltraInstinctTelegraph: 0.5
 --- !u!1 &6652528314850364912

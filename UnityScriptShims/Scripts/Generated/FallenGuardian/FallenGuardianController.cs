@@ -7,7 +7,6 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float Deceleration;
         public float LongWait;
         public float ShortWait;
-        public float VeryShortWait;
         public float SplitOffset;
         public float EscalationPause;
         public int StaggerCount;
