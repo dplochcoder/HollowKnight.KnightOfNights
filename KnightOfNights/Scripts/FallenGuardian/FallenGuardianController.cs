@@ -1,7 +1,6 @@
 ﻿using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.CollectionUtil;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -38,6 +37,14 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public AttackChoice FirstAttack;
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
 
+    [ShimField] public float StaggerGracePeriod;
+    [ShimField] public float StaggerInvuln;
+    [ShimField] public float StaggerMaxWait;
+    [ShimField] public float StaggerNextAttackDelay;
+    [ShimField] public float UltraInstinctInterval;
+    [ShimField] public float UltraInstinctTail;
+    [ShimField] public float UltraInstinctTelegraph;
+
     internal bool DidFirstAttack = false;
 }
 
@@ -54,22 +61,39 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float EscalationPause;
     [ShimField] public int StaggerCount;
 
+    [ShimField] public RuntimeAnimatorController? SpellStartController;
+    [ShimField] public RuntimeAnimatorController? SpellLoopController;
+    [ShimField] public RuntimeAnimatorController? SpellEndController;
+    [ShimField] public RuntimeAnimatorController? StaggerController;
+    [ShimField] public RuntimeAnimatorController? StaggerToRecoverController;
+    [ShimField] public RuntimeAnimatorController? SwordToSpellController;
+
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
     private HealthManager? healthManager;
+    private Recoil? recoil;
     private Animator? animator;
     private FallenGuardianPhaseStats? stats;
 
     private void Awake()
     {
         healthManager = GetComponent<HealthManager>();
+        recoil = GetComponent<Recoil>();
         animator = GetComponent<Animator>();
         stats = PhaseStats[0];
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
 
-    private void Update() => stats = PhaseStats.Where(s => healthManager!.hp >= s.MinHP).First();
+    private Vector2 lastPos;
+
+    private void Update()
+    {
+        stats = PhaseStats.Where(s => healthManager!.hp >= s.MinHP).First();
+
+        var pos = transform.position;
+        if (pos.x > 0 && pos.y > 0) lastPos = pos;
+    }
 
     private IEnumerator<SlashAttackSequence> SpecTutorial()
     {
@@ -110,14 +134,6 @@ internal class FallenGuardianController : MonoBehaviour
         ]);
     }
 
-#if DEBUG
-    private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
-#else
-    private const bool SkipTutorial = false;
-    private static readonly AttackChoice? ForceAttack = null;
-#endif
-
     private IEnumerator<CoroutineElement> RunBoss()
     {
         // TODO: Aura farm intro.
@@ -153,14 +169,18 @@ internal class FallenGuardianController : MonoBehaviour
         while (true)
         {
             AttackChoice attack;
-            if (!stats!.DidFirstAttack) attack = stats!.FirstAttack;
+            if (!stats!.DidFirstAttack)
+            {
+                attack = stats!.FirstAttack;
+                stats!.DidFirstAttack = true;
+            }
             else attack = ChooseAttack(previousAttack);
 
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
                 ExecuteAttack(ForceAttack ?? attack),
                 Coroutines.SleepUntil(() => healthManager!.hp <= 0),
-                Coroutines.SleepUntil(() => multiParries >= StaggerCount));
+                Coroutines.SleepUntil(() => staggered));
             yield return oneof;
 
             if (oneof.Choice == 1)
@@ -169,21 +189,51 @@ internal class FallenGuardianController : MonoBehaviour
                 yield break;
             }
 
-            if (oneof.Choice == 2)
-            {
-                OnStagger?.Invoke();
-                OnStagger = null;
-                multiParries = 0;
-            }
+            if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger());
 
             // Continue to next attack.
         }
     }
 
     private int multiParries;
+    private SlashAttack? staggerAttack;
 
-    internal event Action? OnDeath;  // Invoked once.
-    private event Action? OnStagger;  // Cleared after use.
+    private void MaybeStagger(SlashAttack attack)
+    {
+        if (++multiParries < StaggerCount) return;
+
+        multiParries = 0;
+        staggerAttack = attack;
+    }
+
+    private IEnumerator<CoroutineElement> ExecuteStagger()
+    {
+        OnStagger?.Invoke();
+        OnStagger = null;
+
+        transform.position = staggerAttack!.ParryPos;
+        transform.localScale = new(staggerAttack!.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
+
+        if (!recoil!.IsRecoiling && staggerAttack.HitInstance != null) recoil.RecoilByDamage(staggerAttack.HitInstance.Value);
+
+        SetIntangible();
+        animator!.runtimeAnimatorController = StaggerController!;
+        yield return Coroutines.SleepSeconds(stats!.StaggerInvuln);
+
+        SetTangible();
+        yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
+
+        var prev = healthManager!.hp;
+        yield return Coroutines.OneOf(Coroutines.SleepSeconds(stats!.StaggerMaxWait), Coroutines.SleepUntil(() => healthManager!.hp < prev));
+
+        yield return Coroutines.PlayAnimation(animator, StaggerToRecoverController!);
+
+        transform.position = new(-100, -100);
+        yield return Coroutines.SleepSeconds(stats!.StaggerNextAttackDelay);
+    }
+
+    internal event System.Action? OnDeath;  // Invoked once.
+    private event System.Action? OnStagger;  // Cleared after use.
 
     private readonly HashMultiset<AttackChoice> Cooldowns = new();
     private readonly HashMultiset<AttackChoice> WeightAdditions = new();
@@ -219,6 +269,14 @@ internal class FallenGuardianController : MonoBehaviour
         return choices.Sample();
     }
 
+#if DEBUG
+    private const bool SkipTutorial = true;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
+#else
+    private const bool SkipTutorial = false;
+    private static readonly AttackChoice? ForceAttack = null;
+#endif
+
     private CoroutineElement ExecuteAttack(AttackChoice choice)
     {
         switch (choice)
@@ -236,12 +294,107 @@ internal class FallenGuardianController : MonoBehaviour
             case AttackChoice.ShieldCyclone:
                 return Coroutines.SleepSeconds(1);
             case AttackChoice.UltraInstinct:
-                return Coroutines.SleepSeconds(1);
+                return Coroutines.Sequence(UltraInstinct());
             case AttackChoice.XeroArmada:
                 return Coroutines.SleepSeconds(1);
             default:
                 KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
                 return Coroutines.SleepSeconds(1);
         }
+    }
+
+    private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
+    {
+        static bool IsValid(List<SlashAttackSpec> permutation) => permutation.Pairs().All(p =>
+        {
+            var (a, b) = p;
+            if (a.ApproxEqual(SlashAttackSpec.LEFT) && b.ApproxEqual(SlashAttackSpec.LEFT)) return false;
+            if (a.ApproxEqual(SlashAttackSpec.RIGHT) && b.ApproxEqual(SlashAttackSpec.RIGHT)) return false;
+            if (a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) && b.ApproxEqual(SlashAttackSpec.HIGH_LEFT)) return false;
+            if (a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT) && b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT)) return false;
+            return true;
+        });
+
+        List<List<SlashAttackSpec>> ret = [];
+        input.ForEachPermutation(p =>
+        {
+            if (IsValid(p)) ret.Add([.. p]);
+        });
+
+        return ret;
+    }
+    private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.HIGH_LEFT,
+        SlashAttackSpec.HIGH_RIGHT
+    ]);
+
+    private static readonly List<List<SlashAttackSpec>> SuperUltraInstinctPatterns = GenUltraInstinctPatterns([
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.HIGH_LEFT,
+        SlashAttackSpec.HIGH_LEFT,
+        SlashAttackSpec.HIGH_RIGHT,
+        SlashAttackSpec.HIGH_RIGHT
+    ]);
+
+    private IEnumerator<CoroutineElement> UltraInstinct()
+    {
+        var specs = UltraInstinctPatterns.Choose();
+        specs = [.. specs.Select(s => s.WithTelegraph(stats!.UltraInstinctTelegraph))];
+
+        List<SlashAttack> attacks = [];
+        HashSet<SlashAttack> activeAttacks = [];
+        foreach (var spec in specs)
+        {
+            var attack = SlashAttack.Spawn(spec);
+            attacks.Add(attack);
+            activeAttacks.Add(attack);
+            yield return Coroutines.SleepSeconds(stats!.UltraInstinctInterval);
+        }
+
+        Wrapped<SlashAttack> lastAttack = new(attacks.First());
+        yield return Coroutines.SleepUntil(() => {
+            lastAttack.Value = attacks.First();
+            attacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
+            return attacks.Count == 0;
+        });
+
+        if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))
+        {
+            var attack = lastAttack.Value;
+
+            RevekAddons.SpawnSoul(attack.ParryPos);
+            RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
+            healthManager!.hp -= attacks.Select(a => a.DamageDealt()).Sum();
+
+            MaybeStagger(attack);
+        }
+
+        yield return Coroutines.SleepSeconds(stats!.UltraInstinctTail);
+    }
+
+    private event System.Action? OnCastSpell;
+
+    [ShimMethod]
+    public void CastSpell() => OnCastSpell?.Invoke();
+
+    [ShimMethod]
+    public void SetTangible() => SetTangible(true);
+
+    [ShimMethod]
+    public void SetIntangible() => SetTangible(false);
+
+    private void SetTangible(bool value)
+    {
+        healthManager!.IsInvincible = !value;
+        healthManager.SetPreventInvincibleEffect(!value);
     }
 }

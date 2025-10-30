@@ -12,6 +12,7 @@ namespace KnightOfNights.Scripts;
 internal class RevekAddons : MonoBehaviour, IHitResponder
 {
     public bool HealOnNailParry = false;
+    public HitInstance? HitInstance {  get; private set; }
 
     private MeshRenderer? renderer;
     private PlayMakerFSM? fsm;
@@ -40,6 +41,8 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
             case AttackTypes.Nail:
             case AttackTypes.Spell:
                 if (damageInstance.AttackType == AttackTypes.Nail && HealOnNailParry) SpawnSoul(transform);
+
+                HitInstance = damageInstance;
                 fsm.SetState("Hit");
                 break;
             case AttackTypes.Acid:

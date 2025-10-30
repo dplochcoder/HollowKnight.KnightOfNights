@@ -15,23 +15,28 @@ internal enum SlashAttackResult
     NOT_PARRIED,
 }
 
-internal class SlashAttack(PlayMakerFSM fsm)
+internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
 {
+    public SlashAttackSpec Spec => spec;
     public SlashAttackResult Result { get; private set; }
     public Vector2 ParryPos { get; private set; }
+    public HitInstance? HitInstance => revekAddons?.HitInstance;
 
     private bool cancelled = false;
     private ParticleClock? clock;
+    private RevekAddons? revekAddons;
 
     public static SlashAttack Spawn(SlashAttackSpec spec)
     {
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
         revek.transform.position = new(-100, -100);
 
-        SlashAttack attack = new(revek.LocateMyFSM("Control"));
+        SlashAttack attack = new(spec, revek.LocateMyFSM("Control"));
         attack.SpawnImpl(spec);
         return attack;
     }
+
+    public int DamageDealt() => revekAddons?.HitInstance?.DamageDealt ?? 0;
 
     private const float ANIM_TIME = 0.1f;
     private const float CIRCLE_TIME = 0.4f;
@@ -40,7 +45,7 @@ internal class SlashAttack(PlayMakerFSM fsm)
     private void SpawnImpl(SlashAttackSpec spec)
     {
         var revek = fsm.gameObject;
-        revek.AddComponent<RevekAddons>();
+        revekAddons = revek.AddComponent<RevekAddons>();
 
         var timeToStrike = (5f / 18f) + spec.Telegraph;
         float clockDuration = ANIM_TIME + CIRCLE_TIME;

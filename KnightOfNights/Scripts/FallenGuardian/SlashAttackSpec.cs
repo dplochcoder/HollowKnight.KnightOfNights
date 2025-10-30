@@ -35,4 +35,10 @@ internal record SlashAttackSpec
     internal SlashAttackSpec WithTelegraph(float telegraph) => new(SpawnOffset, TargetOffset, telegraph, Deceleration);
 
     internal SlashAttackSpec WithDeceleration(float deceleration) => new(SpawnOffset, TargetOffset, Telegraph, Deceleration);
+
+    private static bool ApproxEqual(float a, float b) => Mathf.Abs(a - b) <= 0.0001f;
+
+    private static bool ApproxEqual(Vector2 a, Vector2 b) => ApproxEqual(a.x, b.x) && ApproxEqual(a.y, b.y);
+
+    internal bool ApproxEqual(SlashAttackSpec spec) => ApproxEqual(SpawnOffset, spec.SpawnOffset) && ApproxEqual(spec.TargetOffset, spec.TargetOffset) && ApproxEqual(Telegraph, spec.Telegraph) && ApproxEqual(Deceleration, spec.Deceleration);
 }
