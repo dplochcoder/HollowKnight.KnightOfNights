@@ -54,14 +54,22 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float EscalationPause;
     [ShimField] public int StaggerCount;
 
-    [ShimField] public int HP;
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
+    private HealthManager? healthManager;
+    private Animator? animator;
     private FallenGuardianPhaseStats? stats;
+
+    private void Awake()
+    {
+        healthManager = GetComponent<HealthManager>();
+        animator = GetComponent<Animator>();
+        stats = PhaseStats[0];
+    }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
 
-    private void Update() => stats = PhaseStats.Where(s => HP >= s.MinHP).First();
+    private void Update() => stats = PhaseStats.Where(s => healthManager!.hp >= s.MinHP).First();
 
     private IEnumerator<SlashAttackSequence> SpecTutorial()
     {
@@ -136,7 +144,7 @@ internal class FallenGuardianController : MonoBehaviour
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
                 Coroutines.Sequence(ExecuteAttack(attack)),
-                Coroutines.SleepUntil(() => HP <= 0),
+                Coroutines.SleepUntil(() => healthManager!.hp <= 0),
                 Coroutines.SleepUntil(() => multiParries >= StaggerCount));
             yield return oneof;
 

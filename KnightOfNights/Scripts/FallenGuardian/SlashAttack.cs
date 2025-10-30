@@ -33,8 +33,8 @@ internal class SlashAttack(PlayMakerFSM fsm)
         return attack;
     }
 
-    private const float ANIM_TIME = 0.15f;
-    private const float CIRCLE_TIME = 0.45f;
+    private const float ANIM_TIME = 0.1f;
+    private const float CIRCLE_TIME = 0.4f;
     private const float FADE_TIME = 0.4f;
 
     private void SpawnImpl(SlashAttackSpec spec)
