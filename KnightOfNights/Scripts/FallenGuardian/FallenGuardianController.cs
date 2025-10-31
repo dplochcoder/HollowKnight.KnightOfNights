@@ -43,7 +43,9 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public float StaggerHitWait;
     [ShimField] public float StaggerMaxWait;
     [ShimField] public float StaggerNextAttackDelay;
+    [ShimField] public float UltraInstinctDeceleration;
     [ShimField] public float UltraInstinctInterval;
+    [ShimField] public float UltraInstinctSpeed;
     [ShimField] public float UltraInstinctTail;
     [ShimField] public float UltraInstinctTelegraph;
 
@@ -389,7 +391,7 @@ internal class FallenGuardianController : MonoBehaviour
     private IEnumerator<CoroutineElement> UltraInstinct()
     {
         var specs = UltraInstinctPatterns.Choose();
-        specs = [.. specs.Select(s => s.WithTelegraph(stats!.UltraInstinctTelegraph))];
+        specs = [.. specs.Select(s => s.WithTelegraph(stats!.UltraInstinctTelegraph).WithSpeed(stats.UltraInstinctSpeed).WithDeceleration(stats.UltraInstinctDeceleration))];
         if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
 
         List<SlashAttack> attacks = [];

@@ -10,7 +10,9 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float StaggerHitWait;
         public float StaggerMaxWait;
         public float StaggerNextAttackDelay;
+        public float UltraInstinctDeceleration;
         public float UltraInstinctInterval;
+        public float UltraInstinctSpeed;
         public float UltraInstinctTail;
         public float UltraInstinctTelegraph;
         

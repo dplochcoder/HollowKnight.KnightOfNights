@@ -63,6 +63,8 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             MagnitudeMultiplier = hit.MagnitudeMultiplier;
         };
 
+        fsm.FsmVariables.GetFsmFloat("Speed").Value = spec.Speed;
+
         var timeToStrike = (5f / 18f) + spec.Telegraph;
         float clockDuration = ANIM_TIME + CIRCLE_TIME;
         Wrapped<float> compress = new(1);

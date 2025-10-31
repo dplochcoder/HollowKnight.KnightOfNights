@@ -15,6 +15,7 @@ internal record SlashAttackSpec
     public readonly Vector2 SpawnOffset;
     public readonly Vector2 TargetOffset;
     public readonly float Telegraph;
+    public readonly float Speed;
     public readonly float Deceleration;
 
     private static string FlipHit(string hit)
@@ -27,26 +28,29 @@ internal record SlashAttackSpec
         };
     }
 
-    internal SlashAttackSpec(List<string> allowedHits, Vector2 spawnOffset, Vector2 targetOffset, float telegraph = 0.6f, float deceleration = 0.905f)
+    internal SlashAttackSpec(List<string> allowedHits, Vector2 spawnOffset, Vector2 targetOffset, float telegraph = 0.6f, float speed = 180, float deceleration = 0.905f)
     {
         AllowedHits = [.. allowedHits];
         SpawnOffset = spawnOffset;
         TargetOffset = targetOffset;
         Telegraph = telegraph;
+        Speed = speed;
         Deceleration = deceleration;
     }
 
-    internal SlashAttackSpec Flipped() => new([.. AllowedHits.Select(FlipHit)], new(-SpawnOffset.x, SpawnOffset.y), new(-TargetOffset.x, TargetOffset.y), Telegraph, Deceleration);
+    internal SlashAttackSpec Flipped() => new([.. AllowedHits.Select(FlipHit)], new(-SpawnOffset.x, SpawnOffset.y), new(-TargetOffset.x, TargetOffset.y), Telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec Up(float y) => new(AllowedHits, new(SpawnOffset.x, SpawnOffset.y + y), TargetOffset, Telegraph, Deceleration);
+    internal SlashAttackSpec Up(float y) => new(AllowedHits, new(SpawnOffset.x, SpawnOffset.y + y), TargetOffset, Telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec Down(float y) => new(AllowedHits, new(SpawnOffset.x, SpawnOffset.y - y), TargetOffset, Telegraph, Deceleration);
+    internal SlashAttackSpec Down(float y) => new(AllowedHits, new(SpawnOffset.x, SpawnOffset.y - y), TargetOffset, Telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec Left(float x) => new(AllowedHits, new(SpawnOffset.x - x, SpawnOffset.y), TargetOffset, Telegraph, Deceleration);
+    internal SlashAttackSpec Left(float x) => new(AllowedHits, new(SpawnOffset.x - x, SpawnOffset.y), TargetOffset, Telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec Right(float x) => new(AllowedHits, new(SpawnOffset.x + x, SpawnOffset.y), TargetOffset, Telegraph, Deceleration);
+    internal SlashAttackSpec Right(float x) => new(AllowedHits, new(SpawnOffset.x + x, SpawnOffset.y), TargetOffset, Telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec WithTelegraph(float telegraph) => new(AllowedHits, SpawnOffset, TargetOffset, telegraph, Deceleration);
+    internal SlashAttackSpec WithTelegraph(float telegraph) => new(AllowedHits, SpawnOffset, TargetOffset, telegraph, Speed, Deceleration);
 
-    internal SlashAttackSpec WithDeceleration(float deceleration) => new(AllowedHits, SpawnOffset, TargetOffset, Telegraph, Deceleration);
+    internal SlashAttackSpec WithSpeed(float speed) => new(AllowedHits, SpawnOffset, TargetOffset, Telegraph, speed, Deceleration);
+
+    internal SlashAttackSpec WithDeceleration(float deceleration) => new(AllowedHits, SpawnOffset, TargetOffset, Telegraph, Speed, deceleration);
 }
