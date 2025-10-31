@@ -351,21 +351,10 @@ internal class FallenGuardianController : MonoBehaviour
 
     private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
     {
-        static bool IsValid(List<SlashAttackSpec> permutation) => permutation.Pairs().All(p =>
-        {
-            var (a, b) = p;
-            if (a.ApproxEqual(SlashAttackSpec.LEFT) && b.ApproxEqual(SlashAttackSpec.LEFT)) return false;
-            if (a.ApproxEqual(SlashAttackSpec.RIGHT) && b.ApproxEqual(SlashAttackSpec.RIGHT)) return false;
-
-            var aHigh = a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT);
-            var bHigh = a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT);
-            return !aHigh || !bHigh;
-        });
-
         List<List<SlashAttackSpec>> ret = [];
         input.ForEachPermutation(p =>
         {
-            if (IsValid(p)) ret.Add([.. p]);
+            if (p.Pairs().All(pair => !pair.Item1.ApproxEqual(pair.Item2))) ret.Add([.. p]);
         });
         return ret;
     }
