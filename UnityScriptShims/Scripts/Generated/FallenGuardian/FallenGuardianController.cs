@@ -20,6 +20,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public void CastSpell() { }
         public void SetTangible() { }
         public void SetIntangible() { }
+        public void TeleportOut() { }
         
     }
 }

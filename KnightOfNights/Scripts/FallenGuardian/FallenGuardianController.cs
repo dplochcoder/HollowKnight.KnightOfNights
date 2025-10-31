@@ -210,14 +210,15 @@ internal class FallenGuardianController : MonoBehaviour
 
     private IEnumerator<CoroutineElement> ExecuteStagger()
     {
+        var prevAttack = staggerAttack!;
+        staggerAttack = null;
         OnStagger?.Invoke();
         OnStagger = null;
-        staggerAttack = null;
 
-        transform.position = staggerAttack!.ParryPos;
-        transform.localScale = new(staggerAttack!.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
+        transform.position = prevAttack.ParryPos;
+        transform.localScale = new(prevAttack.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
 
-        if (!recoil!.IsRecoiling && staggerAttack.HitInstance != null) recoil.RecoilByDamage(staggerAttack.HitInstance.Value);
+        if (!recoil!.IsRecoiling && prevAttack.HitInstance != null) recoil.RecoilByDamage(prevAttack.HitInstance.Value);
 
         SetIntangible();
         animator!.runtimeAnimatorController = StaggerController!;
@@ -229,10 +230,18 @@ internal class FallenGuardianController : MonoBehaviour
         var prev = healthManager!.hp;
         yield return Coroutines.SleepUntilTimeout(() => healthManager!.hp < prev, stats!.StaggerMaxWait);
 
-        yield return Coroutines.PlayAnimation(animator, StaggerToRecoverController!);
+        animator.runtimeAnimatorController = StaggerToRecoverController!;
+
+        Wrapped<bool> teleportOut = new(false);
+        void Listen() => teleportOut.Value = true;
+        OnTeleportOut += Listen;
+        yield return Coroutines.SleepUntil(() => teleportOut.Value);
+        OnTeleportOut -= Listen;
 
         transform.position = new(-100, -100);
         yield return Coroutines.SleepSeconds(stats!.StaggerNextAttackDelay);
+
+        staggerAttack = null;
     }
 
     internal event System.Action? OnDeath;  // Invoked once.
@@ -409,4 +418,9 @@ internal class FallenGuardianController : MonoBehaviour
         healthManager!.IsInvincible = !value;
         healthManager.SetPreventInvincibleEffect(!value);
     }
+
+    private event System.Action? OnTeleportOut;
+
+    [ShimMethod]
+    public void TeleportOut() => OnTeleportOut?.Invoke();
 }

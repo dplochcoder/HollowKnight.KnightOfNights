@@ -57,6 +57,9 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }
 
+    [Preload(SceneNames.RestingGrounds_02_boss, "Warrior/Ghost Warrior Xero")]
+    public GameObject? Xero { get; private set; }
+
     [Preload(SceneNames.RestingGrounds_02_boss, "Warrior/Ghost Warrior Xero/Sword 1")]
     public GameObject? XeroNail { get; private set; }
 
