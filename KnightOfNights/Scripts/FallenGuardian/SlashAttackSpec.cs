@@ -27,7 +27,7 @@ internal record SlashAttackSpec
         };
     }
 
-    internal SlashAttackSpec(List<string> allowedHits, Vector2 spawnOffset, Vector2 targetOffset, float telegraph = 0.6f, float deceleration = 0.925f)
+    internal SlashAttackSpec(List<string> allowedHits, Vector2 spawnOffset, Vector2 targetOffset, float telegraph = 0.6f, float deceleration = 0.905f)
     {
         AllowedHits = [.. allowedHits];
         SpawnOffset = spawnOffset;
