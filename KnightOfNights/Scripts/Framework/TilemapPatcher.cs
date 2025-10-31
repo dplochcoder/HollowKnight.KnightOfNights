@@ -16,6 +16,8 @@ public class TilemapPatcher : MonoBehaviour
         newMap.width = oldMap.size.x;
         newMap.height = oldMap.size.y;
 
+        gameObject.GetComponent<TilemapRenderer>().material.shader = Shader.Find("Sprites/Default");
+
         // Patch terrain material.
         var terrainMaterial = KnightOfNightsPreloader.Instance.TerrainMaterial;
         foreach (var collider in gameObject.GetComponentsInChildren<Collider2D>()) collider.sharedMaterial = terrainMaterial;

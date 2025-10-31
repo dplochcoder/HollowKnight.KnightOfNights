@@ -1,6 +1,7 @@
 ﻿using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.CollectionUtil;
+using PurenailCore.GOUtil;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -51,6 +52,8 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
 [Shim]
 internal class FallenGuardianController : MonoBehaviour
 {
+    [ShimField] public FallenGuardianContainer? Container;
+
     [ShimField] public float SequenceDelay;
     [ShimField] public float Telegraph;
     [ShimField] public float Deceleration;
@@ -59,6 +62,9 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float SplitOffset;
     [ShimField] public float EscalationPause;
     [ShimField] public int StaggerCount;
+    [ShimField] public float StaggerDistance;
+
+    [ShimField] public GameObject? StaggerBurst;
 
     [ShimField] public RuntimeAnimatorController? SpellStartController;
     [ShimField] public RuntimeAnimatorController? SpellLoopController;
@@ -72,6 +78,8 @@ internal class FallenGuardianController : MonoBehaviour
     private HealthManager? healthManager;
     private Recoil? recoil;
     private Animator? animator;
+    private AudioSource? audio;
+
     private FallenGuardianPhaseStats? stats;
 
     private void Awake()
@@ -80,6 +88,9 @@ internal class FallenGuardianController : MonoBehaviour
         recoil = GetComponent<Recoil>();
         animator = GetComponent<Animator>();
         stats = PhaseStats[0];
+
+        audio = gameObject.AddComponent<AudioSource>();
+        audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
 
         On.GameManager.FreezeMoment_int += NoFreezeMoment;
     }
@@ -108,8 +119,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         yield return new FlippableSlashAttackSequence([
             (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
-            (LongWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
-            (LongWait, SlashAttackSpec.LEFT.WithTelegraph(Telegraph))
+            (LongWait, SlashAttackSpec.LEFT.WithTelegraph(Telegraph)),
         ]);
 
         yield return new FlippableSlashAttackSequence([
@@ -200,12 +210,13 @@ internal class FallenGuardianController : MonoBehaviour
     private int multiParries;
     private SlashAttack? staggerAttack;
 
-    private void MaybeStagger(SlashAttack attack)
+    private bool MaybeStagger(SlashAttack attack)
     {
-        if (++multiParries < StaggerCount) return;
+        if (++multiParries < StaggerCount) return true;
 
         multiParries = 0;
         staggerAttack = attack;
+        return false;
     }
 
     private IEnumerator<CoroutineElement> ExecuteStagger()
@@ -215,8 +226,28 @@ internal class FallenGuardianController : MonoBehaviour
         OnStagger?.Invoke();
         OnStagger = null;
 
-        transform.position = prevAttack.ParryPos;
+        var pos = prevAttack.ParryPos.To3d();
+
+        // Force hero distance.
+        var kPos = HeroController.instance.transform.position;
+        if ((pos - kPos).magnitude < StaggerDistance) pos = kPos + (pos - kPos).normalized * StaggerDistance;
+
+        // Force above grounds.
+        if (pos.y <= Container!.Arena!.bounds.min.y)
+        {
+            pos.y = Container!.Arena!.bounds.min.y + 1;
+
+            if ((pos - kPos).magnitude < StaggerDistance)
+            {
+                var s = Mathf.Sign(pos.x - kPos.x);
+                pos.x = kPos.x + s * StaggerDistance;
+            }
+        }
+
+        transform.position = pos;
         transform.localScale = new(prevAttack.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
+        StaggerBurst?.Spawn(pos);
+        KnightOfNightsPreloader.Instance.StunEffect.Spawn(pos);
 
         if (!recoil!.IsRecoiling && prevAttack.HitInstance != null) recoil.RecoilByDamage(prevAttack.HitInstance.Value);
 
@@ -287,7 +318,7 @@ internal class FallenGuardianController : MonoBehaviour
     }
 
 #if DEBUG
-    private const bool SkipTutorial = true;
+    private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
 #else
     private const bool SkipTutorial = false;
@@ -396,7 +427,7 @@ internal class FallenGuardianController : MonoBehaviour
             RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
             healthManager!.hp -= attacks.Select(a => a.DamageDealt()).Sum();
 
-            MaybeStagger(attack);
+            if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
         }
 
         yield return Coroutines.SleepSeconds(stats!.UltraInstinctTail);
@@ -413,6 +444,13 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimMethod]
     public void SetIntangible() => SetTangible(false);
 
+    [ShimMethod]
+    public void TeleportOut()
+    {
+        SetIntangible();
+        KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
+    }
+
     private void SetTangible(bool value)
     {
         healthManager!.IsInvincible = !value;
@@ -422,5 +460,5 @@ internal class FallenGuardianController : MonoBehaviour
     private event System.Action? OnTeleportOut;
 
     [ShimMethod]
-    public void TeleportOut() => OnTeleportOut?.Invoke();
+    public void TeleportOutEvent() => OnTeleportOut?.Invoke();
 }

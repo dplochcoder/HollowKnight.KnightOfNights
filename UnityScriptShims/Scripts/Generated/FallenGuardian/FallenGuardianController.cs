@@ -2,6 +2,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
 {
     public class FallenGuardianController : UnityEngine.MonoBehaviour
     {
+        public FallenGuardianContainer Container;
         public float SequenceDelay;
         public float Telegraph;
         public float Deceleration;
@@ -10,6 +11,8 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float SplitOffset;
         public float EscalationPause;
         public int StaggerCount;
+        public float StaggerDistance;
+        public UnityEngine.GameObject StaggerBurst;
         public UnityEngine.RuntimeAnimatorController SpellStartController;
         public UnityEngine.RuntimeAnimatorController SpellLoopController;
         public UnityEngine.RuntimeAnimatorController SpellEndController;
@@ -21,6 +24,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public void SetTangible() { }
         public void SetIntangible() { }
         public void TeleportOut() { }
+        public void TeleportOutEvent() { }
         
     }
 }

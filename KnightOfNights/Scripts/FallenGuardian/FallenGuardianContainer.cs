@@ -10,6 +10,7 @@ internal class FallenGuardianContainer : MonoBehaviour
 {
     [ShimField] public HeroDetectorProxy? Trigger;
     [ShimField] public FallenGuardianController? Boss;
+    [ShimField] public BoxCollider2D? Arena;
 
     private void OnEnable() => StartCoroutine(Run());
 

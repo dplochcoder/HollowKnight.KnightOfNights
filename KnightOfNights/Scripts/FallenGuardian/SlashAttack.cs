@@ -12,6 +12,7 @@ internal enum SlashAttackResult
 {
     PENDING,
     PARRIED,
+    PERFECT_PARRIED,
     NOT_PARRIED,
 }
 
@@ -57,12 +58,13 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             clock = ParticleClock.Spawn(revek.transform, compress.Value * ANIM_TIME, compress.Value * CIRCLE_TIME, compress.Value * FADE_TIME);
         }
 
+        System.Action? onActive = null;
         if (clockDuration >= timeToStrike)
         {
             compress.Value = timeToStrike / clockDuration;
             SpawnClock();
         }
-        else revek.DoAfter(SpawnClock, timeToStrike - clockDuration);
+        else onActive = () => revek.DoAfter(SpawnClock, timeToStrike - clockDuration);
 
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
@@ -114,6 +116,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         hitState.GetFirstActionOfType<AudioPlayerOneShot>().Enabled = false;
 
         revek.SetActive(true);
+        onActive?.Invoke();
     }
 
     internal void Cancel()

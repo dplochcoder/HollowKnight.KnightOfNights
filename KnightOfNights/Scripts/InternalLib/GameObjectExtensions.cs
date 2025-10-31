@@ -17,12 +17,13 @@ internal static class GameObjectExtensions
         while (!co.Update(Time.deltaTime).done) yield return 0;
     }
 
-    public static void PlayAtPosition(this AudioClip self, Vector2 pos)
+    public static void PlayAtPosition(this AudioClip self, Vector2 pos, float pitch = 1f)
     {
         var obj = new GameObject();
         obj.transform.position = pos;
         var audio = obj.AddComponent<AudioSource>();
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
+        audio.pitch = pitch;
 
         IEnumerator Routine()
         {

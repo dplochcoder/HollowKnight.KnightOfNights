@@ -254,7 +254,9 @@ MonoBehaviour:
   ShortWait: 0.45
   SplitOffset: 1.15
   EscalationPause: 3.5
-  StaggerCount: 1
+  StaggerCount: 3
+  StaggerDistance: 4
+  StaggerBurst: {fileID: 7206719451512712455, guid: ce835af18719ab348b26157ef228f670, type: 3}
   SpellStartController: {fileID: 9100000, guid: 7ff6afe9add6250408888dbdf8c8af2f, type: 2}
   SpellLoopController: {fileID: 9100000, guid: f972f190f1a69be489f21a4302db3b10, type: 2}
   SpellEndController: {fileID: 9100000, guid: 1d2d93f7624414c46a94ecce34ce8f96, type: 2}
