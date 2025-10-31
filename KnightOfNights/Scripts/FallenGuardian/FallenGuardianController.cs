@@ -351,7 +351,7 @@ internal class FallenGuardianController : MonoBehaviour
 
     private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
     {
-        bool Equal(SlashAttackSpec a, SlashAttackSpec b)
+        static bool Equal(SlashAttackSpec a, SlashAttackSpec b)
         {
             if (a.ApproxEqual(b)) return true;
             if ((a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT)) && (b.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT))) return true;
