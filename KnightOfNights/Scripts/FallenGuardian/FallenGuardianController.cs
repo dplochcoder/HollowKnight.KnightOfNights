@@ -13,8 +13,7 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 internal enum AttackChoice
 {
     AxeHopscotch,
-    GorbFireworks,
-    GorbNuclear,
+    GorbStorm,
     PancakeWaveSlash,
     PancakeDiveStorm,
     ShieldCyclone,
@@ -67,6 +66,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public float StaggerDistance;
 
     [ShimField] public GameObject? StaggerBurst;
+    [ShimField] public GameObject? TeleportBurst;
 
     [ShimField] public RuntimeAnimatorController? SpellStartController;
     [ShimField] public RuntimeAnimatorController? SpellLoopController;
@@ -74,10 +74,12 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public RuntimeAnimatorController? StaggerController;
     [ShimField] public RuntimeAnimatorController? StaggerToRecoverController;
     [ShimField] public RuntimeAnimatorController? SwordToSpellController;
+    [ShimField] public RuntimeAnimatorController? TeleportInController;
 
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
     private HealthManager? healthManager;
+    private NonBouncer? nonBouncer;
     private Recoil? recoil;
     private Animator? animator;
     private AudioSource? audio;
@@ -87,6 +89,7 @@ internal class FallenGuardianController : MonoBehaviour
     private void Awake()
     {
         healthManager = GetComponent<HealthManager>();
+        nonBouncer = GetComponent<NonBouncer>();
         recoil = GetComponent<Recoil>();
         animator = GetComponent<Animator>();
         stats = PhaseStats[0];
@@ -246,11 +249,11 @@ internal class FallenGuardianController : MonoBehaviour
         if (!recoil!.IsRecoiling && prevAttack.DamageDirection.HasValue && prevAttack.MagnitudeMultiplier.HasValue)
             recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(prevAttack.DamageDirection.Value), prevAttack.MagnitudeMultiplier.Value);
 
-        SetIntangible();
+        SetTangible(false);
         animator!.runtimeAnimatorController = StaggerController!;
         yield return Coroutines.SleepSeconds(stats!.StaggerInvuln);
 
-        SetTangible();
+        SetTangible(true);
         yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
 
         var prev = healthManager!.hp;
@@ -328,10 +331,8 @@ internal class FallenGuardianController : MonoBehaviour
         {
             case AttackChoice.AxeHopscotch:
                 return Coroutines.SleepSeconds(1);
-            case AttackChoice.GorbFireworks:
-                return Coroutines.SleepSeconds(1);
-            case AttackChoice.GorbNuclear:
-                return Coroutines.SleepSeconds(1);
+            case AttackChoice.GorbStorm:
+                return Coroutines.Sequence(GorbStorm());
             case AttackChoice.PancakeDiveStorm:
                 return Coroutines.SleepSeconds(1);
             case AttackChoice.PancakeWaveSlash:
@@ -429,21 +430,27 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats!.UltraInstinctTail);
     }
 
+    private IEnumerator<CoroutineElement> GorbStorm()
+    {
+        yield break;
+    }
+
     private event System.Action? OnCastSpell;
 
     [ShimMethod]
-    public void CastSpell() => OnCastSpell?.Invoke();
+    public void CastSpellEvent() => OnCastSpell?.Invoke();
 
     [ShimMethod]
-    public void SetTangible() => SetTangible(true);
-
-    [ShimMethod]
-    public void SetIntangible() => SetTangible(false);
+    public void TeleportIn()
+    {
+        SetTangible(true);
+        KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
+    }
 
     [ShimMethod]
     public void TeleportOut()
     {
-        SetIntangible();
+        SetTangible(false);
         KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
     }
 
@@ -451,6 +458,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         healthManager!.IsInvincible = !value;
         healthManager.SetPreventInvincibleEffect(!value);
+        nonBouncer!.active = value;
     }
 
     private event System.Action? OnTeleportOut;

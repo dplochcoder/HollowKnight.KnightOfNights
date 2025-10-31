@@ -115,6 +115,7 @@ GameObject:
   - component: {fileID: 9145306397532747116}
   - component: {fileID: 1005945526208214885}
   - component: {fileID: 5794112500761221665}
+  - component: {fileID: 6829015592357060972}
   m_Layer: 11
   m_Name: Revek
   m_TagString: Untagged
@@ -151,7 +152,7 @@ Animator:
   m_GameObject: {fileID: 7989141326161804240}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: eb3efaa58dad0dd429640f5482ce9810, type: 2}
+  m_Controller: {fileID: 9100000, guid: f3e69d178161d7f4e8a28c20e4350c55, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -259,12 +260,14 @@ MonoBehaviour:
   StaggerCount: 3
   StaggerDistance: 4
   StaggerBurst: {fileID: 7206719451512712455, guid: ce835af18719ab348b26157ef228f670, type: 3}
+  TeleportBurst: {fileID: 7206719451512712455, guid: 3b63bd6c939529741af834b96c6fb53f, type: 3}
   SpellStartController: {fileID: 9100000, guid: 7ff6afe9add6250408888dbdf8c8af2f, type: 2}
   SpellLoopController: {fileID: 9100000, guid: f972f190f1a69be489f21a4302db3b10, type: 2}
   SpellEndController: {fileID: 9100000, guid: 1d2d93f7624414c46a94ecce34ce8f96, type: 2}
   StaggerController: {fileID: 9100000, guid: 15fb7bc37e597b54a979b60d66738b20, type: 2}
   StaggerToRecoverController: {fileID: 9100000, guid: 8b36ca2caa5ee5e40973c4dfb2946a33, type: 2}
   SwordToSpellController: {fileID: 9100000, guid: ad34102d403381248bdc760f7b4a8619, type: 2}
+  TeleportInController: {fileID: 9100000, guid: f3e69d178161d7f4e8a28c20e4350c55, type: 2}
   PhaseStats:
   - {fileID: 6148910342374127532}
   - {fileID: 1758648912265112720}
@@ -319,6 +322,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fcd7f33b3a8bffe4baba17a2d3d65bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6829015592357060972
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7989141326161804240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22e743bd60d7b214592e1c4fde0e7c2f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  active: 0
 --- !u!1 &8744406199751773256
 GameObject:
   m_ObjectHideFlags: 0

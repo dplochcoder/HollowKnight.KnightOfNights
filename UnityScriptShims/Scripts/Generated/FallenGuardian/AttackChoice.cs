@@ -3,8 +3,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
     public enum AttackChoice
     {
         AxeHopscotch,
-        GorbFireworks,
-        GorbNuclear,
+        GorbStorm,
         PancakeWaveSlash,
         PancakeDiveStorm,
         ShieldCyclone,
