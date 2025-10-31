@@ -6,6 +6,13 @@ using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
 
+internal class OnAwaken : MonoBehaviour
+{
+    internal System.Action? Action;
+
+    private void Awake() => Action?.Invoke();
+}
+
 internal static class GameObjectExtensions
 {
     public static void StartLibCoroutine(this MonoBehaviour self, CoroutineElement co) => self.StartCoroutine(EvaluateLibCoroutine(co));
@@ -16,6 +23,8 @@ internal static class GameObjectExtensions
     {
         while (!co.Update(Time.deltaTime).done) yield return 0;
     }
+
+    public static void OnAwake(this GameObject self, System.Action action) => self.GetOrAddComponent<OnAwaken>().Action += action;
 
     public static void PlayAtPosition(this AudioClip self, Vector2 pos, float pitch = 1f)
     {

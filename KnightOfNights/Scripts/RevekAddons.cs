@@ -12,6 +12,7 @@ namespace KnightOfNights.Scripts;
 internal class RevekAddons : MonoBehaviour, IHitResponder
 {
     public bool HealOnNailParry = false;
+    public System.Func<float, bool> DirectionFilter = _ => true;
     public HitInstance? HitInstance {  get; private set; }
 
     private MeshRenderer? renderer;
@@ -35,6 +36,7 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
     {
         if (damageInstance.DamageDealt <= 0) return;
         if (fsm == null || !VULNERABLE_STATES.Contains(fsm.ActiveStateName)) return;
+        if (!DirectionFilter(damageInstance.Direction)) return;
 
         switch (damageInstance.AttackType)
         {

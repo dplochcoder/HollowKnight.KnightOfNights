@@ -1,6 +1,7 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
+using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.CollectionUtil;
 using SFCore.Utils;
@@ -47,6 +48,14 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
     {
         var revek = fsm.gameObject;
         revekAddons = revek.AddComponent<RevekAddons>();
+        revekAddons.DirectionFilter = dir =>
+        {
+            dir = MathExt.ClampAngle(dir, -45, 315);
+            if (dir <= 45) return spec.AllowedHits.Contains("RIGHT");
+            else if (dir <= 135) return spec.AllowedHits.Contains("UP");
+            else if (dir <= 225) return spec.AllowedHits.Contains("LEFT");
+            else return spec.AllowedHits.Contains("DOWN");
+        };
 
         var timeToStrike = (5f / 18f) + spec.Telegraph;
         float clockDuration = ANIM_TIME + CIRCLE_TIME;
@@ -58,13 +67,12 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             clock = ParticleClock.Spawn(revek.transform, compress.Value * ANIM_TIME, compress.Value * CIRCLE_TIME, compress.Value * FADE_TIME);
         }
 
-        System.Action? onActive = null;
         if (clockDuration >= timeToStrike)
         {
             compress.Value = timeToStrike / clockDuration;
             SpawnClock();
         }
-        else onActive = () => revek.DoAfter(SpawnClock, timeToStrike - clockDuration);
+        else revek.OnAwake(() => revek.DoAfter(SpawnClock, timeToStrike - clockDuration));
 
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
@@ -90,8 +98,23 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         idleWait.timeMin = spec.Telegraph;
         idleWait.timeMax = spec.Telegraph;
 
-        var tink = revek.FindChild("Slash Hit").LocateMyFSM("nail_clash_tink");
-        tink.GetFsmState("Blocked Hit").RemoveFirstActionOfType<SendMessage>();  // Disable freeze for the fight.  Doesn't work?
+        var slashHit = revek.FindChild("Slash Hit")!;
+        slashHit.OnAwake(() =>
+        {
+            var tink = slashHit.LocateMyFSM("nail_clash_tink");
+            var blockedHitState = tink.GetFsmState("Blocked Hit");
+            blockedHitState.AddFsmTransition("ABORT", "Detecting");
+
+            // Move freeze moment and Nail parry calls to after direction validation.
+            var actions = blockedHitState.Actions;
+            (actions[0], actions[1], actions[2], actions[3]) = (actions[2], actions[3], actions[0], actions[1]);
+            // Prevent parries from disallowed directions.
+            blockedHitState.InsertFsmAction(new Lambda(() =>
+            {
+                var dir = tink.FsmVariables.GetFsmFloat("Attack Direction").Value;
+                if (!revekAddons.DirectionFilter(dir)) tink.SendEvent("ABORT");
+            }), 2);
+        });
 
         var slashState = fsm.GetFsmState("Slash");
         slashState.AddFsmTransition("PARRIED", "Hit");
@@ -116,7 +139,6 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         hitState.GetFirstActionOfType<AudioPlayerOneShot>().Enabled = false;
 
         revek.SetActive(true);
-        onActive?.Invoke();
     }
 
     internal void Cancel()
