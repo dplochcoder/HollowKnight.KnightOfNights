@@ -93,19 +93,9 @@ internal class FallenGuardianController : MonoBehaviour
 
         audio = gameObject.AddComponent<AudioSource>();
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
-
-        On.GameManager.FreezeMoment_int += NoFreezeMoment;
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
-
-    private void OnDestroy() => On.GameManager.FreezeMoment_int -= NoFreezeMoment;
-
-    private static void NoFreezeMoment(On.GameManager.orig_FreezeMoment_int orig, GameManager self, int type)
-    {
-        if (type == 3) return;
-        orig(self, type);
-    }
 
     private Vector2 lastPos;
 
@@ -365,9 +355,10 @@ internal class FallenGuardianController : MonoBehaviour
             var (a, b) = p;
             if (a.ApproxEqual(SlashAttackSpec.LEFT) && b.ApproxEqual(SlashAttackSpec.LEFT)) return false;
             if (a.ApproxEqual(SlashAttackSpec.RIGHT) && b.ApproxEqual(SlashAttackSpec.RIGHT)) return false;
-            if (a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) && b.ApproxEqual(SlashAttackSpec.HIGH_LEFT)) return false;
-            if (a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT) && b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT)) return false;
-            return true;
+
+            var aHigh = a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT);
+            var bHigh = a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT);
+            return !aHigh || !bHigh;
         });
 
         List<List<SlashAttackSpec>> ret = [];
@@ -375,7 +366,6 @@ internal class FallenGuardianController : MonoBehaviour
         {
             if (IsValid(p)) ret.Add([.. p]);
         });
-
         return ret;
     }
     private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
@@ -393,8 +383,6 @@ internal class FallenGuardianController : MonoBehaviour
         SlashAttackSpec.LEFT,
         SlashAttackSpec.RIGHT,
         SlashAttackSpec.RIGHT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.HIGH_LEFT,
         SlashAttackSpec.HIGH_LEFT,
         SlashAttackSpec.HIGH_RIGHT,
         SlashAttackSpec.HIGH_RIGHT
@@ -404,6 +392,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         var specs = UltraInstinctPatterns.Choose();
         specs = [.. specs.Select(s => s.WithTelegraph(stats!.UltraInstinctTelegraph))];
+        if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
 
         List<SlashAttack> attacks = [];
         HashSet<SlashAttack> activeAttacks = [];

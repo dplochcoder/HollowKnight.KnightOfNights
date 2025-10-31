@@ -114,6 +114,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             // Move freeze moment and Nail parry calls to after direction validation.
             var actions = blockedHitState.Actions;
             (actions[0], actions[1], actions[2], actions[3]) = (actions[2], actions[3], actions[0], actions[1]);
+            actions[2].Enabled = false;  // Disable FreezeMoment.
             // Prevent parries from disallowed directions.
             blockedHitState.InsertFsmAction(new Lambda(() =>
             {
