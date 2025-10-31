@@ -41,6 +41,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
 
     [ShimField] public float StaggerGracePeriod;
     [ShimField] public float StaggerInvuln;
+    [ShimField] public float StaggerHitWait;
     [ShimField] public float StaggerMaxWait;
     [ShimField] public float StaggerNextAttackDelay;
     [ShimField] public float UltraInstinctInterval;
@@ -236,7 +237,7 @@ internal class FallenGuardianController : MonoBehaviour
         if ((pos - kPos).magnitude < StaggerDistance) pos = kPos + (pos - kPos).normalized * StaggerDistance;
 
         // Force above grounds.
-        if (pos.y <= Container!.Arena!.bounds.min.y)
+        if (pos.y <= Container!.Arena!.bounds.min.y + 1)
         {
             pos.y = Container!.Arena!.bounds.min.y + 1;
 
@@ -262,7 +263,9 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
 
         var prev = healthManager!.hp;
-        yield return Coroutines.SleepUntilTimeout(() => healthManager!.hp < prev, stats!.StaggerMaxWait);
+        yield return Coroutines.OneOf(
+            Coroutines.SleepUntil(() => healthManager!.hp < prev).Then(Coroutines.SleepSeconds(stats!.StaggerHitWait)),
+            Coroutines.SleepSeconds(stats!.StaggerMaxWait));
 
         animator.runtimeAnimatorController = StaggerToRecoverController!;
 

@@ -7,6 +7,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public System.Collections.Generic.List<FallenGuardianAttack> Attacks;
         public float StaggerGracePeriod;
         public float StaggerInvuln;
+        public float StaggerHitWait;
         public float StaggerMaxWait;
         public float StaggerNextAttackDelay;
         public float UltraInstinctInterval;
