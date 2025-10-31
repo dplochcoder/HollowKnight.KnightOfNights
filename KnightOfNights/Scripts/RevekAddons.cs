@@ -73,11 +73,12 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
             AngleMin = 0,
             AngleMax = 360,
         };
-        FlingUtils.SpawnAndFling(config, transform, Vector3.zero);
+        var objs = FlingUtils.SpawnAndFling(config, transform, Vector3.zero);
 
         // Heal on parry.
         HeroController.instance.AddHealth(1);
 
+        GameManager.instance.gameObject.DoAfter(() => objs.ForEach(Destroy), 30f);
         Destroy(prefab);
     }
 
