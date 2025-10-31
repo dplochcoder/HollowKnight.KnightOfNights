@@ -250,7 +250,7 @@ internal class FallenGuardianController : MonoBehaviour
         transform.position = pos;
         transform.localScale = new(prevAttack.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
         StaggerBurst?.Spawn(pos);
-        KnightOfNightsPreloader.Instance.StunEffect.Spawn(pos);
+        KnightOfNightsPreloader.Instance.StunEffect!.Spawn(pos);
 
         if (!recoil!.IsRecoiling && prevAttack.HitInstance != null) recoil.RecoilByDamage(prevAttack.HitInstance.Value);
 
@@ -321,7 +321,7 @@ internal class FallenGuardianController : MonoBehaviour
     }
 
 #if DEBUG
-    private const bool SkipTutorial = false;
+    private const bool SkipTutorial = true;
     private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
 #else
     private const bool SkipTutorial = false;

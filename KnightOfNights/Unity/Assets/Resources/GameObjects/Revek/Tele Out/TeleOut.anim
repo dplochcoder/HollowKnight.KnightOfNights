@@ -937,14 +937,14 @@ AnimationClip:
   m_HasMotionFloatCurves: 0
   m_Events:
   - time: 0.16666667
-    functionName: SetIntangible
+    functionName: TeleportOut
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
     intParameter: 0
     messageOptions: 0
   - time: 0.2777778
-    functionName: TeleportOut
+    functionName: TeleportOutEvent
     data: 
     objectReferenceParameter: {fileID: 0}
     floatParameter: 0
