@@ -1,5 +1,6 @@
 ﻿using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
+using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
 using System.Collections.Generic;
@@ -183,6 +184,8 @@ internal class FallenGuardianController : MonoBehaviour
 
         if (SkipTutorial) EscalationPause = 1f;
         yield return Coroutines.SleepSeconds(EscalationPause);
+
+        if (CharmIds.HeavyBlow.IsEquipped()) --StaggerCount;
 
         AttackChoice previousAttack = AttackChoice.UltraInstinct;
         while (true)
