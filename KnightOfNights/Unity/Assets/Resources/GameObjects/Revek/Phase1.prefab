@@ -53,7 +53,7 @@ MonoBehaviour:
   StaggerHitWait: 0.25
   StaggerMaxWait: 2.5
   StaggerNextAttackDelay: 0.85
-  UltraInstinctInterval: 0.35
+  UltraInstinctInterval: 0.285
   UltraInstinctTail: 1.25
   UltraInstinctTelegraph: 0.5
 --- !u!1 &6652528314850364912

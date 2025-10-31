@@ -353,24 +353,24 @@ internal class FallenGuardianController : MonoBehaviour
     {
         static bool Equal(SlashAttackSpec a, SlashAttackSpec b)
         {
-            if (a.ApproxEqual(b)) return true;
-            if ((a.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || a.ApproxEqual(SlashAttackSpec.HIGH_RIGHT)) && (b.ApproxEqual(SlashAttackSpec.HIGH_LEFT) || b.ApproxEqual(SlashAttackSpec.HIGH_RIGHT))) return true;
+            if (a.AllowedHits.Count != b.AllowedHits.Count) return false;
 
-            return false;
+            HashSet<string> bSet = [.. b.AllowedHits];
+            return a.AllowedHits.All(bSet.Contains);
         }
 
         List<List<SlashAttackSpec>> ret = [];
         input.ForEachPermutation(p =>
         {
-            if (p.Pairs().All(pair => Equal(pair.Item1, pair.Item2))) ret.Add([.. p]);
+            if (p.Pairs().All(pair => !Equal(pair.Item1, pair.Item2))) ret.Add([.. p]);
         });
         return ret;
     }
     private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.LEFT.Down(1.25f),
+        SlashAttackSpec.LEFT.Up(1.25f),
+        SlashAttackSpec.RIGHT.Down(1.25f),
+        SlashAttackSpec.RIGHT.Up(1.25f),
         SlashAttackSpec.HIGH_LEFT,
         SlashAttackSpec.HIGH_RIGHT
     ]);
