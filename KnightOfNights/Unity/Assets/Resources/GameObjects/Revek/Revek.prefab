@@ -114,6 +114,7 @@ GameObject:
   - component: {fileID: 7989141326161804242}
   - component: {fileID: 9145306397532747116}
   - component: {fileID: 1005945526208214885}
+  - component: {fileID: 5794112500761221665}
   m_Layer: 11
   m_Name: Revek
   m_TagString: Untagged
@@ -247,6 +248,7 @@ MonoBehaviour:
   m_Script: {fileID: -1477357591, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Container: {fileID: 0}
   SequenceDelay: 1.9
   Telegraph: 0.55
   Deceleration: 0.91
@@ -303,6 +305,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 1677935295, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &5794112500761221665
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7989141326161804240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd7f33b3a8bffe4baba17a2d3d65bc6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1 &8744406199751773256
