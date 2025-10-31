@@ -13,7 +13,7 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
 {
     public bool HealOnNailParry = false;
     public System.Func<float, bool> DirectionFilter = _ => true;
-    public HitInstance? HitInstance {  get; private set; }
+    public event System.Action<HitInstance>? OnParry;
 
     private MeshRenderer? renderer;
     private PlayMakerFSM? fsm;
@@ -44,7 +44,7 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
             case AttackTypes.Spell:
                 if (damageInstance.AttackType == AttackTypes.Nail && HealOnNailParry) SpawnSoul(transform);
 
-                HitInstance = damageInstance;
+                OnParry?.Invoke(damageInstance);
                 fsm.SetState("Hit");
                 break;
             case AttackTypes.Acid:

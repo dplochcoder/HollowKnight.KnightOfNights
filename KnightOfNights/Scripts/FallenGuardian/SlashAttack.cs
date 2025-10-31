@@ -22,7 +22,9 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
     public SlashAttackSpec Spec => spec;
     public SlashAttackResult Result { get; private set; }
     public Vector2 ParryPos { get; private set; }
-    public HitInstance? HitInstance => revekAddons?.HitInstance;
+    public int DamageDealt { get; private set; }
+    public float? DamageDirection { get; private set; }
+    public float? MagnitudeMultiplier { get; private set; }
 
     private bool cancelled = false;
     private ParticleClock? clock;
@@ -37,8 +39,6 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         attack.SpawnImpl(spec);
         return attack;
     }
-
-    public int DamageDealt() => revekAddons?.HitInstance?.DamageDealt ?? 0;
 
     private const float ANIM_TIME = 0.1f;
     private const float CIRCLE_TIME = 0.4f;
@@ -55,6 +55,12 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             else if (dir <= 135) return spec.AllowedHits.Contains("UP");
             else if (dir <= 225) return spec.AllowedHits.Contains("LEFT");
             else return spec.AllowedHits.Contains("DOWN");
+        };
+        revekAddons.OnParry += hit =>
+        {
+            DamageDealt = hit.DamageDealt;
+            DamageDirection = hit.Direction;
+            MagnitudeMultiplier = hit.MagnitudeMultiplier;
         };
 
         var timeToStrike = (5f / 18f) + spec.Telegraph;
@@ -113,6 +119,13 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             {
                 var dir = tink.FsmVariables.GetFsmFloat("Attack Direction").Value;
                 if (!revekAddons.DirectionFilter(dir)) tink.SendEvent("ABORT");
+                else
+                {
+                    var damagesEnemy = tink.FsmVariables.GetFsmGameObject("Slash").Value.LocateMyFSM("damages_enemy");
+                    DamageDealt = damagesEnemy.FsmVariables.GetFsmInt("damageDealt").Value;
+                    DamageDirection = damagesEnemy.FsmVariables.GetFsmFloat("direction").Value;
+                    MagnitudeMultiplier = damagesEnemy.FsmVariables.GetFsmFloat("magnitudeMult").Value;
+                }
             }), 2);
         });
 

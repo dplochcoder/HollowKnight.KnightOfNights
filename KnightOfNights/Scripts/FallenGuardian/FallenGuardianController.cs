@@ -216,11 +216,11 @@ internal class FallenGuardianController : MonoBehaviour
 
     private bool MaybeStagger(SlashAttack attack)
     {
-        if (++multiParries < StaggerCount) return true;
+        if (++multiParries < StaggerCount) return false;
 
         multiParries = 0;
         staggerAttack = attack;
-        return false;
+        return true;
     }
 
     private IEnumerator<CoroutineElement> ExecuteStagger()
@@ -253,7 +253,8 @@ internal class FallenGuardianController : MonoBehaviour
         StaggerBurst?.Spawn(pos);
         KnightOfNightsPreloader.Instance.StunEffect!.Spawn(pos);
 
-        if (!recoil!.IsRecoiling && prevAttack.HitInstance != null) recoil.RecoilByDamage(prevAttack.HitInstance.Value);
+        if (!recoil!.IsRecoiling && prevAttack.DamageDirection.HasValue && prevAttack.MagnitudeMultiplier.HasValue)
+            recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(prevAttack.DamageDirection.Value), prevAttack.MagnitudeMultiplier.Value);
 
         SetIntangible();
         animator!.runtimeAnimatorController = StaggerController!;
@@ -431,7 +432,7 @@ internal class FallenGuardianController : MonoBehaviour
 
             RevekAddons.SpawnSoul(attack.ParryPos);
             RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
-            healthManager!.hp -= attacks.Select(a => a.DamageDealt()).Sum();
+            healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
 
             if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
         }
