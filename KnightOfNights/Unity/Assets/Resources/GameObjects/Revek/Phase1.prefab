@@ -53,6 +53,8 @@ MonoBehaviour:
   StaggerHitWait: 0.25
   StaggerMaxWait: 2.5
   StaggerNextAttackDelay: 0.85
+  StaggerOscillationPeriod: 1.75
+  StaggerOscillationRadius: 0.25
   UltraInstinctDeceleration: 0.9
   UltraInstinctInterval: 0.31
   UltraInstinctSpeed: 180

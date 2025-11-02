@@ -1,4 +1,5 @@
-﻿using KnightOfNights.Scripts.InternalLib;
+﻿using ItemChanger.Extensions;
+using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
@@ -43,6 +44,8 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public float StaggerHitWait;
     [ShimField] public float StaggerMaxWait;
     [ShimField] public float StaggerNextAttackDelay;
+    [ShimField] public float StaggerOscillationPeriod;
+    [ShimField] public float StaggerOscillationRadius;
     [ShimField] public float UltraInstinctDeceleration;
     [ShimField] public float UltraInstinctInterval;
     [ShimField] public float UltraInstinctSpeed;
@@ -86,7 +89,18 @@ internal class FallenGuardianController : MonoBehaviour
     private Animator? animator;
     private AudioSource? audio;
 
+    private ParticleSystem? idleParticles;
+
     private FallenGuardianPhaseStats? stats;
+
+    private void InitParticles()
+    {
+        GameObject particles = Instantiate(KnightOfNightsPreloader.Instance.Revek!.FindChild("Idle Pt")!);
+        particles.SetActive(true);
+        particles.SetParent(gameObject);
+        particles.transform.localPosition = Vector3.zero;
+        idleParticles = particles.GetComponent<ParticleSystem>();
+    }
 
     private void Awake()
     {
@@ -98,11 +112,26 @@ internal class FallenGuardianController : MonoBehaviour
 
         audio = gameObject.AddComponent<AudioSource>();
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
+
+        SetTangible(false);
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
 
     private Vector2 lastPos;
+    private bool staggerFloating;
+    private float staggerTime;
+
+    private void UpdateStaggerPos()
+    {
+        var prev = staggerTime;
+        staggerTime += Time.deltaTime;
+
+        float YPos(float time) => stats!.StaggerOscillationRadius * Mathf.Sin(Mathf.PI * 2 * time / stats.StaggerOscillationPeriod);
+
+        var delta = YPos(staggerTime) - YPos(prev);
+        transform.SetPositionY(transform.position.y + delta);
+    }
 
     private void Update()
     {
@@ -110,6 +139,8 @@ internal class FallenGuardianController : MonoBehaviour
 
         var pos = transform.position;
         if (pos.x > 0 && pos.y > 0) lastPos = pos;
+
+        if (staggerFloating) UpdateStaggerPos();
     }
 
     private IEnumerator<SlashAttackSequence> SpecTutorial()
@@ -255,6 +286,8 @@ internal class FallenGuardianController : MonoBehaviour
         animator!.runtimeAnimatorController = StaggerController!;
         yield return Coroutines.SleepSeconds(stats!.StaggerInvuln);
 
+        staggerFloating = true;
+        staggerTime = 0;
         SetTangible(true);
         yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
 
@@ -263,6 +296,7 @@ internal class FallenGuardianController : MonoBehaviour
             Coroutines.SleepUntil(() => healthManager!.hp < prev).Then(Coroutines.SleepSeconds(stats!.StaggerHitWait)),
             Coroutines.SleepSeconds(stats!.StaggerMaxWait));
 
+        staggerFloating = false;
         animator.runtimeAnimatorController = StaggerToRecoverController!;
 
         Wrapped<bool> teleportOut = new(false);
@@ -458,6 +492,9 @@ internal class FallenGuardianController : MonoBehaviour
         healthManager!.IsInvincible = !value;
         healthManager.SetPreventInvincibleEffect(!value);
         nonBouncer!.active = value;
+
+        if (value) idleParticles?.Play();
+        else idleParticles?.Stop();
     }
 
     private event System.Action? OnTeleportOut;
