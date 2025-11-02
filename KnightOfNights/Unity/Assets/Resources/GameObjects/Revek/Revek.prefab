@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8979093339899859908}
   - component: {fileID: 7489066820840442220}
   - component: {fileID: 7020944334381048461}
+  - component: {fileID: 6415590116722564158}
   m_Layer: 0
   m_Name: Sprite
   m_TagString: Untagged
@@ -97,6 +98,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shader: Sprites/Default
   Scale: 1
+--- !u!114 &6415590116722564158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5599305361992501538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd7f33b3a8bffe4baba17a2d3d65bc6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7989141326161804240
 GameObject:
   m_ObjectHideFlags: 0
@@ -114,7 +127,6 @@ GameObject:
   - component: {fileID: 7989141326161804242}
   - component: {fileID: 9145306397532747116}
   - component: {fileID: 1005945526208214885}
-  - component: {fileID: 5794112500761221665}
   - component: {fileID: 6829015592357060972}
   m_Layer: 11
   m_Name: Revek
@@ -310,18 +322,7 @@ MonoBehaviour:
   m_Script: {fileID: 1677935295, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5794112500761221665
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7989141326161804240}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fcd7f33b3a8bffe4baba17a2d3d65bc6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  SpriteFlashOverride: {fileID: 5599305361992501538}
 --- !u!114 &6829015592357060972
 MonoBehaviour:
   m_ObjectHideFlags: 0
