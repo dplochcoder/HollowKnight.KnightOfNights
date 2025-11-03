@@ -507,6 +507,7 @@ internal class FallenGuardianController : MonoBehaviour
     private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
     {
         float angle = Random.Range(0f, 360f);
+        float off = 360f * offset / count * (MathExt.CoinFlip() ? 1 : -1);
         var pos = transform.position;
         for (int i = 0; i < numBursts; i++)
         {
@@ -535,7 +536,7 @@ internal class FallenGuardianController : MonoBehaviour
                 obj.SetActive(true);
             }
 
-            angle += 360f * offset / count;
+            angle += off;
             if (i != numBursts - 1) yield return Coroutines.SleepSeconds(wait);
         }
     }
@@ -604,7 +605,6 @@ internal class FallenGuardianController : MonoBehaviour
         }
 
         TeleportInstant(PickBigPos());
-        bobber!.enabled = false;
 
         yield return Coroutines.SleepSeconds(stats.WaitBeforeFinale);
         animator!.runtimeAnimatorController = SpellCastToLoopController!;
@@ -647,6 +647,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         SetTangible(false);
         KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
+        bobber!.enabled = false;
     }
 
     private void SetTangible(bool value)

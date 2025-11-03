@@ -12,7 +12,7 @@ internal class RecycleAfter : MonoBehaviour
 
     private void OnEnable() => timer = 0;
 
-    private void OnUpdate()
+    private void Update()
     {
         timer += Time.deltaTime;
         if (timer >= Seconds) gameObject.Recycle();

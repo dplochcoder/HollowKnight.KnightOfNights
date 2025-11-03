@@ -231,28 +231,28 @@ MonoBehaviour:
   m_Script: {fileID: 864207550, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BobPeriod: 1.25
-  BobRadius: 0.4
+  BobPeriod: 1.4
+  BobRadius: 0.35
   BurstCountFinale: 7
   BurstCountSmall: 3
   FinaleMinDist: 6
-  GracePeriod: 1
+  GracePeriod: 1.25
   NumSmallBursts: 3
-  PitchIncrementFinale: 0.075
-  PitchIncrementSmall: 0.2
+  PitchIncrementFinale: 0.05
+  PitchIncrementSmall: 0.15
   SmallXMin: 6
-  SmallXMax: 10
+  SmallXMax: 12
   SmallYMin: 4.5
   SmallYMax: 10.5
-  SpikeAccel: 1.15
-  SpokeCountFinale: 16
-  SpokeCountSmall: 10
-  SpokeRotationFinale: 0.4286
+  SpikeAccel: 1.1
+  SpokeCountFinale: 7
+  SpokeCountSmall: 12
+  SpokeRotationFinale: 0.4
   SpokeRotationSmall: 0.5
-  WaitAfterFinale: 0.4
-  WaitAfterTeleport: 0.4
-  WaitBeforeFinale: 0.6
-  WaitBeforeTeleport: 0.25
-  WaitFirst: 1
+  WaitAfterFinale: 0.3
+  WaitAfterTeleport: 0.45
+  WaitBeforeFinale: 0.5
+  WaitBeforeTeleport: 0.3
+  WaitFirst: 0.85
   WaitSpikeFinale: 0.125
-  WaitSpikeSmall: 0.25
+  WaitSpikeSmall: 0.225
