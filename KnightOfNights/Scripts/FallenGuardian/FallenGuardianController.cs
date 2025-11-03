@@ -8,7 +8,6 @@ using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
 using SFCore.Utils;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 
@@ -168,6 +167,9 @@ internal class FallenGuardianController : MonoBehaviour
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
         bobber = gameObject.AddComponent<Bobber>();
         bobber.enabled = false;
+
+        StaggerBurst?.FixSpawnBug();
+        TeleportBurst?.FixSpawnBug();
 
         SetTangible(false);
     }

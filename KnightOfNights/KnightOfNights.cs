@@ -1,4 +1,5 @@
 using KnightOfNights.IC;
+using KnightOfNights.Scripts;
 using Modding;
 using System;
 using System.Collections;
@@ -17,6 +18,7 @@ public class KnightOfNightsMod : Mod
     public KnightOfNightsMod() : base("KnightOfNights")
     {
         Instance = this;
+        KnightOfNightsBundleAPI.Load();
 
         ShadelessModule.HookItemHelper();
         RevekSongModule.HookItemHelper();

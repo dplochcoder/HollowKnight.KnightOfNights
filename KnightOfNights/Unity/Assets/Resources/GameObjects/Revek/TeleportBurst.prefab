@@ -10,9 +10,9 @@ GameObject:
   m_Component:
   - component: {fileID: 2763456348815534084}
   - component: {fileID: 8935711529275868687}
-  - component: {fileID: 923820602514345453}
   - component: {fileID: 260445752367692504}
   - component: {fileID: 8110085440732324626}
+  - component: {fileID: 8585940439469923039}
   m_Layer: 0
   m_Name: TeleportBurst
   m_TagString: Untagged
@@ -4749,18 +4749,6 @@ ParticleSystem:
         m_PostInfinity: 2
         m_RotationOrder: 4
     vectorLabel1_3: W
---- !u!114 &923820602514345453
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7206719451512712455}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 667044271, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!199 &260445752367692504
 ParticleSystemRenderer:
   serializedVersion: 6
@@ -4803,7 +4791,7 @@ ParticleSystemRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_RenderMode: 0
-  m_SortMode: 0
+  m_SortMode: 3
   m_MinParticleSize: 0
   m_MaxParticleSize: 0.5
   m_CameraVelocityScale: 0
@@ -4822,7 +4810,7 @@ ParticleSystemRenderer:
   m_FreeformStretching: 0
   m_RotateWithStretchDirection: 1
   m_VertexStreams: 00010304
-  m_Mesh: {fileID: 0}
+  m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   m_Mesh1: {fileID: 0}
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
@@ -4840,3 +4828,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Seconds: 2
+--- !u!114 &8585940439469923039
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7206719451512712455}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 667044271, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
