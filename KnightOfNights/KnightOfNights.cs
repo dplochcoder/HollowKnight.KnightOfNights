@@ -1,5 +1,7 @@
 using KnightOfNights.IC;
 using Modding;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 
 namespace KnightOfNights;
@@ -24,6 +26,8 @@ public class KnightOfNightsMod : Mod
     private static void SetupDebug() => Debug.DebugInterop.Setup();
 
     public override List<(string, string)> GetPreloadNames() => KnightOfNightsPreloader.Instance.GetPreloadNames();
+
+    public override (string, Func<IEnumerator>)[] PreloadSceneHooks() => KnightOfNightsPreloader.Instance.PreloadSceneHooks();
 
     public override void Initialize(Dictionary<string, Dictionary<string, UnityEngine.GameObject>> preloadedObjects)
     {
