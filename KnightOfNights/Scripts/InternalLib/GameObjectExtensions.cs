@@ -15,6 +15,16 @@ internal class OnAwaken : MonoBehaviour
 
 internal static class GameObjectExtensions
 {
+    private static HashSet<GameObject> spawnBugFixed = [];
+
+    public static void FixSpawnBug(this GameObject self)
+    {
+        if (!spawnBugFixed.Add(self)) return;
+
+        Vector3 pos = new(-1000, -1000);
+        self.Spawn(pos).Recycle();
+    }
+
     public static void StartLibCoroutine(this MonoBehaviour self, CoroutineElement co) => self.StartCoroutine(EvaluateLibCoroutine(co));
 
     public static void StartLibCoroutine(this MonoBehaviour self, IEnumerator<CoroutineElement> enumerator) => self.StartCoroutine(EvaluateLibCoroutine(CoroutineSequence.Create(enumerator)));

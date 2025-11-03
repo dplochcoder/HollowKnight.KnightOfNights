@@ -247,7 +247,7 @@ MonoBehaviour:
   SpikeAccel: 1.1
   SpokeCountFinale: 7
   SpokeCountSmall: 11
-  SpokeRotationFinale: 0.25
+  SpokeRotationFinale: 0.3333
   SpokeRotationSmall: 0.5
   WaitAfterFinale: 0.575
   WaitAfterTeleport: 0.55

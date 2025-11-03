@@ -518,6 +518,9 @@ internal class FallenGuardianController : MonoBehaviour
 
     private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
     {
+        var prefab = KnightOfNightsPreloader.Instance.GorbSpear!;
+        prefab.FixSpawnBug();
+
         float angle = Random.Range(0f, 360f);
         float off = 360f * offset / count * (MathExt.CoinFlip() ? 1 : -1);
         for (int i = 0; i < numBursts; i++)
@@ -526,7 +529,7 @@ internal class FallenGuardianController : MonoBehaviour
             KnightOfNightsPreloader.Instance.MageShotClip!.PlayAtPosition(pos, 1f + i * pitchIncrement);
             for (int j = 0; j < count; j++)
             {
-                var obj = KnightOfNightsPreloader.Instance.GorbSpear!.Spawn(pos, Quaternion.Euler(0, 0, angle));
+                var obj = prefab.Spawn(pos, Quaternion.Euler(0, 0, angle));
                 recyclables.Add(obj);
 
                 angle += 360f / count;
@@ -561,7 +564,7 @@ internal class FallenGuardianController : MonoBehaviour
 
         transform.position = newPos;
         KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst?.Spawn(transform.position);
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
     }
 
     private IEnumerator<CoroutineElement> GorbStorm()
