@@ -133,6 +133,8 @@ internal class FallenGuardianController : MonoBehaviour
 
     private HealthManager? healthManager;
     private NonBouncer? nonBouncer;
+    private BoxCollider2D? collider;
+    private DamageHero? damageHero;
     private Recoil? recoil;
     private Animator? animator;
     private AudioSource? audio;
@@ -155,6 +157,8 @@ internal class FallenGuardianController : MonoBehaviour
     {
         healthManager = GetComponent<HealthManager>();
         nonBouncer = GetComponent<NonBouncer>();
+        collider = GetComponent<BoxCollider2D>();
+        damageHero = GetComponent<DamageHero>();
         recoil = GetComponent<Recoil>();
         animator = GetComponent<Animator>();
         stats = PhaseStats[0];
@@ -655,6 +659,8 @@ internal class FallenGuardianController : MonoBehaviour
         healthManager!.IsInvincible = !value;
         healthManager.SetPreventInvincibleEffect(!value);
         nonBouncer!.active = value;
+        collider!.enabled = value;
+        damageHero!.enabled = value;
 
         if (value) idleParticles?.Play();
         else idleParticles?.Stop();
