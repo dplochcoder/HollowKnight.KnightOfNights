@@ -8,6 +8,8 @@ namespace KnightOfNights.Scripts.Proxy;
 [Shim]
 internal class EnemyHitEffectsGhostProxy : EnemyHitEffectsGhost
 {
+    static EnemyHitEffectsGhostProxy() => On.EnemyHitEffectsGhost.RecieveHitEffect += OnRecieveHitEffect;
+
     private static readonly MonobehaviourPatcher<EnemyHitEffectsGhost> Patcher = new(() =>
         KnightOfNightsPreloader.Instance.Xero!.GetComponent<EnemyHitEffectsGhost>(),
         "audioPlayerPrefab",
@@ -16,14 +18,17 @@ internal class EnemyHitEffectsGhostProxy : EnemyHitEffectsGhost
         "slashEffectGhost1",
         "slashEffectGhost2");
 
-    [ShimField] public GameObject? SpriteFlashOverride;
+    [ShimField] public CustomSpriteFlash? SpriteFlash;
 
     protected new void Awake()
     {
         base.Awake();
         Patcher.Patch(this);
+    }
 
-        var spriteFlash = SpriteFlashOverride?.GetComponent<SpriteFlash>();
-        if (spriteFlash != null) this.SetAttr<EnemyHitEffectsGhost, SpriteFlash>("spriteFlash", spriteFlash);
+    private static void OnRecieveHitEffect(On.EnemyHitEffectsGhost.orig_RecieveHitEffect orig, EnemyHitEffectsGhost self, float attackDirection)
+    {
+        if (self is EnemyHitEffectsGhostProxy proxy && proxy.SpriteFlash != null && !self.GetAttr<EnemyHitEffectsGhost, bool>("didFireThisFrame")) proxy.SpriteFlash.Flash(Color.white, 0.85f, 0.35f);
+        orig(self, attackDirection);
     }
 }

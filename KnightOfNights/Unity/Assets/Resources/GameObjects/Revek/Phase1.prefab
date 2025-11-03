@@ -238,21 +238,21 @@ MonoBehaviour:
   FinaleMinDist: 6
   GracePeriod: 1
   NumSmallBursts: 3
-  PitchIncrementFinale: 0.05
+  PitchIncrementFinale: 0.1
   PitchIncrementSmall: 0.15
-  SmallXMin: 7
-  SmallXMax: 13
+  SmallXMin: 6
+  SmallXMax: 12
   SmallYMin: 4.5
   SmallYMax: 10.5
   SpikeAccel: 1.1
-  SpokeCountFinale: 7
-  SpokeCountSmall: 11
-  SpokeRotationFinale: 0.3333
+  SpokeCountFinale: 6
+  SpokeCountSmall: 12
+  SpokeRotationFinale: 0.2857
   SpokeRotationSmall: 0.5
   WaitAfterFinale: 0.575
   WaitAfterTeleport: 0.55
   WaitBeforeFinale: 0.55
   WaitBeforeTeleport: 0.3
   WaitFirst: 0.8
-  WaitSpikeFinale: 0.115
-  WaitSpikeSmall: 0.225
+  WaitSpikeFinale: 0.12
+  WaitSpikeSmall: 0.24
