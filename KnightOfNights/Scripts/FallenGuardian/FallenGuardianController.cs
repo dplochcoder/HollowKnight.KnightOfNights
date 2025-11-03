@@ -560,6 +560,15 @@ internal class FallenGuardianController : MonoBehaviour
         }
     }
 
+    private void FacePlayer()
+    {
+        var kPos = HeroController.instance.transform.position;
+        var pos = transform.position;
+
+        bool left = pos.x >= kPos.x;
+        transform.localScale = new(left ? 1 : -1, 1, 1);
+    }
+
     private void TeleportInstant(Vector2 newPos)
     {
         TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
@@ -595,6 +604,7 @@ internal class FallenGuardianController : MonoBehaviour
                 first = false;
 
                 transform.position = pos;
+                FacePlayer();
                 bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
 
                 this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToSpellController!, SpellStartToLoopController!]));
@@ -603,6 +613,7 @@ internal class FallenGuardianController : MonoBehaviour
             else
             {
                 TeleportInstant(pos);
+                FacePlayer();
                 yield return Coroutines.SleepSeconds(stats.WaitAfterTeleport);
             }
 
@@ -624,6 +635,7 @@ internal class FallenGuardianController : MonoBehaviour
         }
 
         TeleportInstant(PickBigPos());
+        FacePlayer();
 
         yield return Coroutines.SleepSeconds(stats.WaitBeforeFinale);
         animator!.runtimeAnimatorController = SpellCastToLoopController!;
