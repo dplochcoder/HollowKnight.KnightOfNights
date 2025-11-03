@@ -383,6 +383,10 @@ namespace KnightOfNights.Scripts.SharedLib
 
         public static bool CoinFlip() => UnityEngine.Random.Range(0, 2) == 0;
 
+        public static Vector2 Random(this Bounds bounds) => new Vector2(
+            UnityEngine.Random.Range(bounds.min.x, bounds.max.x),
+            UnityEngine.Random.Range(bounds.min.y, bounds.max.y));
+
         public static bool UpdateFloat(this ref float self, float value)
         {
             if (Mathf.Abs(self - value) <= 1e-6f) return false;

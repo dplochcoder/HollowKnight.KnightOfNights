@@ -15,13 +15,15 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public UnityEngine.GameObject StaggerBurst;
         public UnityEngine.GameObject TeleportBurst;
         public UnityEngine.RuntimeAnimatorController SpellCastToEndController;
-        public UnityEngine.RuntimeAnimatorController SpellLoopController;
-        public UnityEngine.RuntimeAnimatorController SpellStartToLoopController;
         public UnityEngine.RuntimeAnimatorController SpellCastToLoopController;
+        public UnityEngine.RuntimeAnimatorController SpellLoopController;
+        public UnityEngine.RuntimeAnimatorController SpellLoopToSwordController;
+        public UnityEngine.RuntimeAnimatorController SpellStartToLoopController;
         public UnityEngine.RuntimeAnimatorController StaggerController;
         public UnityEngine.RuntimeAnimatorController StaggerToRecoverController;
         public UnityEngine.RuntimeAnimatorController SwordToSpellController;
         public UnityEngine.RuntimeAnimatorController TeleportInController;
+        public UnityEngine.RuntimeAnimatorController TeleportOutController;
         public System.Collections.Generic.List<FallenGuardianPhaseStats> PhaseStats;
         public void CastSpellEvent() { }
         public void TeleportIn() { }

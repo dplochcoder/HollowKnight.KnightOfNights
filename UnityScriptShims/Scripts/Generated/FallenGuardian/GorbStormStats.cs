@@ -2,14 +2,19 @@ namespace KnightOfNights.Scripts.FallenGuardian
 {
     public class GorbStormStats : UnityEngine.MonoBehaviour
     {
+        public float BobPeriod;
+        public float BobRadius;
         public int BurstCountFinale;
         public int BurstCountSmall;
         public float FinaleMinDist;
         public float GracePeriod;
+        public int NumSmallBursts;
         public float PitchIncrementFinale;
         public float PitchIncrementSmall;
         public float SmallXMin;
         public float SmallXMax;
+        public float SmallYMin;
+        public float SmallYMax;
         public float SpikeAccel;
         public int SpokeCountFinale;
         public int SpokeCountSmall;

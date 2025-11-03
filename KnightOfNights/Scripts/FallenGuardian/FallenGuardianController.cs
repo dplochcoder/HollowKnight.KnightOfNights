@@ -1,9 +1,12 @@
-﻿using ItemChanger.Extensions;
+﻿using HutongGames.PlayMaker.Actions;
+using ItemChanger.Extensions;
+using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
+using SFCore.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -35,6 +38,8 @@ internal class FallenGuardianAttack : MonoBehaviour
 [Shim]
 internal class GorbStormStats : MonoBehaviour
 {
+    [ShimField] public float BobPeriod;
+    [ShimField] public float BobRadius;
     [ShimField] public int BurstCountFinale;
     [ShimField] public int BurstCountSmall;
     [ShimField] public float FinaleMinDist;
@@ -114,13 +119,15 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public GameObject? TeleportBurst;
 
     [ShimField] public RuntimeAnimatorController? SpellCastToEndController;
-    [ShimField] public RuntimeAnimatorController? SpellLoopController;
-    [ShimField] public RuntimeAnimatorController? SpellStartToLoopController;
     [ShimField] public RuntimeAnimatorController? SpellCastToLoopController;
+    [ShimField] public RuntimeAnimatorController? SpellLoopController;
+    [ShimField] public RuntimeAnimatorController? SpellLoopToSwordController;
+    [ShimField] public RuntimeAnimatorController? SpellStartToLoopController;
     [ShimField] public RuntimeAnimatorController? StaggerController;
     [ShimField] public RuntimeAnimatorController? StaggerToRecoverController;
     [ShimField] public RuntimeAnimatorController? SwordToSpellController;
     [ShimField] public RuntimeAnimatorController? TeleportInController;
+    [ShimField] public RuntimeAnimatorController? TeleportOutController;
 
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
@@ -387,7 +394,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.UltraInstinct;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.GorbStorm;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -497,6 +504,51 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
+    private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
+    {
+        float angle = Random.Range(0f, 360f);
+        var pos = transform.position;
+        for (int i = 0; i < numBursts; i++)
+        {
+            KnightOfNightsPreloader.Instance.MageShotClip!.PlayAtPosition(pos, 1f + i * pitchIncrement);
+            for (int j = 0; j < count; j++)
+            {
+                var obj = KnightOfNightsPreloader.Instance.GorbSpear!.Spawn(pos, Quaternion.Euler(0, 0, angle));
+                angle += 360f / count;
+
+                var accel = stats!.GorbStormStats!.SpikeAccel;
+                var control = obj.LocateMyFSM("Control");
+                var poke = control.GetFsmState("Poke Out");
+                poke.GetFirstActionOfType<SetVelocityAsAngle>().speed = 30 * accel;
+                poke.GetFirstActionOfType<DecelerateV2>().deceleration = 0.88f * Mathf.Pow(accel, 0.02f);
+                poke.GetFirstActionOfType<Wait>().time = 0.5f / accel;
+                control.GetFsmState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25 * accel;
+
+                control.GetFsmState("Recycle").AddFirstAction(new Lambda(() =>
+                {
+                    poke.GetFirstActionOfType<SetVelocityAsAngle>().speed = 30;
+                    poke.GetFirstActionOfType<DecelerateV2>().deceleration = 0.88f;
+                    poke.GetFirstActionOfType<Wait>().time = 0.5f;
+                    control.GetFsmState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25;
+                }));
+
+                obj.SetActive(true);
+            }
+
+            angle += 360f * offset / count;
+            if (i != numBursts - 1) yield return Coroutines.SleepSeconds(wait);
+        }
+    }
+
+    private void TeleportInstant(Vector2 newPos)
+    {
+        TeleportBurst?.Spawn(transform.position);
+
+        transform.position = newPos;
+        KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
+        TeleportBurst?.Spawn(transform.position);
+    }
+
     private IEnumerator<CoroutineElement> GorbStorm()
     {
         var stats = this.stats!.GorbStormStats!;
@@ -514,33 +566,80 @@ internal class FallenGuardianController : MonoBehaviour
         bool first = true;
         for (int i = 0; i < stats.NumSmallBursts; i++)
         {
+            var prevPos = transform.position;
             var pos = PickSmallPos(left);
-            transform.position = pos;
+            left = !left;
 
             if (first)
             {
                 first = false;
 
-                this.StartLibCoroutine(Coroutines.PlayAnimation(animator!, TeleportInController!).Then(Coroutines.PlayAnimation(animator!, SwordToSpellController!)));
-                animator!.runtimeAnimatorController = TeleportInController!;
-                
-                // FIXME
+                transform.position = pos;
+                bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
+
+                this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToSpellController!, SpellStartToLoopController!]));
+                yield return Coroutines.SleepSeconds(stats.WaitFirst);
             }
+            else
+            {
+                TeleportInstant(pos);
+                yield return Coroutines.SleepSeconds(stats.WaitAfterTeleport);
+            }
+
+            yield return Coroutines.Sequence(LaunchGorbSpikes(stats.SpokeCountSmall, stats.SpokeRotationSmall, stats.BurstCountSmall, stats.WaitSpikeSmall, stats.PitchIncrementSmall));
+            yield return Coroutines.SleepSeconds(stats.WaitBeforeTeleport);
         }
 
-        yield break;
+        Vector2 PickBigPos()
+        {
+            var bounds = Container!.GorbStormFinaleBox!.bounds;
+            var kPos = HeroController.instance.transform.position.To2d();
+            for (int i = 0; i < 100; i++)
+            {
+                var p = bounds.Random();
+                if ((kPos - p).magnitude >= stats.FinaleMinDist) return p;
+            }
+
+            return bounds.center;
+        }
+
+        TeleportInstant(PickBigPos());
+        bobber!.enabled = false;
+
+        yield return Coroutines.SleepSeconds(stats.WaitBeforeFinale);
+        animator!.runtimeAnimatorController = SpellCastToLoopController!;
+
+        Wrapped<bool> spell = new(false);
+        OnCastSpell += () => spell.Value = true;
+        yield return Coroutines.SleepUntil(() => spell.Value = true);
+
+        yield return Coroutines.Sequence(LaunchGorbSpikes(stats.SpokeCountFinale, stats.SpokeRotationFinale, stats.BurstCountFinale, stats.WaitSpikeFinale, stats.PitchIncrementFinale));
+        yield return Coroutines.SleepSeconds(stats.WaitAfterFinale);
+
+        Wrapped<bool> teleport = new(false);
+        OnTeleportOut += () => teleport.Value = true;
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator, [SpellLoopToSwordController!, TeleportOutController!]));
+        yield return Coroutines.SleepUntil(() => teleport.Value = true);
+
+        yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
     private event System.Action? OnCastSpell;
 
     [ShimMethod]
-    public void CastSpellEvent() => OnCastSpell?.Invoke();
+    public void CastSpellEvent()
+    {
+        var prev = OnCastSpell;
+        OnCastSpell = null;
+        prev?.Invoke();
+    }
 
     [ShimMethod]
     public void TeleportIn()
     {
         SetTangible(true);
         KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
+        TeleportBurst?.Spawn(transform.position);
     }
 
     [ShimMethod]
@@ -563,5 +662,10 @@ internal class FallenGuardianController : MonoBehaviour
     private event System.Action? OnTeleportOut;
 
     [ShimMethod]
-    public void TeleportOutEvent() => OnTeleportOut?.Invoke();
+    public void TeleportOutEvent()
+    {
+        var prev = OnTeleportOut;
+        OnTeleportOut = null;
+        prev?.Invoke();
+    }
 }

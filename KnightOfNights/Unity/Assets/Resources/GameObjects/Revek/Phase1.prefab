@@ -54,18 +54,6 @@ MonoBehaviour:
   GorbStormStats: {fileID: 1720482504391799160}
   StaggerStats: {fileID: 1217171236579124090}
   UltraInstinctStats: {fileID: 605255954292065798}
-  StaggerGracePeriod: 0.45
-  StaggerInvuln: 0.15
-  StaggerHitWait: 0.25
-  StaggerMaxWait: 2.5
-  StaggerNextAttackDelay: 0.85
-  StaggerOscillationPeriod: 1.75
-  StaggerOscillationRadius: 0.25
-  UltraInstinctDeceleration: 0.9
-  UltraInstinctInterval: 0.31
-  UltraInstinctSpeed: 180
-  UltraInstinctTail: 1.25
-  UltraInstinctTelegraph: 0.5
 --- !u!1 &3211539505212584972
 GameObject:
   m_ObjectHideFlags: 0
@@ -243,19 +231,24 @@ MonoBehaviour:
   m_Script: {fileID: 864207550, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  BobPeriod: 1.25
+  BobRadius: 0.4
   BurstCountFinale: 7
   BurstCountSmall: 3
-  FinaleMinDist: 8
+  FinaleMinDist: 6
   GracePeriod: 1
+  NumSmallBursts: 3
   PitchIncrementFinale: 0.075
   PitchIncrementSmall: 0.2
   SmallXMin: 6
   SmallXMax: 10
+  SmallYMin: 4.5
+  SmallYMax: 10.5
   SpikeAccel: 1.15
   SpokeCountFinale: 16
   SpokeCountSmall: 10
-  SpokeRotationFinale: 0.5
-  SpokeRotationSmall: 0.4286
+  SpokeRotationFinale: 0.4286
+  SpokeRotationSmall: 0.5
   WaitAfterFinale: 0.4
   WaitAfterTeleport: 0.4
   WaitBeforeFinale: 0.6

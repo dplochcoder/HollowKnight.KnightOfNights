@@ -363,8 +363,9 @@ public static class Coroutines
     public static CoroutineLoop Loop(Action action) => new(_ => action());
     public static CoroutineLoop Loop(Action<float> action) => new(action);
 
-    public static CoroutineSequence Sequence(IEnumerator<CoroutineElement> enumerator, CoroutineSequence.StopCondition? stopCondition = null)
-        => new(enumerator, stopCondition);
+    public static CoroutineSequence Sequence<T>(IEnumerator<T> enumerator, CoroutineSequence.StopCondition? stopCondition = null) where T : CoroutineElement => new(enumerator, stopCondition);
+
+    public static CoroutineSequence Sequence<T>(IEnumerable<T> enumerable, CoroutineSequence.StopCondition? stopCondition = null) where T : CoroutineElement => Sequence(enumerable.GetEnumerator(), stopCondition);
 
     public static DeltaAwareCoroutineSequence Sequence(Func<CoroutineTime, IEnumerator<CoroutineElement>> generator, CoroutineSequence.StopCondition? stopCondition = null) => DeltaAwareCoroutineSequence.Create(generator, stopCondition);
 
@@ -410,5 +411,14 @@ public static class Coroutines
     {
         animator.runtimeAnimatorController = controller;
         return SleepUntil(() => !animator.IsPlaying());
+    }
+
+    public static CoroutineElement PlayAnimations(Animator animator, List<RuntimeAnimatorController> controllers)
+    {
+        IEnumerator<CoroutineElement> Routine()
+        {
+            foreach (var controller in controllers) yield return PlayAnimation(animator, controller);
+        }
+        return Sequence(controllers.Select(c => PlayAnimation(animator, c)));
     }
 }
