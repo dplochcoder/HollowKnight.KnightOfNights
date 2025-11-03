@@ -24,6 +24,6 @@ internal class EnemyHitEffectsGhostProxy : EnemyHitEffectsGhost
         Patcher.Patch(this);
 
         var spriteFlash = SpriteFlashOverride?.GetComponent<SpriteFlash>();
-        if (spriteFlash != null) this.SetAttr("spriteFlash", spriteFlash);
+        if (spriteFlash != null) this.SetAttr<EnemyHitEffectsGhost, SpriteFlash>("spriteFlash", spriteFlash);
     }
 }
