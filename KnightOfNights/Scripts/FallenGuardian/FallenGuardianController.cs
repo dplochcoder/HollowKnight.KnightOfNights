@@ -560,24 +560,6 @@ internal class FallenGuardianController : MonoBehaviour
         }
     }
 
-    private void FacePlayer()
-    {
-        var kPos = HeroController.instance.transform.position;
-        var pos = transform.position;
-
-        bool left = pos.x >= kPos.x;
-        transform.localScale = new(left ? 1 : -1, 1, 1);
-    }
-
-    private void TeleportInstant(Vector2 newPos)
-    {
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
-
-        transform.position = newPos;
-        KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
-    }
-
     private IEnumerator<CoroutineElement> GorbStorm()
     {
         var stats = this.stats!.GorbStormStats!;
@@ -653,6 +635,24 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepUntil(() => teleport.Value = true);
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
+    }
+
+    private void FacePlayer()
+    {
+        var kPos = HeroController.instance.transform.position;
+        var pos = transform.position;
+
+        bool left = pos.x >= kPos.x;
+        transform.localScale = new(left ? 1 : -1, 1, 1);
+    }
+
+    private void TeleportInstant(Vector2 newPos)
+    {
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
+
+        transform.position = newPos;
+        KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
     }
 
     private event System.Action? OnCastSpell;
