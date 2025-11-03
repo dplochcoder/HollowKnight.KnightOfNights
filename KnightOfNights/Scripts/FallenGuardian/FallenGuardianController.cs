@@ -18,8 +18,7 @@ internal enum AttackChoice
 {
     AxeHopscotch,
     GorbStorm,
-    PancakeWaveSlash,
-    PancakeDiveStorm,
+    RainingPancakes,
     ShieldCyclone,
     UltraInstinct,
     XeroArmada
@@ -118,6 +117,10 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public GameObject? StaggerBurst;
     [ShimField] public GameObject? TeleportBurst;
 
+    [ShimField] public RuntimeAnimatorController? DiveAnticLoopController;
+    [ShimField] public RuntimeAnimatorController? DiveAnticToDiveLoopController;
+    [ShimField] public RuntimeAnimatorController? DiveImpactController;
+    [ShimField] public RuntimeAnimatorController? DiveLoopController;
     [ShimField] public RuntimeAnimatorController? SpellCastToEndController;
     [ShimField] public RuntimeAnimatorController? SpellCastToLoopController;
     [ShimField] public RuntimeAnimatorController? SpellLoopController;
@@ -125,6 +128,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public RuntimeAnimatorController? SpellStartToLoopController;
     [ShimField] public RuntimeAnimatorController? StaggerController;
     [ShimField] public RuntimeAnimatorController? StaggerToRecoverController;
+    [ShimField] public RuntimeAnimatorController? SwordToDiveAnticController;
     [ShimField] public RuntimeAnimatorController? SwordToSpellController;
     [ShimField] public RuntimeAnimatorController? TeleportInController;
     [ShimField] public RuntimeAnimatorController? TeleportOutController;
@@ -139,9 +143,9 @@ internal class FallenGuardianController : MonoBehaviour
     private Animator? animator;
     private AudioSource? audio;
     private Bobber? bobber;
+    private PancakePool? pancakePool;
 
     private ParticleSystem? idleParticles;
-
     private FallenGuardianPhaseStats? stats;
 
     private void InitParticles()
@@ -167,11 +171,13 @@ internal class FallenGuardianController : MonoBehaviour
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
         bobber = gameObject.AddComponent<Bobber>();
         bobber.enabled = false;
+        pancakePool = gameObject.AddComponent<PancakePool>();
 
         StaggerBurst?.FixSpawnBug();
         TeleportBurst?.FixSpawnBug();
 
         SetTangible(false);
+        InitParticles();
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
@@ -422,10 +428,8 @@ internal class FallenGuardianController : MonoBehaviour
                 return Coroutines.SleepSeconds(1);
             case AttackChoice.GorbStorm:
                 return Coroutines.Sequence(GorbStorm());
-            case AttackChoice.PancakeDiveStorm:
-                return Coroutines.SleepSeconds(1);
-            case AttackChoice.PancakeWaveSlash:
-                return Coroutines.SleepSeconds(1);
+            case AttackChoice.RainingPancakes:
+                return Coroutines.Sequence(RainingPancakes());
             case AttackChoice.ShieldCyclone:
                 return Coroutines.SleepSeconds(1);
             case AttackChoice.UltraInstinct:
@@ -436,86 +440,6 @@ internal class FallenGuardianController : MonoBehaviour
                 KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
                 return Coroutines.SleepSeconds(1);
         }
-    }
-
-    private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
-    {
-        static bool Equal(SlashAttackSpec a, SlashAttackSpec b)
-        {
-            if (a.AllowedHits.Count != b.AllowedHits.Count) return false;
-
-            HashSet<string> bSet = [.. b.AllowedHits];
-            return a.AllowedHits.All(bSet.Contains);
-        }
-
-        List<List<SlashAttackSpec>> ret = [];
-        input.ForEachPermutation(p =>
-        {
-            if (p.Pairs().All(pair => !Equal(pair.Item1, pair.Item2))) ret.Add([.. p]);
-        });
-        return ret;
-    }
-    private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
-        SlashAttackSpec.LEFT.Down(1.25f),
-        SlashAttackSpec.LEFT.Up(1.25f),
-        SlashAttackSpec.RIGHT.Down(1.25f),
-        SlashAttackSpec.RIGHT.Up(1.25f),
-        SlashAttackSpec.HIGH_LEFT,
-        SlashAttackSpec.HIGH_RIGHT
-    ]);
-
-    private static readonly List<List<SlashAttackSpec>> SuperUltraInstinctPatterns = GenUltraInstinctPatterns([
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.HIGH_LEFT,
-        SlashAttackSpec.HIGH_RIGHT,
-        SlashAttackSpec.HIGH_RIGHT
-    ]);
-
-    private IEnumerator<CoroutineElement> UltraInstinct()
-    {
-        var stats = this.stats!.UltraInstinctStats!;
-
-        var specs = UltraInstinctPatterns.Choose();
-        specs = [.. specs.Select(s => s.WithTelegraph(stats.Telegraph).WithSpeed(stats.Speed).WithDeceleration(stats.Deceleration))];
-        if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
-
-        List<SlashAttack> attacks = [];
-        HashSet<SlashAttack> activeAttacks = [];
-        foreach (var spec in specs)
-        {
-            var attack = SlashAttack.Spawn(spec);
-            attacks.Add(attack);
-            activeAttacks.Add(attack);
-            yield return Coroutines.SleepSeconds(stats.Interval);
-        }
-
-        Wrapped<SlashAttack> lastAttack = new(activeAttacks.First());
-        yield return Coroutines.SleepUntil(() => {
-            if (activeAttacks.Count > 0)
-            {
-                lastAttack.Value = activeAttacks.First();
-                activeAttacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
-            }
-
-            return activeAttacks.Count == 0;
-        });
-
-        if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))
-        {
-            var attack = lastAttack.Value;
-
-            RevekAddons.SpawnSoul(attack.ParryPos);
-            RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
-            healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
-
-            if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
-        }
-
-        yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
     private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
@@ -635,6 +559,92 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepUntil(() => teleport.Value = true);
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
+    }
+
+    private IEnumerator<CoroutineElement> RainingPancakes()
+    {
+        // FIXME
+        yield break; 
+    }
+
+    private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
+    {
+        static bool Equal(SlashAttackSpec a, SlashAttackSpec b)
+        {
+            if (a.AllowedHits.Count != b.AllowedHits.Count) return false;
+
+            HashSet<string> bSet = [.. b.AllowedHits];
+            return a.AllowedHits.All(bSet.Contains);
+        }
+
+        List<List<SlashAttackSpec>> ret = [];
+        input.ForEachPermutation(p =>
+        {
+            if (p.Pairs().All(pair => !Equal(pair.Item1, pair.Item2))) ret.Add([.. p]);
+        });
+        return ret;
+    }
+    private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
+        SlashAttackSpec.LEFT.Down(1.25f),
+        SlashAttackSpec.LEFT.Up(1.25f),
+        SlashAttackSpec.RIGHT.Down(1.25f),
+        SlashAttackSpec.RIGHT.Up(1.25f),
+        SlashAttackSpec.HIGH_LEFT,
+        SlashAttackSpec.HIGH_RIGHT
+    ]);
+
+    private static readonly List<List<SlashAttackSpec>> SuperUltraInstinctPatterns = GenUltraInstinctPatterns([
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.LEFT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.RIGHT,
+        SlashAttackSpec.HIGH_LEFT,
+        SlashAttackSpec.HIGH_RIGHT,
+        SlashAttackSpec.HIGH_RIGHT
+    ]);
+
+    private IEnumerator<CoroutineElement> UltraInstinct()
+    {
+        var stats = this.stats!.UltraInstinctStats!;
+
+        var specs = UltraInstinctPatterns.Choose();
+        specs = [.. specs.Select(s => s.WithTelegraph(stats.Telegraph).WithSpeed(stats.Speed).WithDeceleration(stats.Deceleration))];
+        if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
+
+        List<SlashAttack> attacks = [];
+        HashSet<SlashAttack> activeAttacks = [];
+        foreach (var spec in specs)
+        {
+            var attack = SlashAttack.Spawn(spec);
+            attacks.Add(attack);
+            activeAttacks.Add(attack);
+            yield return Coroutines.SleepSeconds(stats.Interval);
+        }
+
+        Wrapped<SlashAttack> lastAttack = new(activeAttacks.First());
+        yield return Coroutines.SleepUntil(() => {
+            if (activeAttacks.Count > 0)
+            {
+                lastAttack.Value = activeAttacks.First();
+                activeAttacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
+            }
+
+            return activeAttacks.Count == 0;
+        });
+
+        if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))
+        {
+            var attack = lastAttack.Value;
+
+            RevekAddons.SpawnSoul(attack.ParryPos);
+            RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
+            healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
+
+            if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
+        }
+
+        yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
     private void FacePlayer()

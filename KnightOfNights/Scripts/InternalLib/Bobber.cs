@@ -5,9 +5,13 @@ namespace KnightOfNights.Scripts.InternalLib;
 
 internal class Bobber : MonoBehaviour
 {
+    private Rigidbody2D? rigidbody;
+
     private float radius;
     private float period;
     private float timer;
+
+    private void Awake() => rigidbody = GetComponent<Rigidbody2D>();
 
     internal void Reset(float radius, float period, bool upFirst = true)
     {
@@ -28,8 +32,9 @@ internal class Bobber : MonoBehaviour
 
         var p = transform.position;
         p.y += y2 - y1;
-        transform.position = p;
+        if (rigidbody != null) rigidbody.MovePosition(p);
+        else transform.position = p;
     }
 
-    private float ComputeY(float time) => radius * Mathf.Sin(2 * Mathf.PI * timer / period);
+    private float ComputeY(float time) => radius * Mathf.Sin(2 * Mathf.PI * time / period);
 }

@@ -4,8 +4,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
     {
         AxeHopscotch,
         GorbStorm,
-        PancakeWaveSlash,
-        PancakeDiveStorm,
+        RainingPancakes,
         ShieldCyclone,
         UltraInstinct,
         XeroArmada,
