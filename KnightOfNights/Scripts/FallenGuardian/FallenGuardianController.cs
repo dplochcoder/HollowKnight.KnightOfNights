@@ -656,7 +656,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         SetTangible(true);
         KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst?.Spawn(transform.position);
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
     }
 
     [ShimMethod]
@@ -664,6 +664,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         SetTangible(false);
         KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
         bobber!.enabled = false;
     }
 
