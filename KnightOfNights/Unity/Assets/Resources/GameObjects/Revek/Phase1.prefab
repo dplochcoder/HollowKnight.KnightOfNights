@@ -29,6 +29,8 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 5776631858513733537}
+  - {fileID: 6205185690576271810}
+  - {fileID: 2344739562684248617}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,6 +50,10 @@ MonoBehaviour:
   FirstAttack: 6
   Attacks:
   - {fileID: 5596897245960897113}
+  - {fileID: 404081514580924327}
+  GorbStormStats: {fileID: 1720482504391799160}
+  StaggerStats: {fileID: 1217171236579124090}
+  UltraInstinctStats: {fileID: 605255954292065798}
   StaggerGracePeriod: 0.45
   StaggerInvuln: 0.15
   StaggerHitWait: 0.25
@@ -60,6 +66,56 @@ MonoBehaviour:
   UltraInstinctSpeed: 180
   UltraInstinctTail: 1.25
   UltraInstinctTelegraph: 0.5
+--- !u!1 &3211539505212584972
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6205185690576271810}
+  - component: {fileID: 1217171236579124090}
+  m_Layer: 11
+  m_Name: Stagger
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6205185690576271810
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211539505212584972}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 1
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1217171236579124090
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3211539505212584972}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -847503467, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GracePeriod: 0.45
+  Invuln: 0.15
+  HitWait: 0.25
+  MaxWait: 2.5
+  NextAttackDelay: 0.85
+  OscillationPeriod: 1.75
+  OscillationRadius: 0.25
 --- !u!1 &6652528314850364912
 GameObject:
   m_ObjectHideFlags: 0
@@ -70,6 +126,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5776631858513733537}
   - component: {fileID: 5596897245960897113}
+  - component: {fileID: 605255954292065798}
   m_Layer: 0
   m_Name: UltraInstinct
   m_TagString: Untagged
@@ -108,3 +165,101 @@ MonoBehaviour:
   Cooldown: 3
   WeightIncrease: 0.5
   ForbiddenPredecessors: 00000000
+--- !u!114 &605255954292065798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6652528314850364912}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -59513005, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Deceleration: 0.9
+  Interval: 0.31
+  Speed: 180
+  Tail: 1.15
+  Telegraph: 0.5
+--- !u!1 &8179795735541059478
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2344739562684248617}
+  - component: {fileID: 404081514580924327}
+  - component: {fileID: 1720482504391799160}
+  m_Layer: 11
+  m_Name: GorbStorm
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2344739562684248617
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179795735541059478}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &404081514580924327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179795735541059478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 1
+  Weight: 1
+  Cooldown: 2
+  WeightIncrease: 0.25
+  ForbiddenPredecessors: 
+--- !u!114 &1720482504391799160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8179795735541059478}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 864207550, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BurstCountFinale: 7
+  BurstCountSmall: 3
+  FinaleMinDist: 8
+  GracePeriod: 1
+  PitchIncrementFinale: 0.075
+  PitchIncrementSmall: 0.2
+  SmallXMin: 6
+  SmallXMax: 10
+  SpikeAccel: 1.15
+  SpokeCountFinale: 16
+  SpokeCountSmall: 10
+  SpokeRotationFinale: 0.5
+  SpokeRotationSmall: 0.4286
+  WaitAfterFinale: 0.4
+  WaitAfterTeleport: 0.4
+  WaitBeforeFinale: 0.6
+  WaitBeforeTeleport: 0.25
+  WaitFirst: 1
+  WaitSpikeFinale: 0.125
+  WaitSpikeSmall: 0.25

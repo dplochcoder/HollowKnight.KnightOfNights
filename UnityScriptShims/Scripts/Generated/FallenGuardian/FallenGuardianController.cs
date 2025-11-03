@@ -14,9 +14,10 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float StaggerDistance;
         public UnityEngine.GameObject StaggerBurst;
         public UnityEngine.GameObject TeleportBurst;
-        public UnityEngine.RuntimeAnimatorController SpellStartController;
+        public UnityEngine.RuntimeAnimatorController SpellCastToEndController;
         public UnityEngine.RuntimeAnimatorController SpellLoopController;
-        public UnityEngine.RuntimeAnimatorController SpellEndController;
+        public UnityEngine.RuntimeAnimatorController SpellStartToLoopController;
+        public UnityEngine.RuntimeAnimatorController SpellCastToLoopController;
         public UnityEngine.RuntimeAnimatorController StaggerController;
         public UnityEngine.RuntimeAnimatorController StaggerToRecoverController;
         public UnityEngine.RuntimeAnimatorController SwordToSpellController;

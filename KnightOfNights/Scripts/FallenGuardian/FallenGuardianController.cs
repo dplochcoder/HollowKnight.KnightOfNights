@@ -33,24 +33,64 @@ internal class FallenGuardianAttack : MonoBehaviour
 }
 
 [Shim]
+internal class GorbStormStats : MonoBehaviour
+{
+    [ShimField] public int BurstCountFinale;
+    [ShimField] public int BurstCountSmall;
+    [ShimField] public float FinaleMinDist;
+    [ShimField] public float GracePeriod;
+    [ShimField] public int NumSmallBursts;
+    [ShimField] public float PitchIncrementFinale;
+    [ShimField] public float PitchIncrementSmall;
+    [ShimField] public float SmallXMin;
+    [ShimField] public float SmallXMax;
+    [ShimField] public float SmallYMin;
+    [ShimField] public float SmallYMax;
+    [ShimField] public float SpikeAccel;
+    [ShimField] public int SpokeCountFinale;
+    [ShimField] public int SpokeCountSmall;
+    [ShimField] public float SpokeRotationFinale;
+    [ShimField] public float SpokeRotationSmall;
+    [ShimField] public float WaitAfterFinale;
+    [ShimField] public float WaitAfterTeleport;
+    [ShimField] public float WaitBeforeFinale;
+    [ShimField] public float WaitBeforeTeleport;
+    [ShimField] public float WaitFirst;
+    [ShimField] public float WaitSpikeFinale;
+    [ShimField] public float WaitSpikeSmall;
+}
+
+[Shim]
+internal class StaggerStats : MonoBehaviour
+{
+    [ShimField] public float GracePeriod;
+    [ShimField] public float Invuln;
+    [ShimField] public float HitWait;
+    [ShimField] public float MaxWait;
+    [ShimField] public float NextAttackDelay;
+    [ShimField] public float OscillationPeriod;
+    [ShimField] public float OscillationRadius;
+}
+
+[Shim]
+internal class UltraInstinctStats : MonoBehaviour
+{
+    [ShimField] public float Deceleration;
+    [ShimField] public float Interval;
+    [ShimField] public float Speed;
+    [ShimField] public float Tail;
+    [ShimField] public float Telegraph;
+}
+
+[Shim]
 internal class FallenGuardianPhaseStats : MonoBehaviour
 {
     [ShimField] public int MinHP;
     [ShimField] public AttackChoice FirstAttack;
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
-
-    [ShimField] public float StaggerGracePeriod;
-    [ShimField] public float StaggerInvuln;
-    [ShimField] public float StaggerHitWait;
-    [ShimField] public float StaggerMaxWait;
-    [ShimField] public float StaggerNextAttackDelay;
-    [ShimField] public float StaggerOscillationPeriod;
-    [ShimField] public float StaggerOscillationRadius;
-    [ShimField] public float UltraInstinctDeceleration;
-    [ShimField] public float UltraInstinctInterval;
-    [ShimField] public float UltraInstinctSpeed;
-    [ShimField] public float UltraInstinctTail;
-    [ShimField] public float UltraInstinctTelegraph;
+    [ShimField] public GorbStormStats? GorbStormStats;
+    [ShimField] public StaggerStats? StaggerStats;
+    [ShimField] public UltraInstinctStats? UltraInstinctStats;
 
     internal bool DidFirstAttack = false;
 }
@@ -73,9 +113,10 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public GameObject? StaggerBurst;
     [ShimField] public GameObject? TeleportBurst;
 
-    [ShimField] public RuntimeAnimatorController? SpellStartController;
+    [ShimField] public RuntimeAnimatorController? SpellCastToEndController;
     [ShimField] public RuntimeAnimatorController? SpellLoopController;
-    [ShimField] public RuntimeAnimatorController? SpellEndController;
+    [ShimField] public RuntimeAnimatorController? SpellStartToLoopController;
+    [ShimField] public RuntimeAnimatorController? SpellCastToLoopController;
     [ShimField] public RuntimeAnimatorController? StaggerController;
     [ShimField] public RuntimeAnimatorController? StaggerToRecoverController;
     [ShimField] public RuntimeAnimatorController? SwordToSpellController;
@@ -88,6 +129,7 @@ internal class FallenGuardianController : MonoBehaviour
     private Recoil? recoil;
     private Animator? animator;
     private AudioSource? audio;
+    private Bobber? bobber;
 
     private ParticleSystem? idleParticles;
 
@@ -112,6 +154,8 @@ internal class FallenGuardianController : MonoBehaviour
 
         audio = gameObject.AddComponent<AudioSource>();
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
+        bobber = gameObject.AddComponent<Bobber>();
+        bobber.enabled = false;
 
         SetTangible(false);
     }
@@ -119,19 +163,6 @@ internal class FallenGuardianController : MonoBehaviour
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
 
     private Vector2 lastPos;
-    private bool staggerFloating;
-    private float staggerTime;
-
-    private void UpdateStaggerPos()
-    {
-        var prev = staggerTime;
-        staggerTime += Time.deltaTime;
-
-        float YPos(float time) => stats!.StaggerOscillationRadius * Mathf.Sin(Mathf.PI * 2 * time / stats.StaggerOscillationPeriod);
-
-        var delta = YPos(staggerTime) - YPos(prev);
-        transform.SetPositionY(transform.position.y + delta);
-    }
 
     private void Update()
     {
@@ -139,8 +170,6 @@ internal class FallenGuardianController : MonoBehaviour
 
         var pos = transform.position;
         if (pos.x > 0 && pos.y > 0) lastPos = pos;
-
-        if (staggerFloating) UpdateStaggerPos();
     }
 
     private IEnumerator<SlashAttackSequence> SpecTutorial()
@@ -176,9 +205,9 @@ internal class FallenGuardianController : MonoBehaviour
             (0f, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph + ShortWait)),
             (LongWait + ShortWait, SlashAttackSpec.RIGHT.WithTelegraph(Telegraph)),
             (0f, SlashAttackSpec.LEFT.WithTelegraph(Telegraph + ShortWait)),
-            (2 * ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
+            (3 * ShortWait, SlashAttackSpec.HIGH_LEFT.WithTelegraph(Telegraph)),
             (0f, SlashAttackSpec.HIGH_RIGHT.WithTelegraph(Telegraph + ShortWait))
-        ]);
+        ], ShortWait);
     }
 
     private IEnumerator<CoroutineElement> RunBoss()
@@ -208,6 +237,8 @@ internal class FallenGuardianController : MonoBehaviour
                 else break;
             }
         }
+
+        // TODO: Aura farm escalation pause.
 
         if (SkipTutorial) EscalationPause = 1f;
         yield return Coroutines.SleepSeconds(EscalationPause);
@@ -251,6 +282,8 @@ internal class FallenGuardianController : MonoBehaviour
 
     private IEnumerator<CoroutineElement> ExecuteStagger()
     {
+        var stats = this.stats!.StaggerStats!;
+
         var prevAttack = staggerAttack!;
         staggerAttack = null;
         OnStagger?.Invoke();
@@ -284,19 +317,18 @@ internal class FallenGuardianController : MonoBehaviour
 
         SetTangible(false);
         animator!.runtimeAnimatorController = StaggerController!;
-        yield return Coroutines.SleepSeconds(stats!.StaggerInvuln);
+        yield return Coroutines.SleepSeconds(stats.Invuln);
 
-        staggerFloating = true;
-        staggerTime = 0;
+        bobber?.ResetRandom(stats.OscillationRadius, stats.OscillationPeriod);
         SetTangible(true);
-        yield return Coroutines.SleepSeconds(stats!.StaggerGracePeriod);
+        yield return Coroutines.SleepSeconds(stats.GracePeriod);
 
         var prev = healthManager!.hp;
         yield return Coroutines.OneOf(
-            Coroutines.SleepUntil(() => healthManager!.hp < prev).Then(Coroutines.SleepSeconds(stats!.StaggerHitWait)),
-            Coroutines.SleepSeconds(stats!.StaggerMaxWait));
+            Coroutines.SleepUntil(() => healthManager!.hp < prev).Then(Coroutines.SleepSeconds(stats.HitWait)),
+            Coroutines.SleepSeconds(stats.MaxWait));
 
-        staggerFloating = false;
+        bobber!.enabled = false;
         animator.runtimeAnimatorController = StaggerToRecoverController!;
 
         Wrapped<bool> teleportOut = new(false);
@@ -306,7 +338,7 @@ internal class FallenGuardianController : MonoBehaviour
         OnTeleportOut -= Listen;
 
         transform.position = new(-100, -100);
-        yield return Coroutines.SleepSeconds(stats!.StaggerNextAttackDelay);
+        yield return Coroutines.SleepSeconds(stats.NextAttackDelay);
 
         staggerAttack = null;
     }
@@ -424,8 +456,10 @@ internal class FallenGuardianController : MonoBehaviour
 
     private IEnumerator<CoroutineElement> UltraInstinct()
     {
+        var stats = this.stats!.UltraInstinctStats!;
+
         var specs = UltraInstinctPatterns.Choose();
-        specs = [.. specs.Select(s => s.WithTelegraph(stats!.UltraInstinctTelegraph).WithSpeed(stats.UltraInstinctSpeed).WithDeceleration(stats.UltraInstinctDeceleration))];
+        specs = [.. specs.Select(s => s.WithTelegraph(stats.Telegraph).WithSpeed(stats.Speed).WithDeceleration(stats.Deceleration))];
         if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
 
         List<SlashAttack> attacks = [];
@@ -435,7 +469,7 @@ internal class FallenGuardianController : MonoBehaviour
             var attack = SlashAttack.Spawn(spec);
             attacks.Add(attack);
             activeAttacks.Add(attack);
-            yield return Coroutines.SleepSeconds(stats!.UltraInstinctInterval);
+            yield return Coroutines.SleepSeconds(stats.Interval);
         }
 
         Wrapped<SlashAttack> lastAttack = new(activeAttacks.First());
@@ -460,11 +494,40 @@ internal class FallenGuardianController : MonoBehaviour
             if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
         }
 
-        yield return Coroutines.SleepSeconds(stats!.UltraInstinctTail);
+        yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
     private IEnumerator<CoroutineElement> GorbStorm()
     {
+        var stats = this.stats!.GorbStormStats!;
+
+        Vector2 PickSmallPos(bool left)
+        {
+            var xMin = left ? -stats.SmallXMax : stats.SmallXMin;
+            var xMax = left ? -stats.SmallXMin : stats.SmallXMax;
+
+            var kPos = HeroController.instance.transform.position;
+            return new(kPos.x + Random.Range(xMin, xMax), Container!.Arena!.bounds.min.y + Random.Range(stats.SmallYMin, stats.SmallYMax));
+        }
+
+        var left = MathExt.CoinFlip();
+        bool first = true;
+        for (int i = 0; i < stats.NumSmallBursts; i++)
+        {
+            var pos = PickSmallPos(left);
+            transform.position = pos;
+
+            if (first)
+            {
+                first = false;
+
+                this.StartLibCoroutine(Coroutines.PlayAnimation(animator!, TeleportInController!).Then(Coroutines.PlayAnimation(animator!, SwordToSpellController!)));
+                animator!.runtimeAnimatorController = TeleportInController!;
+                
+                // FIXME
+            }
+        }
+
         yield break;
     }
 

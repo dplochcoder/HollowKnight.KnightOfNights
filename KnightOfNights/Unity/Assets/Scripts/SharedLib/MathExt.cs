@@ -381,6 +381,8 @@ namespace KnightOfNights.Scripts.SharedLib
 
         public static Vector3Int To3d(this Vector2Int v) => new Vector3Int(v.x, v.y, 0);
 
+        public static bool CoinFlip() => UnityEngine.Random.Range(0, 2) == 0;
+
         public static bool UpdateFloat(this ref float self, float value)
         {
             if (Mathf.Abs(self - value) <= 1e-6f) return false;

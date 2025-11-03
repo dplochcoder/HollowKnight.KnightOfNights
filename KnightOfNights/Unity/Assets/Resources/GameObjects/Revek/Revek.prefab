@@ -164,7 +164,7 @@ Animator:
   m_GameObject: {fileID: 7989141326161804240}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: f3e69d178161d7f4e8a28c20e4350c55, type: 2}
+  m_Controller: {fileID: 9100000, guid: f972f190f1a69be489f21a4302db3b10, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -273,9 +273,10 @@ MonoBehaviour:
   StaggerDistance: 4
   StaggerBurst: {fileID: 7206719451512712455, guid: ce835af18719ab348b26157ef228f670, type: 3}
   TeleportBurst: {fileID: 7206719451512712455, guid: 3b63bd6c939529741af834b96c6fb53f, type: 3}
-  SpellStartController: {fileID: 9100000, guid: 7ff6afe9add6250408888dbdf8c8af2f, type: 2}
+  SpellCastToEndController: {fileID: 9100000, guid: 1d2d93f7624414c46a94ecce34ce8f96, type: 2}
   SpellLoopController: {fileID: 9100000, guid: f972f190f1a69be489f21a4302db3b10, type: 2}
-  SpellEndController: {fileID: 9100000, guid: 1d2d93f7624414c46a94ecce34ce8f96, type: 2}
+  SpellStartToLoopController: {fileID: 9100000, guid: 7ff6afe9add6250408888dbdf8c8af2f, type: 2}
+  SpellCastToLoopController: {fileID: 9100000, guid: 792012bb90478eb4589955658f418673, type: 2}
   StaggerController: {fileID: 9100000, guid: 15fb7bc37e597b54a979b60d66738b20, type: 2}
   StaggerToRecoverController: {fileID: 9100000, guid: 8b36ca2caa5ee5e40973c4dfb2946a33, type: 2}
   SwordToSpellController: {fileID: 9100000, guid: ad34102d403381248bdc760f7b4a8619, type: 2}
