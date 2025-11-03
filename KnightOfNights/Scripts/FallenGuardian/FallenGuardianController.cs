@@ -8,6 +8,7 @@ using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
 using SFCore.Utils;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using UnityEngine;
 
@@ -172,6 +173,13 @@ internal class FallenGuardianController : MonoBehaviour
     }
 
     private void OnEnable() => this.StartLibCoroutine(RunBoss());
+
+    private readonly HashSet<GameObject> recyclables = [];
+
+    private void OnDestroy() => recyclables.ForEach(go =>
+    {
+        if (go.activeSelf) go.Recycle();
+    });
 
     private Vector2 lastPos;
 
@@ -512,13 +520,15 @@ internal class FallenGuardianController : MonoBehaviour
     {
         float angle = Random.Range(0f, 360f);
         float off = 360f * offset / count * (MathExt.CoinFlip() ? 1 : -1);
-        var pos = transform.position;
         for (int i = 0; i < numBursts; i++)
         {
+            var pos = transform.position;
             KnightOfNightsPreloader.Instance.MageShotClip!.PlayAtPosition(pos, 1f + i * pitchIncrement);
             for (int j = 0; j < count; j++)
             {
                 var obj = KnightOfNightsPreloader.Instance.GorbSpear!.Spawn(pos, Quaternion.Euler(0, 0, angle));
+                recyclables.Add(obj);
+
                 angle += 360f / count;
 
                 var accel = stats!.GorbStormStats!.SpikeAccel;
@@ -547,7 +557,7 @@ internal class FallenGuardianController : MonoBehaviour
 
     private void TeleportInstant(Vector2 newPos)
     {
-        TeleportBurst?.Spawn(transform.position);
+        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
 
         transform.position = newPos;
         KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
