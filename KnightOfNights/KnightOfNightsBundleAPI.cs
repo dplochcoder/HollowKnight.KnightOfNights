@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-namespace KnightOfNights.Scripts;
+namespace KnightOfNights;
 
 public static class KnightOfNightsBundleAPI
 {
