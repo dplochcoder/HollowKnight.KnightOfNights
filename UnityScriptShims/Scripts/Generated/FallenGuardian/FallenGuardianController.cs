@@ -31,6 +31,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public UnityEngine.RuntimeAnimatorController TeleportOutController;
         public System.Collections.Generic.List<FallenGuardianPhaseStats> PhaseStats;
         public void CastSpellEvent() { }
+        public void DiveEvent() { }
         public void TeleportIn() { }
         public void TeleportOut() { }
         public void TeleportOutEvent() { }

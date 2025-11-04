@@ -1,5 +1,6 @@
 ﻿using ItemChanger;
 using PurenailCore.ModUtil;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KnightOfNights;
@@ -17,8 +18,8 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Fungus2_32, "Ring Holder/1")]
     public GameObject? ElderHuPancake { get; private set; }
 
-    [PrefabPreload(SceneNames.Fungus2_32, "Elder_Hu_Ring_Appear")]
-    public AudioClip? ElderHuRingClip { get; private set; }
+    [PrefabPreload(SceneNames.Fungus2_32, "Elder_Hu_Ring_Impact")]
+    public AudioClip? ElderHuImpactClip { get; private set; }
 
     [Preload(SceneNames.Deepnest_40, "Warrior/Galien Hammer")]
     public GameObject? GalienAxe { get; private set; }
@@ -52,6 +53,17 @@ internal class KnightOfNightsPreloader : Preloader
 
     [Preload(SceneNames.RestingGrounds_08, "Ghost Battle Revek")]
     public GameObject? Revek { get; private set; }
+
+    [PrefabPreload(SceneNames.Room_Colosseum_02, "Col_miner_attack_02")]
+    public AudioClip? RevekAttackClip1 { get; private set; }
+
+    [PrefabPreload(SceneNames.Room_Colosseum_02, "Col_miner_attack_03")]
+    public AudioClip? RevekAttackClip2 { get; private set; }
+
+    [PrefabPreload(SceneNames.Room_Colosseum_02, "Col_miner_attack_04")]
+    public AudioClip? RevekAttackClip3 { get; private set; }
+
+    public List<AudioClip> RevekAttackClips => [RevekAttackClip1!, RevekAttackClip2!, RevekAttackClip3!];
 
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }

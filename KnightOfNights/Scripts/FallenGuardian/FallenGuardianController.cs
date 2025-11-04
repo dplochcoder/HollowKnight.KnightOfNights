@@ -35,71 +35,6 @@ internal class FallenGuardianAttack : MonoBehaviour
 }
 
 [Shim]
-internal class GorbStormStats : MonoBehaviour
-{
-    [ShimField] public float BobPeriod;
-    [ShimField] public float BobRadius;
-    [ShimField] public int BurstCountFinale;
-    [ShimField] public int BurstCountSmall;
-    [ShimField] public float FinaleMinDist;
-    [ShimField] public float GracePeriod;
-    [ShimField] public int NumSmallBursts;
-    [ShimField] public float PitchIncrementFinale;
-    [ShimField] public float PitchIncrementSmall;
-    [ShimField] public float SmallXMin;
-    [ShimField] public float SmallXMax;
-    [ShimField] public float SmallYMin;
-    [ShimField] public float SmallYMax;
-    [ShimField] public float SpikeAccel;
-    [ShimField] public int SpokeCountFinale;
-    [ShimField] public int SpokeCountSmall;
-    [ShimField] public float SpokeRotationFinale;
-    [ShimField] public float SpokeRotationSmall;
-    [ShimField] public float WaitAfterFinale;
-    [ShimField] public float WaitAfterTeleport;
-    [ShimField] public float WaitBeforeFinale;
-    [ShimField] public float WaitBeforeTeleport;
-    [ShimField] public float WaitFirst;
-    [ShimField] public float WaitSpikeFinale;
-    [ShimField] public float WaitSpikeSmall;
-}
-
-[Shim]
-internal class StaggerStats : MonoBehaviour
-{
-    [ShimField] public float GracePeriod;
-    [ShimField] public float Invuln;
-    [ShimField] public float HitWait;
-    [ShimField] public float MaxWait;
-    [ShimField] public float NextAttackDelay;
-    [ShimField] public float OscillationPeriod;
-    [ShimField] public float OscillationRadius;
-}
-
-[Shim]
-internal class UltraInstinctStats : MonoBehaviour
-{
-    [ShimField] public float Deceleration;
-    [ShimField] public float Interval;
-    [ShimField] public float Speed;
-    [ShimField] public float Tail;
-    [ShimField] public float Telegraph;
-}
-
-[Shim]
-internal class FallenGuardianPhaseStats : MonoBehaviour
-{
-    [ShimField] public int MinHP;
-    [ShimField] public AttackChoice FirstAttack;
-    [ShimField] public List<FallenGuardianAttack> Attacks = [];
-    [ShimField] public GorbStormStats? GorbStormStats;
-    [ShimField] public StaggerStats? StaggerStats;
-    [ShimField] public UltraInstinctStats? UltraInstinctStats;
-
-    internal bool DidFirstAttack = false;
-}
-
-[Shim]
 internal class FallenGuardianController : MonoBehaviour
 {
     [ShimField] public FallenGuardianContainer? Container;
@@ -561,15 +496,113 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
+    private const int NUM_PANCAKES = 27;
+
+    private static readonly List<List<int>> HOLE_PERMUTATIONS = GenerateHolePermutations();
+    private static List<List<int>> GenerateHolePermutations()
+    {
+        List<int> input = [4, 4, 4, 5, 5, 5];  // Sum to 27
+        List<List<int>> ret = [];
+        input.ForEachPermutation(ret.Add);
+        return ret;
+    }
+
+    private static List<bool> GeneratePancakes()
+    {
+        List<bool> ret = [];
+        for (int i = 0; i < NUM_PANCAKES; i++) ret.Add(true);
+
+        int idx = 0;
+        foreach (int span in HOLE_PERMUTATIONS.Choose())
+        {
+            idx += span;
+            ret[idx - 1] = false;
+        }
+
+        ret.Rotate(Random.Range(0, NUM_PANCAKES));
+        return ret;
+    }
+    
+    private static List<bool> UpdatePancakes(List<bool> prev)
+    {
+        List<bool> ret = [];
+        for (int i = 0; i < NUM_PANCAKES; i++) ret.Add(true);
+
+        for (int i = 0; i < NUM_PANCAKES; i++)
+        {
+            if (prev[i]) continue;
+
+            List<int> choices = [i == 0 ? 1 : (i - 1), i, i == NUM_PANCAKES - 1 ? (NUM_PANCAKES - 2) : i + 1];
+            ret[choices.Choose()] = false;
+        }
+
+        return ret;
+    }
+
+    private void SpawnPancakes(List<bool> spawns, float y)
+    {
+        var b = Bounds();
+        var span = (b.max.x - b.min.x) / NUM_PANCAKES;
+
+        float X(int idx) => b.min.x + span / 2 + idx * span;
+
+        var extra = stats!.RainingPancakesStats!.WingCount;
+        for (int i = -extra; i < NUM_PANCAKES + extra; i++)
+        {
+            if (i >= 0 & i < NUM_PANCAKES && !spawns[i]) continue;
+            pancakePool?.SpawnPancake(new(X(i), y));
+        }
+
+        KnightOfNightsPreloader.Instance.MageShotClip!.PlayAtPosition(HeroController.instance.transform.position, 0.85f);
+        gameObject.DoAfter(() => KnightOfNightsPreloader.Instance.ElderHuImpactClip!.PlayAtPosition(HeroController.instance.transform.position), stats.RainingPancakesStats!.PancakeSoundDelay);
+    }
+
     private IEnumerator<CoroutineElement> RainingPancakes()
     {
-        // FIXME
-        yield break; 
+        var stats = this.stats!.RainingPancakesStats!;
+
+        float ChooseX()
+        {
+            var kX = HeroController.instance.transform.position.x;
+            var b = Container!.Arena!.bounds;
+            kX = MathExt.Clamp(kX, b.min.x + stats.DiveXRange, b.max.x - stats.DiveXRange);
+
+            var realRange = stats.DiveXRange - stats.DiveXBuffer;
+            return Random.Range(kX - realRange, kX + realRange);
+        }
+
+        for (int i = 0; i < stats.NumDives; i++)
+        {
+            if (i == 0) this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
+            else animator!.runtimeAnimatorController = DiveAnticLoopController;
+
+            transform.position = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
+            SpawnTeleportBurst(1);
+            PlayTeleportSound();
+
+            yield return Coroutines.SleepSeconds(i == 0 ? stats.WaitFirstWave : stats.WaitLaterWaves);
+
+            float y = Bounds().min.y + stats.PancakeY;
+            var spawns = GeneratePancakes();
+            for (int j = 0; j < 3; j++)
+            {
+                SpawnPancakes(spawns, y);
+                UpdatePancakes(spawns);
+                y += stats.PancakeYIncrement;
+
+                if (j != 2) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaves);
+            }
+
+            yield return Coroutines.SleepSeconds(stats.WaitAfterWave);
+
+            animator!.runtimeAnimatorController = DiveAnticToDiveLoopController;
+            // FIXME: Dive
+        }
     }
 
     private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
     {
-        static bool Equal(SlashAttackSpec a, SlashAttackSpec b)
+        static bool MatchingDirections(SlashAttackSpec a, SlashAttackSpec b)
         {
             if (a.AllowedHits.Count != b.AllowedHits.Count) return false;
 
@@ -580,7 +613,7 @@ internal class FallenGuardianController : MonoBehaviour
         List<List<SlashAttackSpec>> ret = [];
         input.ForEachPermutation(p =>
         {
-            if (p.Pairs().All(pair => !Equal(pair.Item1, pair.Item2))) ret.Add([.. p]);
+            if (p.Pairs().All(pair => !MatchingDirections(pair.Item1, pair.Item2))) ret.Add([.. p]);
         });
         return ret;
     }
@@ -647,6 +680,8 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
+    private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;
+
     private void FacePlayer()
     {
         var kPos = HeroController.instance.transform.position;
@@ -656,13 +691,21 @@ internal class FallenGuardianController : MonoBehaviour
         transform.localScale = new(left ? 1 : -1, 1, 1);
     }
 
+    private void SpawnTeleportBurst(float scale, Vector3? pos = null)
+    {
+        pos ??= transform.position;
+        TeleportBurst!.Spawn(pos.Value).transform.localScale = new(scale, scale, 1);
+    }
+
+    private void PlayTeleportSound(Vector3? pos = null) => KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(pos ?? transform.position, 1.1f);
+
     private void TeleportInstant(Vector2 newPos)
     {
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
+        SpawnTeleportBurst(0.5f);
 
         transform.position = newPos;
-        KnightOfNightsPreloader.Instance.MageTeleportClip!.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
+        PlayTeleportSound();
+        SpawnTeleportBurst(1);
     }
 
     private event System.Action? OnCastSpell;
@@ -675,20 +718,30 @@ internal class FallenGuardianController : MonoBehaviour
         prev?.Invoke();
     }
 
+    private event System.Action? OnDive;
+
+    [ShimMethod]
+    public void DiveEvent()
+    {
+        var prev = OnDive;
+        OnDive = null;
+        prev?.Invoke();
+    }
+
     [ShimMethod]
     public void TeleportIn()
     {
         SetTangible(true);
-        KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(1, 1, 1);
+        PlayTeleportSound();
+        SpawnTeleportBurst(1);
     }
 
     [ShimMethod]
     public void TeleportOut()
     {
         SetTangible(false);
-        KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(transform.position, 1.1f);
-        TeleportBurst!.Spawn(transform.position).transform.localScale = new(0.5f, 0.5f, 1);
+        PlayTeleportSound();
+        SpawnTeleportBurst(0.5f);
         bobber!.enabled = false;
     }
 

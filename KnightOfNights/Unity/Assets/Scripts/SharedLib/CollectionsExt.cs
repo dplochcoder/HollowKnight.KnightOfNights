@@ -19,6 +19,12 @@ namespace KnightOfNights.Scripts.SharedLib
             for (int i = 0; i < self.Count; i++) self[i] = updater(self[i]);
         }
 
+        public static void Rotate<T>(this List<T> self, int offset)
+        {
+            var orig = new List<T>(self);
+            for (int i = 0; i < self.Count; i++) self[i] = orig[(i + self.Count - offset) % self.Count];
+        }
+
         public static void RemoveWhere<T>(this List<T> self, Func<T, bool> predicate)
         {
             List<T> newList = new List<T>();
