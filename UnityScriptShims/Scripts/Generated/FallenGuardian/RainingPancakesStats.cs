@@ -4,16 +4,21 @@ namespace KnightOfNights.Scripts.FallenGuardian
     {
         public float DiveHeightMax;
         public float DiveHeightMin;
+        public float DiveImpactScale;
         public float DivePlungeSpeed;
         public float DiveRetreatSpeed;
         public float DiveXBuffer;
         public float DiveXRange;
         public int NumDives;
         public int NumWavesPerDive;
-        public float PancakeSoundDelay;
         public float PancakePitchIncrement;
+        public float PancakeSpeed;
+        public float PancakeXOffset;
         public float PancakeY;
         public float PancakeYIncrement;
+        public float ShockwaveSpeed;
+        public float ShockwaveXScale;
+        public float ShockwaveYScale;
         public float WaitAfterLastWaveSpawn;
         public float WaitBetweenWaveDrops;
         public float WaitBetweenWaveSpawns;

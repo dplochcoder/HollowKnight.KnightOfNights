@@ -1,4 +1,5 @@
 ﻿using HutongGames.PlayMaker;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
@@ -29,23 +30,26 @@ internal class PancakePool : MonoBehaviour
 
         fsm.GetFsmState("Check Pos").ClearActions();
 
+        // Immediately contract.
+        fsm.GetFsmState("Antic").AddLastAction(new Lambda(() => fsm.SendEvent("FINISHED")));
+
         var antic2State = fsm.GetFsmState("Antic 2");
         antic2State.ClearTransitions();
         antic2State.AddFsmTransition("FIRE", "Down");
 
         var fire = fsm.AddFsmBool("Fire", false);
+        var playSound = fsm.AddFsmBool("PlaySound", true);
         antic2State.AddLastAction(new LambdaEveryFrame(() =>
         {
-            if (fire.Value)
-            {
-                fire.Value = false;
-                fsm.SendEvent("FIRE");
-            }
+            if (!fire.Value) return;
+
+            fire.Value = false;
+            fsm.SendEvent("FIRE");
         }));
 
         fsm.GetFsmState("Land").AddFirstAction(new Lambda(() =>
         {
-            if (landClipTimer > 0) return;
+            if (landClipTimer > 0 || !playSound.Value) return;
 
             KnightOfNightsPreloader.Instance.ElderHuImpactClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, fsm.gameObject.transform.position.y));
             landClipTimer = 0.1f;
@@ -55,18 +59,29 @@ internal class PancakePool : MonoBehaviour
     }
 
     // Invoke the returned action to fire the pancake.
-    public Pancake SpawnPancake(Vector2 pos, float pitch)
+    public Pancake SpawnPancake(Vector3 pos, float launchPitch, float speed, float minY, bool playSound)
     {
         if (spawnClipTimer == 0)
         {
-            KnightOfNightsPreloader.Instance.MageShotClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, pos.y), pitch);
+            KnightOfNightsPreloader.Instance.MageShotClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, pos.y), launchPitch);
             spawnClipTimer = 0.1f;
         }
 
         var obj = inactive.Count > 0 ? inactive.Dequeue() : SpawnNew(pos);
 
         active.Add(obj);
+        obj.transform.position = pos;
+
         obj.SetActive(true);
+
+        var fsm = obj.LocateMyFSM("Control");
+
+        var downState = fsm.GetFsmState("Down");
+        downState.GetFirstActionOfType<FloatCompare>().float2 = minY + 4.01f;
+        downState.GetFirstActionOfType<SetVelocity2d>().y = -speed;
+
+        fsm.GetFsmState("Land").GetFirstActionOfType<SetPosition>().y = minY + 3.72f;
+        fsm.FsmVariables.GetFsmBool("PlaySound").Value = playSound;
 
         return new(obj.LocateMyFSM("Control").FsmVariables.GetFsmBool("Fire"));
     }

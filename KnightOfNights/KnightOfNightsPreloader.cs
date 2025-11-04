@@ -36,6 +36,9 @@ internal class KnightOfNightsPreloader : Preloader
     [PrefabPreload(SceneNames.Room_Colosseum_Gold, "mage_knight_projectile_shoot")]
     public AudioClip? MageShotClip { get; private set; }
 
+    [PrefabPreload(SceneNames.Ruins1_24_boss, "mage_lord_strike_impact")]
+    public AudioClip? MageStrikeImpactClip {  get; private set; }
+
     [PrefabPreload(SceneNames.Tutorial_01, "mage_knight_teleport")]
     public AudioClip? MageTeleportClip { get; private set; }
 
@@ -64,6 +67,9 @@ internal class KnightOfNightsPreloader : Preloader
     public AudioClip? RevekAttackClip3 { get; private set; }
 
     public List<AudioClip> RevekAttackClips => [RevekAttackClip1!, RevekAttackClip2!, RevekAttackClip3!];
+
+    [PrefabPreload(SceneNames.Crossroads_10_boss, "Shockwave Wave")]
+    public GameObject? Shockwave { get; private set; }
 
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }

@@ -120,19 +120,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DiveHeightMax: 10
   DiveHeightMin: 8
-  DivePlungeSpeed: 30
+  DiveImpactScale: 2
+  DivePlungeSpeed: 45
   DiveRetreatSpeed: 4
   DiveXBuffer: 1.5
   DiveXRange: 6
   NumDives: 3
   NumWavesPerDive: 3
-  PancakeSoundDelay: 0.5
   PancakePitchIncrement: 0.25
-  PancakeY: 8
-  PancakeYIncrement: 1.5
+  PancakeSpeed: 75
+  PancakeXOffset: -0.1
+  PancakeY: 9.5
+  PancakeYIncrement: 1.65
+  ShockwaveSpeed: 24
+  ShockwaveXScale: 1.5
+  ShockwaveYScale: 1.25
   WaitAfterLastWaveSpawn: 0.35
-  WaitBetweenWaveDrops: 0.25
-  WaitBetweenWaveSpawns: 0.25
+  WaitBetweenWaveDrops: 0.265
+  WaitBetweenWaveSpawns: 0.265
   WaitForFirstTeleport: 0.5
   WaitForLaterTeleports: 1
   WaitFromDiveToNextSpawn: 0.8

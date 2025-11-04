@@ -500,12 +500,12 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
-    private const int NUM_PANCAKES = 18;
+    private const int NUM_PANCAKES = 16;
 
     private static readonly List<List<int>> HOLE_PERMUTATIONS = GenerateHolePermutations();
     private static List<List<int>> GenerateHolePermutations()
     {
-        List<int> input = [4, 4, 5, 5];
+        List<int> input = [3, 4, 4, 5];
         List<List<int>> ret = [];
         input.ForEachPermutation(ret.Add);
         return ret;
@@ -513,18 +513,23 @@ internal class FallenGuardianController : MonoBehaviour
 
     private static List<bool> GeneratePancakeSpawns()
     {
-        List<bool> ret = [];
-        for (int i = 0; i < NUM_PANCAKES; i++) ret.Add(true);
+        List<bool> spawns = [];
+        for (int i = 0; i < NUM_PANCAKES; i++) spawns.Add(true);
 
         int idx = 0;
         foreach (int span in HOLE_PERMUTATIONS.Choose())
         {
             idx += span;
-            ret[idx - 1] = false;
+            spawns[idx - 1] = false;
         }
 
-        ret.Rotate(Random.Range(0, NUM_PANCAKES));
-        return ret;
+        List<List<bool>> valid = [];
+        for (int i = 0; i < NUM_PANCAKES; i++)
+        {
+            if (spawns[0] && spawns[NUM_PANCAKES - 1]) valid.Add([.. spawns]);
+            spawns.Rotate(1);
+        }
+        return valid.Choose();
     }
 
     private static List<bool> UpdatePancakes(List<bool> prev)
@@ -536,26 +541,37 @@ internal class FallenGuardianController : MonoBehaviour
         {
             if (prev[i]) continue;
 
-            List<int> choices = [i == 0 ? 1 : (i - 1), i, i == NUM_PANCAKES - 1 ? (NUM_PANCAKES - 2) : i + 1];
+            List<int> choices = [];
+            if (i < NUM_PANCAKES - 1 && !prev[i + 1])
+            {
+                choices = [i, i + 1];
+                i++;
+            }
+            else choices = [i == 0 ? 1 : (i - 1), i == NUM_PANCAKES - 1 ? (NUM_PANCAKES - 2) : i + 1];
             ret[choices.Choose()] = false;
         }
 
         return ret;
     }
 
-    private List<Pancake> SpawnPancakes(List<bool> spawns, float y, float pitch)
+    private List<Pancake> SpawnPancakes(List<bool> spawns, float y, float z, float launchPitch)
     {
+        var stats = this.stats!.RainingPancakesStats!;
+
         var b = Bounds();
         var span = (b.max.x - b.min.x) / NUM_PANCAKES;
 
-        float X(int idx) => b.min.x + span / 2 + idx * span;
+        float X(int idx) => b.min.x + span / 2 + idx * span + stats.PancakeXOffset;
 
         List<Pancake> ret = [];
-        var extra = stats!.RainingPancakesStats!.WingCount;
+        var extra = stats.WingCount;
         for (int i = -extra; i < NUM_PANCAKES + extra; i++)
         {
-            if (i >= 0 & i < NUM_PANCAKES && !spawns[i]) continue;
-            ret.Add(pancakePool!.SpawnPancake(new(X(i), y), pitch));
+            bool mainPlatform = i >= 0 && i < NUM_PANCAKES;
+            if (mainPlatform && !spawns[i]) continue;
+
+            var minY = Bounds().min.y - (mainPlatform ? 0 : 8);
+            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, mainPlatform));
         }
         return ret;
     }
@@ -572,7 +588,7 @@ internal class FallenGuardianController : MonoBehaviour
             var b = Container!.Arena!.bounds;
             var kX = MathExt.Clamp(HeroController.instance.transform.position.x, b.min.x, b.max.x);
 
-            return Random.Range(Mathf.Max(b.min.x + stats.DiveXBuffer, kX - stats.DiveXRange), Mathf.Min(b.max.x - stats.DiveXBuffer, kX - stats.DiveXRange));
+            return Random.Range(Mathf.Max(b.min.x + stats.DiveXBuffer, kX - stats.DiveXRange), Mathf.Min(b.max.x - stats.DiveXBuffer, kX + stats.DiveXRange));
         }
 
         for (int i = 0; i < stats.NumDives; i++)
@@ -594,12 +610,14 @@ internal class FallenGuardianController : MonoBehaviour
             var spawns = GeneratePancakeSpawns();
             float y = Bounds().min.y + stats.PancakeY;
             float pitch = 1;
+            float z = 0;
             for (int j = 0; j < stats.NumWavesPerDive; j++)
             {
-                waves.Add(SpawnPancakes(spawns, y, pitch));
+                waves.Add(SpawnPancakes(spawns, y, z, pitch));
 
                 spawns = UpdatePancakes(spawns);
                 y += stats.PancakeYIncrement;
+                z += 0.01f;
                 pitch += stats.PancakePitchIncrement;
 
                 if (j != stats.NumWavesPerDive - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
@@ -633,10 +651,17 @@ internal class FallenGuardianController : MonoBehaviour
             };
             yield return Coroutines.SleepUntil(() => dive.Value);
 
+            rigidbody!.velocity = Vector2.zero;
             SetTangible(false);
-            animator!.runtimeAnimatorController = DiveImpactController!;
-            // TODO: Landing sound.
-            // TODO: Waves.
+
+            transform.position = landing.Value;
+            transform.localScale = new(stats.DiveImpactScale, stats.DiveImpactScale, 1);
+            this.StartLibCoroutine(Coroutines.PlayAnimation(animator!, DiveImpactController!).Then(Coroutines.Instant(() => transform.localScale = new(1, 1, 1))));
+
+            var p = landing.Value;
+            p.y -= 0.25f;
+            Shockwave.SpawnTwo(p, new(stats.ShockwaveXScale, stats.ShockwaveYScale), stats.ShockwaveSpeed);
+            KnightOfNightsPreloader.Instance.MageStrikeImpactClip?.PlayAtPosition(landing.Value);
 
             yield return Coroutines.SleepSeconds(stats.WaitFromDiveToNextSpawn);
         }
@@ -822,6 +847,6 @@ internal class FallenGuardianController : MonoBehaviour
 
         var prev = OnDiveLand;
         OnDiveLand = null;
-        prev?.Invoke(new(b.center.x, b.min.y));
+        prev?.Invoke(new(b.center.x, Bounds().min.y));
     }
 }
