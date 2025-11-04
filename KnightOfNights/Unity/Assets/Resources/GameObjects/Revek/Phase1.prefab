@@ -31,6 +31,7 @@ Transform:
   - {fileID: 5776631858513733537}
   - {fileID: 6205185690576271810}
   - {fileID: 2344739562684248617}
+  - {fileID: 4952770570454860908}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,9 +52,92 @@ MonoBehaviour:
   Attacks:
   - {fileID: 5596897245960897113}
   - {fileID: 404081514580924327}
+  - {fileID: 4307519830915032430}
   GorbStormStats: {fileID: 1720482504391799160}
+  RainingPancakesStats: {fileID: 2393960190602140730}
   StaggerStats: {fileID: 1217171236579124090}
   UltraInstinctStats: {fileID: 605255954292065798}
+--- !u!1 &2206071225364861104
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4952770570454860908}
+  - component: {fileID: 4307519830915032430}
+  - component: {fileID: 2393960190602140730}
+  m_Layer: 0
+  m_Name: RainingPancakes
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4952770570454860908
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2206071225364861104}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4307519830915032430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2206071225364861104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 2
+  Weight: 1
+  Cooldown: 2
+  WeightIncrease: 0.75
+  ForbiddenPredecessors: 
+--- !u!114 &2393960190602140730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2206071225364861104}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1017068393, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DiveHeightMax: 10
+  DiveHeightMin: 8
+  DivePlungeSpeed: 30
+  DiveRetreatSpeed: 4
+  DiveXBuffer: 1.5
+  DiveXRange: 6
+  NumDives: 3
+  NumWavesPerDive: 3
+  PancakeSoundDelay: 0.5
+  PancakePitchIncrement: 0.25
+  PancakeY: 8
+  PancakeYIncrement: 1.5
+  WaitAfterLastWaveSpawn: 0.35
+  WaitBetweenWaveDrops: 0.25
+  WaitBetweenWaveSpawns: 0.25
+  WaitForFirstTeleport: 0.5
+  WaitForLaterTeleports: 1
+  WaitFromDiveToNextSpawn: 0.8
+  WaitFromLastDropToDive: 0.6
+  WingCount: 3
 --- !u!1 &3211539505212584972
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,4 +1,5 @@
-﻿using HutongGames.PlayMaker.Actions;
+﻿using GlobalEnums;
+using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
@@ -6,6 +7,7 @@ using KnightOfNights.Scripts.SharedLib;
 using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
+using RandomizerMod.IC;
 using SFCore.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -71,6 +73,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
     private HealthManager? healthManager;
+    private Rigidbody2D? rigidbody;
     private NonBouncer? nonBouncer;
     private BoxCollider2D? collider;
     private DamageHero? damageHero;
@@ -95,6 +98,7 @@ internal class FallenGuardianController : MonoBehaviour
     private void Awake()
     {
         healthManager = GetComponent<HealthManager>();
+        rigidbody = GetComponent<Rigidbody2D>();
         nonBouncer = GetComponent<NonBouncer>();
         collider = GetComponent<BoxCollider2D>();
         damageHero = GetComponent<DamageHero>();
@@ -349,7 +353,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.GorbStorm;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.RainingPancakes;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -496,18 +500,18 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
-    private const int NUM_PANCAKES = 27;
+    private const int NUM_PANCAKES = 18;
 
     private static readonly List<List<int>> HOLE_PERMUTATIONS = GenerateHolePermutations();
     private static List<List<int>> GenerateHolePermutations()
     {
-        List<int> input = [4, 4, 4, 5, 5, 5];  // Sum to 27
+        List<int> input = [4, 4, 5, 5];
         List<List<int>> ret = [];
         input.ForEachPermutation(ret.Add);
         return ret;
     }
 
-    private static List<bool> GeneratePancakes()
+    private static List<bool> GeneratePancakeSpawns()
     {
         List<bool> ret = [];
         for (int i = 0; i < NUM_PANCAKES; i++) ret.Add(true);
@@ -522,7 +526,7 @@ internal class FallenGuardianController : MonoBehaviour
         ret.Rotate(Random.Range(0, NUM_PANCAKES));
         return ret;
     }
-    
+
     private static List<bool> UpdatePancakes(List<bool> prev)
     {
         List<bool> ret = [];
@@ -539,65 +543,106 @@ internal class FallenGuardianController : MonoBehaviour
         return ret;
     }
 
-    private void SpawnPancakes(List<bool> spawns, float y)
+    private List<Pancake> SpawnPancakes(List<bool> spawns, float y, float pitch)
     {
         var b = Bounds();
         var span = (b.max.x - b.min.x) / NUM_PANCAKES;
 
         float X(int idx) => b.min.x + span / 2 + idx * span;
 
+        List<Pancake> ret = [];
         var extra = stats!.RainingPancakesStats!.WingCount;
         for (int i = -extra; i < NUM_PANCAKES + extra; i++)
         {
             if (i >= 0 & i < NUM_PANCAKES && !spawns[i]) continue;
-            pancakePool?.SpawnPancake(new(X(i), y));
+            ret.Add(pancakePool!.SpawnPancake(new(X(i), y), pitch));
         }
-
-        KnightOfNightsPreloader.Instance.MageShotClip!.PlayAtPosition(HeroController.instance.transform.position, 0.85f);
-        gameObject.DoAfter(() => KnightOfNightsPreloader.Instance.ElderHuImpactClip!.PlayAtPosition(HeroController.instance.transform.position), stats.RainingPancakesStats!.PancakeSoundDelay);
+        return ret;
     }
 
     private IEnumerator<CoroutineElement> RainingPancakes()
     {
         var stats = this.stats!.RainingPancakesStats!;
 
+        recoil!.CancelRecoil();
+        recoil.enabled = false;
+
         float ChooseX()
         {
-            var kX = HeroController.instance.transform.position.x;
             var b = Container!.Arena!.bounds;
-            kX = MathExt.Clamp(kX, b.min.x + stats.DiveXRange, b.max.x - stats.DiveXRange);
+            var kX = MathExt.Clamp(HeroController.instance.transform.position.x, b.min.x, b.max.x);
 
-            var realRange = stats.DiveXRange - stats.DiveXBuffer;
-            return Random.Range(kX - realRange, kX + realRange);
+            return Random.Range(Mathf.Max(b.min.x + stats.DiveXBuffer, kX - stats.DiveXRange), Mathf.Min(b.max.x - stats.DiveXBuffer, kX - stats.DiveXRange));
         }
 
         for (int i = 0; i < stats.NumDives; i++)
         {
-            if (i == 0) this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
-            else animator!.runtimeAnimatorController = DiveAnticLoopController;
-
-            transform.position = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
-            SpawnTeleportBurst(1);
-            PlayTeleportSound();
-
-            yield return Coroutines.SleepSeconds(i == 0 ? stats.WaitFirstWave : stats.WaitLaterWaves);
-
-            float y = Bounds().min.y + stats.PancakeY;
-            var spawns = GeneratePancakes();
-            for (int j = 0; j < 3; j++)
+            var iCopy = i;
+            gameObject.DoAfter(() =>
             {
-                SpawnPancakes(spawns, y);
-                UpdatePancakes(spawns);
-                y += stats.PancakeYIncrement;
+                transform.position = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
+                SpawnTeleportBurst(1);
+                PlayTeleportSound();
 
-                if (j != 2) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaves);
+                if (iCopy == 0) this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
+                else animator!.runtimeAnimatorController = DiveAnticLoopController;
+
+                SetTangible(true);
+            }, i == 0 ? stats.WaitForFirstTeleport : stats.WaitForLaterTeleports);
+
+            List<List<Pancake>> waves = [];
+            var spawns = GeneratePancakeSpawns();
+            float y = Bounds().min.y + stats.PancakeY;
+            float pitch = 1;
+            for (int j = 0; j < stats.NumWavesPerDive; j++)
+            {
+                waves.Add(SpawnPancakes(spawns, y, pitch));
+
+                spawns = UpdatePancakes(spawns);
+                y += stats.PancakeYIncrement;
+                pitch += stats.PancakePitchIncrement;
+
+                if (j != stats.NumWavesPerDive - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
             }
 
-            yield return Coroutines.SleepSeconds(stats.WaitAfterWave);
+            yield return Coroutines.SleepSeconds(stats.WaitAfterLastWaveSpawn);
 
+            for (int j = 0; j < waves.Count; j++)
+            {
+                waves[j].ForEach(p => p.Fire());
+                yield return Coroutines.SleepSeconds(j == waves.Count - 1 ? stats.WaitFromLastDropToDive : stats.WaitBetweenWaveDrops);
+            }
+
+            rigidbody!.velocity = new(0, stats.DiveRetreatSpeed);
+            recoil!.CancelRecoil();
+            recoil.enabled = false;
+
+            Wrapped<bool> dive = new(false);
+            OnDive += () => dive.Value = true;
             animator!.runtimeAnimatorController = DiveAnticToDiveLoopController;
-            // FIXME: Dive
+            yield return Coroutines.SleepUntil(() => dive.Value);
+            KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(transform.position);
+
+            dive.Value = false;
+            Wrapped<Vector2> landing = new(Vector2.zero);
+            rigidbody!.velocity = new(0, -stats.DivePlungeSpeed);
+            OnDiveLand += p =>
+            {
+                landing.Value = p;
+                dive.Value = true;
+            };
+            yield return Coroutines.SleepUntil(() => dive.Value);
+
+            SetTangible(false);
+            animator!.runtimeAnimatorController = DiveImpactController!;
+            // TODO: Landing sound.
+            // TODO: Waves.
+
+            yield return Coroutines.SleepSeconds(stats.WaitFromDiveToNextSpawn);
         }
+
+        // TODO: Finale
+        recoil!.enabled = true;
     }
 
     private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
@@ -749,7 +794,7 @@ internal class FallenGuardianController : MonoBehaviour
     {
         healthManager!.IsInvincible = !value;
         healthManager.SetPreventInvincibleEffect(!value);
-        nonBouncer!.active = value;
+        nonBouncer!.active = !value;
         collider!.enabled = value;
         damageHero!.enabled = value;
 
@@ -765,5 +810,18 @@ internal class FallenGuardianController : MonoBehaviour
         var prev = OnTeleportOut;
         OnTeleportOut = null;
         prev?.Invoke();
+    }
+
+    private event System.Action<Vector2>? OnDiveLand;
+
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.collider.gameObject.layer != (int)PhysLayers.TERRAIN) return;
+
+        var b = collider!.bounds;
+
+        var prev = OnDiveLand;
+        OnDiveLand = null;
+        prev?.Invoke(new(b.center.x, b.min.y));
     }
 }
