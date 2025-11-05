@@ -350,12 +350,12 @@ internal class FallenGuardianController : MonoBehaviour
 
             choices.Add(c.Choice, c.Weight + c.WeightIncrease * WeightAdditions.CountOf(c.Choice));
         }
-        return choices.Sample();
+        return choices.Count > 0 ? choices.Sample() : AttackChoice.UltraInstinct;
     }
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.RainingPancakes;
+    private static readonly AttackChoice? ForceAttack = null;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -603,6 +603,7 @@ internal class FallenGuardianController : MonoBehaviour
             void DoTeleport()
             {
                 transform.position = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
+                FacePlayer(true);
                 this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
             }
 
@@ -727,12 +728,13 @@ internal class FallenGuardianController : MonoBehaviour
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;
 
-    private void FacePlayer()
+    private void FacePlayer(bool reverse = false)
     {
         var kPos = HeroController.instance.transform.position;
         var pos = transform.position;
 
         bool left = pos.x >= kPos.x;
+        if (reverse) left = !left;
         transform.localScale = new(left ? 1 : -1, 1, 1);
     }
 

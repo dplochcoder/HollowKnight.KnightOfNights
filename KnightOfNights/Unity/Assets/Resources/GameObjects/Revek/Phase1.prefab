@@ -49,7 +49,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinHP: 1800
-  FirstAttack: 6
+  FirstAttack: 4
   Attacks:
   - {fileID: 5596897245960897113}
   - {fileID: 404081514580924327}
@@ -137,13 +137,13 @@ MonoBehaviour:
   ShockwaveSpeed: 40
   ShockwaveXScale: 1.75
   ShockwaveYScale: 1.25
-  WaitAfterLastWaveSpawn: 0.725
-  WaitAfterFirstTeleport: 0.65
-  WaitAfterSpawnForTeleport: 0.5
+  WaitAfterLastWaveSpawn: 0.675
+  WaitAfterFirstTeleport: 0.5
+  WaitAfterSpawnForTeleport: 0.35
   WaitBetweenWaveDrops: 0.31
   WaitBetweenWaveSpawns: 0.125
-  WaitFinal: 1.15
-  WaitFromDiveToNextSpawn: 0.45
+  WaitFinal: 0.85
+  WaitFromDiveToNextSpawn: 0.4
   WaitFromLastDropToDive: 0.35
   WingCount: 3
 --- !u!1 &3211539505212584972
@@ -290,7 +290,7 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Choice: 6
+  Choice: 4
   Weight: 1
   Cooldown: 3
   WeightIncrease: 0.5
@@ -310,8 +310,8 @@ MonoBehaviour:
   Deceleration: 0.9
   Interval: 0.31
   Speed: 180
-  Tail: 1.15
-  Telegraph: 0.5
+  Tail: 0.7
+  Telegraph: 0.6
 --- !u!1 &8179795735541059478
 GameObject:
   m_ObjectHideFlags: 0
@@ -378,23 +378,23 @@ MonoBehaviour:
   BurstCountFinale: 7
   BurstCountSmall: 3
   FinaleMinDist: 6
-  GracePeriod: 1
+  GracePeriod: 0.75
   NumSmallBursts: 3
   PitchIncrementFinale: 0.1
   PitchIncrementSmall: 0.15
   SmallXMin: 6
-  SmallXMax: 12
-  SmallYMin: 4.5
+  SmallXMax: 10.5
+  SmallYMin: 5.5
   SmallYMax: 10.5
   SpikeAccel: 1.1
   SpokeCountFinale: 6
   SpokeCountSmall: 12
   SpokeRotationFinale: 0.2857
   SpokeRotationSmall: 0.5
-  WaitAfterFinale: 0.575
-  WaitAfterTeleport: 0.55
-  WaitBeforeFinale: 0.55
-  WaitBeforeTeleport: 0.3
-  WaitFirst: 0.8
+  WaitAfterFinale: 0.6
+  WaitAfterTeleport: 0.425
+  WaitBeforeFinale: 0.5
+  WaitBeforeTeleport: 0.25
+  WaitFirst: 0.5
   WaitSpikeFinale: 0.12
   WaitSpikeSmall: 0.24

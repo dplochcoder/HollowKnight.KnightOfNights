@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2483170258698194432
 Transform:
   m_ObjectHideFlags: 0
@@ -58,7 +58,8 @@ PolygonCollider2D:
   m_AutoTiling: 0
   m_Points:
     m_Paths:
-    - - {x: 0.00000011920929, y: 3.4677007}
+    - - {x: 0.36846137, y: 2.2859437}
+      - {x: -0.27520806, y: 2.3103611}
       - {x: -0.89322, y: 0.22226182}
       - {x: 0.066853344, y: 0.015059322}
       - {x: 1.0088933, y: 0.23190147}
