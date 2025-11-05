@@ -16,9 +16,9 @@ internal class Pancake(FsmBool fire)
 
 internal class PancakePool : MonoBehaviour
 {
-    private HashSet<GameObject> active = [];
-    private HashSet<GameObject> inactiveOneFrame = [];
-    private Queue<GameObject> inactive = [];
+    private readonly HashSet<GameObject> active = [];
+    private readonly HashSet<GameObject> inactiveOneFrame = [];
+    private readonly Queue<GameObject> inactive = [];
 
     private readonly GameObject prefab = KnightOfNightsPreloader.Instance.ElderHuPancake!;
 
@@ -31,7 +31,7 @@ internal class PancakePool : MonoBehaviour
         fsm.GetFsmState("Check Pos").ClearActions();
 
         // Immediately contract.
-        fsm.GetFsmState("Antic").AddLastAction(new Lambda(() => fsm.SendEvent("FINISHED")));
+        // fsm.GetFsmState("Antic").AddLastAction(new Lambda(() => fsm.SendEvent("FINISHED")));
 
         var antic2State = fsm.GetFsmState("Antic 2");
         antic2State.ClearTransitions();

@@ -20,10 +20,11 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float ShockwaveXScale;
         public float ShockwaveYScale;
         public float WaitAfterLastWaveSpawn;
+        public float WaitAfterFirstTeleport;
+        public float WaitAfterSpawnForTeleport;
         public float WaitBetweenWaveDrops;
         public float WaitBetweenWaveSpawns;
-        public float WaitForFirstTeleport;
-        public float WaitForLaterTeleports;
+        public float WaitFinal;
         public float WaitFromDiveToNextSpawn;
         public float WaitFromLastDropToDive;
         public int WingCount;

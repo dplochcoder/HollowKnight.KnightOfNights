@@ -77,6 +77,9 @@ internal class KnightOfNightsPreloader : Preloader
     [ResourcePreload("Stun Effect")]
     public GameObject? StunEffect { get; private set; }
 
+    [PrefabPreload(SceneNames.Fungus3_23_boss, "mega_mantis_tall_slash")]
+    public GameObject? TraitorLordWave { get; private set; }
+
     [Preload(SceneNames.RestingGrounds_02_boss, "Warrior/Ghost Warrior Xero")]
     public GameObject? Xero { get; private set; }
 

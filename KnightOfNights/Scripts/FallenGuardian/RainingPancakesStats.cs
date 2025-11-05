@@ -24,10 +24,11 @@ internal class RainingPancakesStats : MonoBehaviour
     [ShimField] public float ShockwaveXScale;
     [ShimField] public float ShockwaveYScale;
     [ShimField] public float WaitAfterLastWaveSpawn;
+    [ShimField] public float WaitAfterFirstTeleport;
+    [ShimField] public float WaitAfterSpawnForTeleport;
     [ShimField] public float WaitBetweenWaveDrops;
     [ShimField] public float WaitBetweenWaveSpawns;
-    [ShimField] public float WaitForFirstTeleport;
-    [ShimField] public float WaitForLaterTeleports;
+    [ShimField] public float WaitFinal;
     [ShimField] public float WaitFromDiveToNextSpawn;
     [ShimField] public float WaitFromLastDropToDive;
     [ShimField] public int WingCount;

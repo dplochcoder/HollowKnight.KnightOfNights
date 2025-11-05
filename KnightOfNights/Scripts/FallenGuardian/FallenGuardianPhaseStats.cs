@@ -5,6 +5,18 @@ using UnityEngine;
 namespace KnightOfNights.Scripts.FallenGuardian;
 
 [Shim]
+internal class DiveStats : MonoBehaviour
+{
+    [ShimField] public float ImpactScale;
+    [ShimField] public float PlungeSpeed;
+    [ShimField] public float RetreatSpeed;
+    [ShimField] public float ShockwaveXScale;
+    [ShimField] public float ShockwaveYScale;
+    [ShimField] public float ShockwaveSpeed;
+    [ShimField] public float TallShockwaveSpeed;
+}
+
+[Shim]
 internal class StaggerStats : MonoBehaviour
 {
     [ShimField] public float GracePeriod;
@@ -22,6 +34,8 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public int MinHP;
     [ShimField] public AttackChoice FirstAttack;
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
+
+    [ShimField] public DiveStats? DiveStats;
     [ShimField] public GorbStormStats? GorbStormStats;
     [ShimField] public RainingPancakesStats? RainingPancakesStats;
     [ShimField] public StaggerStats? StaggerStats;

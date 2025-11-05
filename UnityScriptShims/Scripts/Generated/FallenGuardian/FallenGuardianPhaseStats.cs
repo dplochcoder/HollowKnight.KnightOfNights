@@ -5,6 +5,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public int MinHP;
         public AttackChoice FirstAttack;
         public System.Collections.Generic.List<FallenGuardianAttack> Attacks;
+        public DiveStats DiveStats;
         public GorbStormStats GorbStormStats;
         public RainingPancakesStats RainingPancakesStats;
         public StaggerStats StaggerStats;

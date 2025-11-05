@@ -32,6 +32,7 @@ Transform:
   - {fileID: 6205185690576271810}
   - {fileID: 2344739562684248617}
   - {fileID: 4952770570454860908}
+  - {fileID: 6010507052436451879}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -53,6 +54,7 @@ MonoBehaviour:
   - {fileID: 5596897245960897113}
   - {fileID: 404081514580924327}
   - {fileID: 4307519830915032430}
+  DiveStats: {fileID: 3728819409160070971}
   GorbStormStats: {fileID: 1720482504391799160}
   RainingPancakesStats: {fileID: 2393960190602140730}
   StaggerStats: {fileID: 1217171236579124090}
@@ -118,30 +120,31 @@ MonoBehaviour:
   m_Script: {fileID: -1017068393, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DiveHeightMax: 10
-  DiveHeightMin: 8
+  DiveHeightMax: 8.5
+  DiveHeightMin: 7
   DiveImpactScale: 2
   DivePlungeSpeed: 45
   DiveRetreatSpeed: 4
-  DiveXBuffer: 1.5
-  DiveXRange: 6
+  DiveXBuffer: 1
+  DiveXRange: 5
   NumDives: 3
   NumWavesPerDive: 3
-  PancakePitchIncrement: 0.25
+  PancakePitchIncrement: 0.2
   PancakeSpeed: 75
   PancakeXOffset: -0.1
   PancakeY: 9.5
-  PancakeYIncrement: 1.65
-  ShockwaveSpeed: 24
-  ShockwaveXScale: 1.5
+  PancakeYIncrement: 1.5
+  ShockwaveSpeed: 40
+  ShockwaveXScale: 1.75
   ShockwaveYScale: 1.25
-  WaitAfterLastWaveSpawn: 0.35
-  WaitBetweenWaveDrops: 0.265
-  WaitBetweenWaveSpawns: 0.265
-  WaitForFirstTeleport: 0.5
-  WaitForLaterTeleports: 1
-  WaitFromDiveToNextSpawn: 0.8
-  WaitFromLastDropToDive: 0.6
+  WaitAfterLastWaveSpawn: 0.725
+  WaitAfterFirstTeleport: 0.65
+  WaitAfterSpawnForTeleport: 0.5
+  WaitBetweenWaveDrops: 0.31
+  WaitBetweenWaveSpawns: 0.125
+  WaitFinal: 1.15
+  WaitFromDiveToNextSpawn: 0.45
+  WaitFromLastDropToDive: 0.35
   WingCount: 3
 --- !u!1 &3211539505212584972
 GameObject:
@@ -193,6 +196,56 @@ MonoBehaviour:
   NextAttackDelay: 0.85
   OscillationPeriod: 1.75
   OscillationRadius: 0.25
+--- !u!1 &4344641435690619969
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6010507052436451879}
+  - component: {fileID: 3728819409160070971}
+  m_Layer: 11
+  m_Name: Dive
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6010507052436451879
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4344641435690619969}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 4
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3728819409160070971
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4344641435690619969}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1126755919, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ImpactScale: 2
+  PlungeSpeed: 40
+  RetreatSpeed: 4
+  ShockwaveXScale: 1.75
+  ShockwaveYScale: 1.25
+  ShockwaveSpeed: 40
+  TallShockwaveSpeed: 16
 --- !u!1 &6652528314850364912
 GameObject:
   m_ObjectHideFlags: 0

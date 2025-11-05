@@ -446,6 +446,7 @@ MonoBehaviour:
   EscalationPause: 3.5
   StaggerCount: 3
   StaggerDistance: 4
+  DiveWarningParticles: {fileID: 7206719451512712455, guid: d43f34eef163efb41859d8d64ce724ab, type: 3}
   StaggerBurst: {fileID: 7206719451512712455, guid: ce835af18719ab348b26157ef228f670, type: 3}
   TeleportBurst: {fileID: 7206719451512712455, guid: 3b63bd6c939529741af834b96c6fb53f, type: 3}
   DiveAnticLoopController: {fileID: 9100000, guid: b2ded8c5ef693d1409530044b60e008a, type: 2}
@@ -460,6 +461,7 @@ MonoBehaviour:
   StaggerController: {fileID: 9100000, guid: 15fb7bc37e597b54a979b60d66738b20, type: 2}
   StaggerToRecoverController: {fileID: 9100000, guid: 8b36ca2caa5ee5e40973c4dfb2946a33, type: 2}
   SwordToDiveAnticController: {fileID: 9100000, guid: e10cfd217e5039849b3c22cf2892a447, type: 2}
+  SwordToDiveAnticNoLoopController: {fileID: 9100000, guid: ab8e5ed425d085848b66f77edb8f2517, type: 2}
   SwordToSpellController: {fileID: 9100000, guid: ad34102d403381248bdc760f7b4a8619, type: 2}
   TeleportInController: {fileID: 9100000, guid: f3e69d178161d7f4e8a28c20e4350c55, type: 2}
   TeleportOutController: {fileID: 9100000, guid: eb3efaa58dad0dd429640f5482ce9810, type: 2}
