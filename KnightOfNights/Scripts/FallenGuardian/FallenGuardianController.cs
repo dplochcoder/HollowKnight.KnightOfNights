@@ -614,7 +614,23 @@ internal class FallenGuardianController : MonoBehaviour
         {
             void DoTeleport()
             {
-                transform.position = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
+                Vector3 pos = Vector3.zero;
+                for (int i = 0; i < 10; i++)
+                {
+                    pos = new(ChooseX(), Bounds().min.y + Random.Range(stats.DiveHeightMin, stats.DiveHeightMax));
+                    if ((pos - HeroController.instance.transform.position).magnitude >= 4) break;
+                }
+
+                if ((pos - HeroController.instance.transform.position).magnitude < 4)
+                {
+                    var kX = HeroController.instance.transform.position.x;
+                    List<float> xs = [];
+                    if (kX - 4 >= Bounds().min.x) xs.Add(kX - 4);
+                    if (kX + 4 <= Bounds().max.x) xs.Add(kX + 4);
+                    pos = new(xs.Choose(), pos.y);
+                }
+
+                transform.position = pos;
                 FacePlayer(true);
                 this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
             }
