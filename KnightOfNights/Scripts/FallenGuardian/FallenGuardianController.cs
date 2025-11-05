@@ -653,8 +653,9 @@ internal class FallenGuardianController : MonoBehaviour
         List<List<int>> ret = [];
         template.ForEachPermutation(p =>
         {
-            if (p.IndexOf(2) < p.IndexOf(1) || p.IndexOf(3) < p.IndexOf(2)) return;
-            ret.Add(p);
+            if (p.IndexOf(1) < p.IndexOf(0)) return;
+            if (p.Pairs().Any(pair => pair.Item1 == pair.Item2)) return;
+            ret.Add([.. p]);
         });
         return ret;
     }
@@ -676,8 +677,8 @@ internal class FallenGuardianController : MonoBehaviour
         ]];
 
         System.Random r = new();
-        pools.Shuffle(r);
         pools.ForEach(l => l.Shuffle(r));
+        pools.Shuffle(r);
         List<int> indices = [0, 0, 0];
 
         List<SlashAttackSpec> ret = [];
