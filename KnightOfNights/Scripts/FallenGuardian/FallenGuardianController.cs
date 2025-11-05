@@ -198,10 +198,10 @@ internal class FallenGuardianController : MonoBehaviour
             {
                 yield return Coroutines.SleepSeconds(SequenceDelay);
 
-                Wrapped<SlashAttackResult> result = new(SlashAttackResult.PENDING);
+                Wrapped<SlashAttackResult?> result = new(null);
                 sequence.Play(r => result.Value = r);
 
-                yield return Coroutines.SleepUntil(() => result.Value != SlashAttackResult.PENDING);
+                yield return Coroutines.SleepUntil(() => result.Value.HasValue);
                 if (result.Value == SlashAttackResult.NOT_PARRIED) continue;
                 else break;
             }
@@ -725,37 +725,39 @@ internal class FallenGuardianController : MonoBehaviour
         var specs = GenUltraInstinctSpecs();
 
         List<SlashAttack> attacks = [];
-        HashSet<SlashAttack> activeAttacks = [];
+        Wrapped<SlashAttack?> lastAttack = new(null);
+        Wrapped<int> remaining = new(specs.Count);
         foreach (var spec in specs)
         {
             var attack = SlashAttack.Spawn(spec);
+            attack.OnResult += result =>
+            {
+                --remaining.Value;
+
+                if (result == SlashAttackResult.PARRIED)
+                {
+                    lastPos = attack.ParryPos;
+                    lastAttack.Value = attack;
+                    healthManager!.hp -= attack.DamageDealt;
+                }
+            };
+
             attacks.Add(attack);
-            activeAttacks.Add(attack);
             yield return Coroutines.SleepSeconds(stats.Interval);
         }
 
-        Wrapped<SlashAttack> lastAttack = new(activeAttacks.First());
-        yield return Coroutines.SleepUntil(() => {
-            if (activeAttacks.Count > 0)
-            {
-                lastAttack.Value = activeAttacks.First();
-                activeAttacks.RemoveWhere(a => a.Result != SlashAttackResult.PENDING);
-            }
-
-            return activeAttacks.Count == 0;
-        });
+        yield return Coroutines.SleepUntil(() => remaining.Value == 0);
 
         if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))
         {
             var attack = lastAttack.Value;
 
-            RevekAddons.SpawnSoul(attack.ParryPos);
+            RevekAddons.SpawnSoul(attack!.ParryPos);
             RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
 
             if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
         }
 
-        healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
 

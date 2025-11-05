@@ -49,12 +49,12 @@ internal class SlashAttackSequenceBehaviour : MonoBehaviour
     internal System.Action<SlashAttackResult>? Callback;
 
     private float currentWait;
-    private HashSet<SlashAttack> activeAttacks = [];
+    private readonly HashSet<SlashAttack> activeAttacks = [];
     private int launchedAttacks;
     private int parriedAttacks;
     private bool cancelled = false;
 
-    private void LaunchAttacks()
+    private void Update()
     {
         currentWait += Time.deltaTime;
 
@@ -65,46 +65,33 @@ internal class SlashAttackSequenceBehaviour : MonoBehaviour
             else
             {
                 ++launchedAttacks;
-                activeAttacks.Add(SlashAttack.Spawn(spec));
-            }
-        }
-    }
+                var attack = SlashAttack.Spawn(spec);
+                activeAttacks.Add(attack);
 
-    private void TrackAttacks()
-    {
-        List<SlashAttack> toRemove = [];
-        foreach (var attack in activeAttacks)
-        {
-            switch (attack.Result)
-            {
-                case SlashAttackResult.PENDING:
-                    break;
-                case SlashAttackResult.NOT_PARRIED:
-                    CancelAndDestroy();
-                    return;
-                case SlashAttackResult.PARRIED:
-                    if (++parriedAttacks == Attacks.Count)
+                attack.OnResult += result =>
+                {
+                    activeAttacks.Remove(attack);
+
+                    switch (result)
                     {
-                        RevekAddons.SpawnSoul(attack.ParryPos);
-                        RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
+                        case SlashAttackResult.NOT_PARRIED:
+                            CancelAndDestroy();
+                            break;
+                        case SlashAttackResult.PARRIED:
+                            if (++parriedAttacks == Attacks.Count)
+                            {
+                                RevekAddons.SpawnSoul(attack.ParryPos);
+                                RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
 
-                        Callback?.Invoke(SlashAttackResult.PARRIED);
-                        Callback = null;
-                        Destroy(gameObject);
-                        return;
+                                Callback?.Invoke(SlashAttackResult.PARRIED);
+                                Callback = null;
+                                Destroy(gameObject);
+                            }
+                            break;
                     }
-                    else toRemove.Add(attack);
-                    break;
+                };
             }
         }
-
-        toRemove.ForEach(a => activeAttacks.Remove(a));
-    }
-
-    private void Update()
-    {
-        LaunchAttacks();
-        TrackAttacks();
     }
 
     internal void CancelAndDestroy()

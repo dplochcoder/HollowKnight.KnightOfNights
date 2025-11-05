@@ -11,20 +11,20 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 
 internal enum SlashAttackResult
 {
-    PENDING,
     PARRIED,
-    PERFECT_PARRIED,
     NOT_PARRIED,
 }
 
 internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
 {
     public SlashAttackSpec Spec => spec;
-    public SlashAttackResult Result { get; private set; }
+    public SlashAttackResult? Result { get; private set; }
     public Vector2 ParryPos { get; private set; }
     public int DamageDealt { get; private set; }
     public float? DamageDirection { get; private set; }
     public float? MagnitudeMultiplier { get; private set; }
+
+    internal event System.Action<SlashAttackResult>? OnResult;
 
     private bool cancelled = false;
     private ParticleClock? clock;
@@ -137,7 +137,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = spec.TargetOffset;
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = spec.Deceleration;
 
-        fsm.GetFsmState("Slash Tele Out").AddFirstAction(new Lambda(() => Result = SlashAttackResult.NOT_PARRIED));
+        fsm.GetFsmState("Slash Tele Out").AddFirstAction(new Lambda(() => SetResult(SlashAttackResult.NOT_PARRIED)));
         fsm.GetFsmState("Damaged Pause").AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
 
         var attackPause = fsm.GetFsmState("Attack Pause");
@@ -150,7 +150,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         hitState.AddFirstAction(new Lambda(() =>
         {
             ParryPos = fsm.gameObject.transform.position;
-            Result = SlashAttackResult.PARRIED;
+            SetResult(SlashAttackResult.PARRIED);
         }));
         hitState.GetFirstActionOfType<AudioPlayerOneShot>().Enabled = false;
 
@@ -159,7 +159,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
 
     internal void Cancel()
     {
-        Result = SlashAttackResult.NOT_PARRIED;
+        SetResult(SlashAttackResult.NOT_PARRIED);
 
         void TeleOut()
         {
@@ -180,5 +180,13 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
 
         if (fsm.ActiveStateName == "Slash Idle" || fsm.ActiveStateName == "Slash Antic") TeleOut();
         else fsm.GetFsmState("Slash Idle").AddFirstAction(new Lambda(TeleOut));
+    }
+
+    private void SetResult(SlashAttackResult result)
+    {
+        if (Result.HasValue) return;
+
+        Result = result;
+        OnResult?.Invoke(result);
     }
 }
