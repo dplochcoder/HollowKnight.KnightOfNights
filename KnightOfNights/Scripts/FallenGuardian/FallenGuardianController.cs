@@ -523,19 +523,30 @@ internal class FallenGuardianController : MonoBehaviour
         {
             if (prev[i]) continue;
 
-            List<int> choices;
             if (i + 1 < NUM_PANCAKES && !prev[i + 1])
             {
-                choices = [i, i + 1];
-                i++;
+                if (i - 1 >= 0 && i + 2 < NUM_PANCAKES)
+                {
+                    ret[i - 1] = false;
+                    ret[i + 2] = false;
+                    i += 2;
+                }
+                else
+                {
+                    ret[Random.Range(i, i + 2)] = false;
+                    i++;
+                }
             }
             else if (i + 2 < NUM_PANCAKES && !prev[i + 2])
             {
-                choices = [i + 1];
+                ret[i + 1] = false;
                 i += 2;
             }
-            else choices = [i == 0 ? 1 : (i - 1), i == NUM_PANCAKES - 1 ? (NUM_PANCAKES - 2) : i + 1];
-            ret[choices.Choose()] = false;
+            else
+            {
+                List<int> choices = [i == 0 ? 1 : (i - 1), i == NUM_PANCAKES - 1 ? (NUM_PANCAKES - 2) : i + 1];
+                ret[choices.Choose()] = false;
+            }
         }
 
         return ret;
@@ -599,7 +610,7 @@ internal class FallenGuardianController : MonoBehaviour
             return Random.Range(Mathf.Max(b.min.x + stats.DiveXBuffer, kX - stats.DiveXRange), Mathf.Min(b.max.x - stats.DiveXBuffer, kX + stats.DiveXRange));
         }
 
-        for (int i = 0; i < stats.NumDives; i++)
+        for (int i = 0; i < 3; i++)
         {
             void DoTeleport()
             {
@@ -615,20 +626,21 @@ internal class FallenGuardianController : MonoBehaviour
             }
 
             // Generate waves forwards, spawn them in reverse then fire them forwards.
-            var spawns = GeneratePancakeSpawns(stats.NumWavesPerDive);
-            float y = Bounds().min.y + stats.PancakeY + stats.PancakeYIncrement * (spawns.Count - 1);
+            int numWaves = 2 + i;
+            var spawns = GeneratePancakeSpawns(numWaves);
+            float y = Bounds().min.y + stats.PancakeY;
             float pitch = 0.85f;
-            float z = 0.01f * (spawns.Count - 1);
+            float z = 0.01f * (numWaves - 1);
 
             List<List<Pancake>> waves = [];
-            for (int j = 0; j < stats.NumWavesPerDive; j++)
+            for (int j = 0; j < numWaves; j++)
             {
-                waves.Add(SpawnPancakes(spawns[spawns.Count - 1 - j], y, z, pitch));
+                waves.Add(SpawnPancakes(spawns[numWaves - 1 - j], y, z, pitch));
 
                 y -= stats.PancakeYIncrement;
                 z -= 0.01f;
                 pitch += stats.PancakePitchIncrement;
-                if (j != stats.NumWavesPerDive - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
+                if (j != numWaves - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
             }
             waves.Reverse();
 
@@ -642,8 +654,8 @@ internal class FallenGuardianController : MonoBehaviour
             }
 
             yield return Coroutines.SleepSeconds(stats.WaitFromLastDropToDive);
-            yield return Coroutines.Sequence(Dive(i == stats.NumDives - 1));
-            yield return Coroutines.SleepSeconds(i == stats.NumDives - 1 ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
+            yield return Coroutines.Sequence(Dive(i == 2));
+            yield return Coroutines.SleepSeconds(i == 2 ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
         }
     }
 

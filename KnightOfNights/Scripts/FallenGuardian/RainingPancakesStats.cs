@@ -13,8 +13,6 @@ internal class RainingPancakesStats : MonoBehaviour
     [ShimField] public float DiveRetreatSpeed;
     [ShimField] public float DiveXBuffer;
     [ShimField] public float DiveXRange;
-    [ShimField] public int NumDives;
-    [ShimField] public int NumWavesPerDive;
     [ShimField] public float PancakePitchIncrement;
     [ShimField] public float PancakeSpeed;
     [ShimField] public float PancakeXOffset;

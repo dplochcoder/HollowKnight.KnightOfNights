@@ -127,20 +127,18 @@ MonoBehaviour:
   DiveRetreatSpeed: 4
   DiveXBuffer: 1
   DiveXRange: 5
-  NumDives: 3
-  NumWavesPerDive: 3
   PancakePitchIncrement: 0.2
   PancakeSpeed: 75
   PancakeXOffset: -0.1
-  PancakeY: 9.5
+  PancakeY: 12
   PancakeYIncrement: 1.5
   ShockwaveSpeed: 40
   ShockwaveXScale: 1.75
   ShockwaveYScale: 1.25
-  WaitAfterLastWaveSpawn: 0.675
+  WaitAfterLastWaveSpawn: 0.715
   WaitAfterFirstTeleport: 0.5
   WaitAfterSpawnForTeleport: 0.35
-  WaitBetweenWaveDrops: 0.31
+  WaitBetweenWaveDrops: 0.3
   WaitBetweenWaveSpawns: 0.125
   WaitFinal: 0.85
   WaitFromDiveToNextSpawn: 0.4
@@ -382,7 +380,7 @@ MonoBehaviour:
   NumSmallBursts: 3
   PitchIncrementFinale: 0.1
   PitchIncrementSmall: 0.15
-  SmallXMin: 6
+  SmallXMin: 6.5
   SmallXMax: 10.5
   SmallYMin: 5.5
   SmallYMax: 10.5
@@ -392,9 +390,9 @@ MonoBehaviour:
   SpokeRotationFinale: 0.2857
   SpokeRotationSmall: 0.5
   WaitAfterFinale: 0.6
-  WaitAfterTeleport: 0.425
-  WaitBeforeFinale: 0.5
+  WaitAfterTeleport: 0.55
+  WaitBeforeFinale: 0.6
   WaitBeforeTeleport: 0.25
-  WaitFirst: 0.5
+  WaitFirst: 0.75
   WaitSpikeFinale: 0.12
   WaitSpikeSmall: 0.24

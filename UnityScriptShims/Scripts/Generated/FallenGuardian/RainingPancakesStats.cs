@@ -9,8 +9,6 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float DiveRetreatSpeed;
         public float DiveXBuffer;
         public float DiveXRange;
-        public int NumDives;
-        public int NumWavesPerDive;
         public float PancakePitchIncrement;
         public float PancakeSpeed;
         public float PancakeXOffset;
