@@ -7,6 +7,7 @@ using KnightOfNights.Scripts.SharedLib;
 using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
+using PurenailCore.SystemUtil;
 using SFCore.Utils;
 using System.Collections.Generic;
 using System.Linq;
@@ -125,10 +126,10 @@ internal class FallenGuardianController : MonoBehaviour
 
     private readonly HashSet<GameObject> recyclables = [];
 
-    private void OnDestroy() => recyclables.ForEach(go =>
+    private void OnDestroy()
     {
-        if (go.activeSelf) go.Recycle();
-    });
+        foreach (var go in recyclables) go.Recycle();
+    }
 
     private Vector2 lastPos;
 
@@ -646,50 +647,53 @@ internal class FallenGuardianController : MonoBehaviour
         }
     }
 
-    private static List<List<SlashAttackSpec>> GenUltraInstinctPatterns(List<SlashAttackSpec> input)
+    private static List<List<int>> GenUltraInstinctGroupings()
     {
-        static bool MatchingDirections(SlashAttackSpec a, SlashAttackSpec b)
+        List<int> template = [0, 0, 0, 1, 1, 1, 2, 2];
+        List<List<int>> ret = [];
+        template.ForEachPermutation(p =>
         {
-            if (a.AllowedHits.Count != b.AllowedHits.Count) return false;
-
-            HashSet<string> bSet = [.. b.AllowedHits];
-            return a.AllowedHits.All(bSet.Contains);
-        }
-
-        List<List<SlashAttackSpec>> ret = [];
-        input.ForEachPermutation(p =>
-        {
-            if (p.Pairs().All(pair => !MatchingDirections(pair.Item1, pair.Item2))) ret.Add([.. p]);
+            if (p.IndexOf(2) < p.IndexOf(1) || p.IndexOf(3) < p.IndexOf(2)) return;
+            ret.Add(p);
         });
         return ret;
     }
-    private static readonly List<List<SlashAttackSpec>> UltraInstinctPatterns = GenUltraInstinctPatterns([
-        SlashAttackSpec.LEFT.Down(1.25f),
-        SlashAttackSpec.LEFT.Up(1.25f),
-        SlashAttackSpec.RIGHT.Down(1.25f),
-        SlashAttackSpec.RIGHT.Up(1.25f),
-        SlashAttackSpec.HIGH_LEFT,
-        SlashAttackSpec.HIGH_RIGHT
-    ]);
 
-    private static readonly List<List<SlashAttackSpec>> SuperUltraInstinctPatterns = GenUltraInstinctPatterns([
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.LEFT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.RIGHT,
-        SlashAttackSpec.HIGH_LEFT,
-        SlashAttackSpec.HIGH_RIGHT,
-        SlashAttackSpec.HIGH_RIGHT
-    ]);
+    private static readonly List<List<int>> UltraInstinctGroupings = GenUltraInstinctGroupings();
+
+    private List<SlashAttackSpec> GenUltraInstinctSpecs()
+    {
+        var stats = this.stats!.UltraInstinctStats!;
+        List<List<SlashAttackSpec>> pools = [[
+            SlashAttackSpec.LEFT.Down(1.25f),
+            SlashAttackSpec.LEFT.Up(1.25f)
+        ], [
+            SlashAttackSpec.RIGHT.Down(1.25f),
+            SlashAttackSpec.RIGHT.Up(1.25f)
+        ], [
+            SlashAttackSpec.HIGH_LEFT,
+            SlashAttackSpec.HIGH_RIGHT
+        ]];
+
+        System.Random r = new();
+        pools.Shuffle(r);
+        pools.ForEach(l => l.Shuffle(r));
+        List<int> indices = [0, 0, 0];
+
+        List<SlashAttackSpec> ret = [];
+        foreach (var group in UltraInstinctGroupings.Choose())
+        {
+            ret.Add(pools[group][indices[group]].WithTelegraph(stats.Telegraph).WithSpeed(stats.Speed).WithDeceleration(stats.Deceleration));
+            indices[group] = (indices[group] + 1) % pools[group].Count;
+        }
+        return ret;
+    }
 
     private IEnumerator<CoroutineElement> UltraInstinct()
     {
         var stats = this.stats!.UltraInstinctStats!;
 
-        var specs = UltraInstinctPatterns.Choose();
-        specs = [.. specs.Select(s => s.WithTelegraph(stats.Telegraph).WithSpeed(stats.Speed).WithDeceleration(stats.Deceleration))];
-        if (Random.Range(0, 2) == 0) specs = [.. specs.Select(s => s.Flipped())];
+        var specs = GenUltraInstinctSpecs();
 
         List<SlashAttack> attacks = [];
         HashSet<SlashAttack> activeAttacks = [];
@@ -718,11 +722,11 @@ internal class FallenGuardianController : MonoBehaviour
 
             RevekAddons.SpawnSoul(attack.ParryPos);
             RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
-            healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
 
             if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
         }
 
+        healthManager!.hp -= attacks.Select(a => a.DamageDealt).Sum();
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
