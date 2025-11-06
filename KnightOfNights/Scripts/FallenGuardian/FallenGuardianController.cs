@@ -133,12 +133,29 @@ internal class FallenGuardianController : MonoBehaviour
 
     private Vector2 lastPos;
 
+    private const float FLIP_COOLDOWN = 0.25f;
+    private float flipTimer;
+    private bool stayFacing;
+    private bool reverseFacing;
+
+    private void UpdateFacePlayer()
+    {
+        flipTimer -= Time.deltaTime;
+        if (flipTimer > 0) return;
+        flipTimer = 0;
+
+        if (!stayFacing) return;
+        if (FacePlayer(reverseFacing)) flipTimer = FLIP_COOLDOWN;
+    }
+
     private void Update()
     {
         stats = PhaseStats.Where(s => healthManager!.hp >= s.MinHP).First();
 
         var pos = transform.position;
         if (pos.x > 0 && pos.y > 0) lastPos = pos;
+
+        UpdateFacePlayer();
     }
 
     private IEnumerator<SlashAttackSequence> SpecTutorial()
@@ -612,11 +629,6 @@ internal class FallenGuardianController : MonoBehaviour
 
         for (int i = 0; i < 3; i++)
         {
-            void DoTeleport()
-            {
-                
-            }
-
             // Generate waves forwards, spawn them in reverse then fire them forwards.
             int numWaves = i + 1;
             var spawns = GeneratePancakeSpawns(numWaves);
@@ -657,6 +669,10 @@ internal class FallenGuardianController : MonoBehaviour
                 transform.position = pos;
                 FacePlayer(true);
                 this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
+
+                stayFacing = true;
+                reverseFacing = true;
+                flipTimer = 0.5f;
             }, stats.WaitAfterSpawnForTeleport);
 
             yield return Coroutines.SleepSeconds(stats.WaitAfterLastWaveSpawn);
@@ -667,7 +683,10 @@ internal class FallenGuardianController : MonoBehaviour
             }
 
             yield return Coroutines.SleepSeconds(stats.WaitFromLastDropToDive);
+
+            stayFacing = false;
             yield return Coroutines.Sequence(Dive(i == 2));
+
             yield return Coroutines.SleepSeconds(i == 2 ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
         }
     }
@@ -760,14 +779,17 @@ internal class FallenGuardianController : MonoBehaviour
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;
 
-    private void FacePlayer(bool reverse = false)
+    private bool FacePlayer(bool reverse = false)
     {
         var kPos = HeroController.instance.transform.position;
         var pos = transform.position;
 
         bool left = pos.x >= kPos.x;
         if (reverse) left = !left;
+
+        var prevX = transform.localScale.x;
         transform.localScale = new(left ? 1 : -1, 1, 1);
+        return prevX != transform.localScale.x;
     }
 
     private void SpawnTeleportBurst(float scale, Vector3? pos = null)
