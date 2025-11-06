@@ -33,6 +33,7 @@ Transform:
   - {fileID: 2344739562684248617}
   - {fileID: 4952770570454860908}
   - {fileID: 6010507052436451879}
+  - {fileID: 8534862928656139355}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -51,10 +52,12 @@ MonoBehaviour:
   MinHP: 1800
   FirstAttack: 4
   Attacks:
-  - {fileID: 5596897245960897113}
+  - {fileID: 807538454964093753}
   - {fileID: 404081514580924327}
   - {fileID: 4307519830915032430}
+  - {fileID: 5596897245960897113}
   DiveStats: {fileID: 3728819409160070971}
+  EmptyTeleportStats: {fileID: 2956078922529798382}
   GorbStormStats: {fileID: 1720482504391799160}
   RainingPancakesStats: {fileID: 2393960190602140730}
   StaggerStats: {fileID: 1217171236579124090}
@@ -106,6 +109,7 @@ MonoBehaviour:
   Choice: 2
   Weight: 1
   Cooldown: 2
+  InitialCooldown: 0
   WeightIncrease: 0.75
   ForbiddenPredecessors: 
 --- !u!114 &2393960190602140730
@@ -291,6 +295,7 @@ MonoBehaviour:
   Choice: 4
   Weight: 1
   Cooldown: 3
+  InitialCooldown: 0
   WeightIncrease: 0.5
   ForbiddenPredecessors: 00000000
 --- !u!114 &605255954292065798
@@ -310,6 +315,76 @@ MonoBehaviour:
   Speed: 180
   Tail: 0.7
   Telegraph: 0.6
+--- !u!1 &7138955916263404913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8534862928656139355}
+  - component: {fileID: 807538454964093753}
+  - component: {fileID: 2956078922529798382}
+  m_Layer: 11
+  m_Name: EmptyTeleport
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8534862928656139355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7138955916263404913}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &807538454964093753
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7138955916263404913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 1
+  Weight: 0.5
+  Cooldown: 5
+  InitialCooldown: 3
+  WeightIncrease: 0.1
+  ForbiddenPredecessors: 05000000
+--- !u!114 &2956078922529798382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7138955916263404913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1512721553, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  DistanceMax: 12
+  DistanceMin: 7
+  HeightMax: 10
+  HeightMin: 2.5
+  GracePeriod: 0.8
+  WaitToTeleOutMax: 1.5
+  WaitToTeleOutMin: 1
+  XBuffer: 3
 --- !u!1 &8179795735541059478
 GameObject:
   m_ObjectHideFlags: 0
@@ -357,6 +432,7 @@ MonoBehaviour:
   Choice: 1
   Weight: 1
   Cooldown: 2
+  InitialCooldown: 0
   WeightIncrease: 0.25
   ForbiddenPredecessors: 
 --- !u!114 &1720482504391799160

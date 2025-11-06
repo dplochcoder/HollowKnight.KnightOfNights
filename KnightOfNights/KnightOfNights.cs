@@ -1,5 +1,4 @@
 using KnightOfNights.IC;
-using KnightOfNights.Scripts;
 using Modding;
 using System;
 using System.Collections;

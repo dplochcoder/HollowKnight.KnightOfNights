@@ -19,6 +19,7 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 internal enum AttackChoice
 {
     AxeHopscotch,
+    EmptyTeleport,
     GorbStorm,
     RainingPancakes,
     ShieldCyclone,
@@ -32,6 +33,7 @@ internal class FallenGuardianAttack : MonoBehaviour
     [ShimField] public AttackChoice Choice;
     [ShimField] public float Weight;
     [ShimField] public int Cooldown;
+    [ShimField] public int InitialCooldown;
     [ShimField] public float WeightIncrease;
     [ShimField] public List<AttackChoice> ForbiddenPredecessors = [];
 }
@@ -71,6 +73,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public RuntimeAnimatorController? SwordToSpellController;
     [ShimField] public RuntimeAnimatorController? TeleportInController;
     [ShimField] public RuntimeAnimatorController? TeleportOutController;
+    [ShimField] public RuntimeAnimatorController? ToSlashAnticLoopController;
 
     [ShimField] public List<FallenGuardianPhaseStats> PhaseStats = [];
 
@@ -309,9 +312,8 @@ internal class FallenGuardianController : MonoBehaviour
         SetTangible(true);
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
 
-        var prev = healthManager!.hp;
         yield return Coroutines.OneOf(
-            Coroutines.SleepUntil(() => healthManager!.hp < prev).Then(Coroutines.SleepSeconds(stats.HitWait)),
+            OnTakeDamage().Then(Coroutines.SleepSeconds(stats.HitWait)),
             Coroutines.SleepSeconds(stats.MaxWait));
 
         bobber!.enabled = false;
@@ -357,7 +359,11 @@ internal class FallenGuardianController : MonoBehaviour
     private AttackChoice ChooseAttack(AttackChoice previous)
     {
         if (ForceAttack.HasValue) return ForceAttack.Value;
-        if (!stats!.DidFirstAttack) return stats.FirstAttack;
+        if (!stats!.DidFirstAttack)
+        {
+            foreach (var attack in stats.Attacks) if (attack.InitialCooldown > 0) Cooldowns.Add(attack.Choice, attack.InitialCooldown);
+            return stats.FirstAttack;
+        }
 
         IndexedWeightedSet<AttackChoice> choices = new();
         foreach (var c in stats!.Attacks)
@@ -385,6 +391,8 @@ internal class FallenGuardianController : MonoBehaviour
         {
             case AttackChoice.AxeHopscotch:
                 return Coroutines.SleepSeconds(1);
+            case AttackChoice.EmptyTeleport:
+                return Coroutines.Sequence(EmptyTeleport());
             case AttackChoice.GorbStorm:
                 return Coroutines.Sequence(GorbStorm());
             case AttackChoice.RainingPancakes:
@@ -399,6 +407,48 @@ internal class FallenGuardianController : MonoBehaviour
                 KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
                 return Coroutines.SleepSeconds(1);
         }
+    }
+
+    private IEnumerator<CoroutineElement> EmptyTeleport()
+    {
+        var stats = this.stats!.EmptyTeleportStats!;
+
+        Vector2 ChoosePos()
+        {
+            Vector2 kPos = HeroController.instance.transform.position;
+            for (int i = 0; i < 100; i++)
+            {
+                var x = Random.Range(Bounds().min.x + stats.XBuffer, Bounds().max.x - stats.XBuffer);
+                var y = Bounds().min.y + Random.Range(stats.HeightMin, stats.HeightMax);
+                Vector2 pos = new(x, y);
+
+                var dist = (pos - kPos).magnitude;
+                if (dist < stats.DistanceMin || dist > stats.DistanceMax) continue;
+
+                return pos;
+            }
+
+            List<float> xs = [];
+            var x1 = kPos.x - (stats.DistanceMin + stats.DistanceMax) / 2;
+            if (x1 > Bounds().min.x + stats.XBuffer) xs.Add(x1);
+            var x2 = kPos.x + (stats.DistanceMin + stats.DistanceMax) / 2;
+            if (x2 < Bounds().max.x - stats.XBuffer) xs.Add(x2);
+
+            return new(xs.Choose(), Bounds().min.y + Random.Range(stats.HeightMin, stats.HeightMax));
+        }
+
+        var pos = ChoosePos();
+
+        transform.position = pos;
+        FacePlayer();
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, ToSlashAnticLoopController!]));
+
+        stayFacing = true;
+        yield return Coroutines.OneOf(Coroutines.SleepSeconds(Random.Range(stats.WaitToTeleOutMin, stats.WaitToTeleOutMax)), OnTakeDamage());
+        stayFacing = false;
+
+        animator!.runtimeAnimatorController = TeleportOutController!;
+        yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
     private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
@@ -922,5 +972,11 @@ internal class FallenGuardianController : MonoBehaviour
         var prev = OnDiveLand;
         OnDiveLand = null;
         prev?.Invoke(new(b.center.x, Bounds().min.y));
+    }
+
+    private CoroutineElement OnTakeDamage()
+    {
+        var prev = healthManager!.hp;
+        return Coroutines.SleepUntil(() => healthManager!.hp < prev);
     }
 }

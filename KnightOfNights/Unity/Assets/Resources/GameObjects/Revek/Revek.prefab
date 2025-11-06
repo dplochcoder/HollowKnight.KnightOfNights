@@ -18,7 +18,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &2483170258698194432
 Transform:
   m_ObjectHideFlags: 0
@@ -164,7 +164,7 @@ SpriteRenderer:
   m_SortingLayerID: 1270309357
   m_SortingLayer: 5
   m_SortingOrder: 0
-  m_Sprite: {fileID: 21300000, guid: fb4cf3f3a069ada45a9c16e2fe8c6afa, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 6d65fd97f453de54594d2337698241ae, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -340,7 +340,7 @@ Animator:
   m_GameObject: {fileID: 7989141326161804240}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 4042bc5a9deeb504094fe5d59e14ccf2, type: 2}
+  m_Controller: {fileID: 9100000, guid: 495ea130aaf07b94ebff099420bcccca, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -466,6 +466,7 @@ MonoBehaviour:
   SwordToSpellController: {fileID: 9100000, guid: ad34102d403381248bdc760f7b4a8619, type: 2}
   TeleportInController: {fileID: 9100000, guid: f3e69d178161d7f4e8a28c20e4350c55, type: 2}
   TeleportOutController: {fileID: 9100000, guid: eb3efaa58dad0dd429640f5482ce9810, type: 2}
+  ToSlashAnticLoopController: {fileID: 9100000, guid: 495ea130aaf07b94ebff099420bcccca, type: 2}
   PhaseStats:
   - {fileID: 6148910342374127532}
   - {fileID: 1758648912265112720}

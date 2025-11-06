@@ -31,6 +31,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public UnityEngine.RuntimeAnimatorController SwordToSpellController;
         public UnityEngine.RuntimeAnimatorController TeleportInController;
         public UnityEngine.RuntimeAnimatorController TeleportOutController;
+        public UnityEngine.RuntimeAnimatorController ToSlashAnticLoopController;
         public System.Collections.Generic.List<FallenGuardianPhaseStats> PhaseStats;
         public void CastSpellEvent() { }
         public void DiveEvent() { }

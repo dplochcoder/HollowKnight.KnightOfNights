@@ -17,6 +17,19 @@ internal class DiveStats : MonoBehaviour
 }
 
 [Shim]
+internal class EmptyTeleportStats : MonoBehaviour
+{
+    [ShimField] public float DistanceMax;
+    [ShimField] public float DistanceMin;
+    [ShimField] public float HeightMax;
+    [ShimField] public float HeightMin;
+    [ShimField] public float GracePeriod;
+    [ShimField] public float WaitToTeleOutMax;
+    [ShimField] public float WaitToTeleOutMin;
+    [ShimField] public float XBuffer;
+}
+
+[Shim]
 internal class StaggerStats : MonoBehaviour
 {
     [ShimField] public float GracePeriod;
@@ -36,6 +49,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
 
     [ShimField] public DiveStats? DiveStats;
+    [ShimField] public EmptyTeleportStats? EmptyTeleportStats;
     [ShimField] public GorbStormStats? GorbStormStats;
     [ShimField] public RainingPancakesStats? RainingPancakesStats;
     [ShimField] public StaggerStats? StaggerStats;
