@@ -614,6 +614,30 @@ internal class FallenGuardianController : MonoBehaviour
         {
             void DoTeleport()
             {
+                
+            }
+
+            // Generate waves forwards, spawn them in reverse then fire them forwards.
+            int numWaves = i + 1;
+            var spawns = GeneratePancakeSpawns(numWaves);
+            float y = Bounds().min.y + stats.PancakeY;
+            float pitch = 0.85f;
+            float z = 0.01f * (numWaves - 1);
+
+            List<List<Pancake>> waves = [];
+            for (int j = 0; j < numWaves; j++)
+            {
+                waves.Add(SpawnPancakes(spawns[numWaves - 1 - j], y, z, pitch));
+
+                y -= stats.PancakeYIncrement;
+                z -= 0.01f;
+                pitch += stats.PancakePitchIncrement;
+                if (j != numWaves - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
+            }
+            waves.Reverse();
+
+            gameObject.DoAfter(() =>
+            {
                 Vector3 pos = Vector3.zero;
                 for (int i = 0; i < 10; i++)
                 {
@@ -633,34 +657,7 @@ internal class FallenGuardianController : MonoBehaviour
                 transform.position = pos;
                 FacePlayer(true);
                 this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToDiveAnticController!]));
-            }
-
-            if (i == 0)
-            {
-                DoTeleport();
-                yield return Coroutines.SleepSeconds(stats.WaitAfterFirstTeleport);
-            }
-
-            // Generate waves forwards, spawn them in reverse then fire them forwards.
-            int numWaves = 2 + i;
-            var spawns = GeneratePancakeSpawns(numWaves);
-            float y = Bounds().min.y + stats.PancakeY;
-            float pitch = 0.85f;
-            float z = 0.01f * (numWaves - 1);
-
-            List<List<Pancake>> waves = [];
-            for (int j = 0; j < numWaves; j++)
-            {
-                waves.Add(SpawnPancakes(spawns[numWaves - 1 - j], y, z, pitch));
-
-                y -= stats.PancakeYIncrement;
-                z -= 0.01f;
-                pitch += stats.PancakePitchIncrement;
-                if (j != numWaves - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenWaveSpawns);
-            }
-            waves.Reverse();
-
-            if (i != 0) gameObject.DoAfter(DoTeleport, stats.WaitAfterSpawnForTeleport);
+            }, stats.WaitAfterSpawnForTeleport);
 
             yield return Coroutines.SleepSeconds(stats.WaitAfterLastWaveSpawn);
             for (int j = 0; j < waves.Count; j++)
