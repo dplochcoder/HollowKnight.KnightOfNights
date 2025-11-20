@@ -34,6 +34,7 @@ Transform:
   - {fileID: 4952770570454860908}
   - {fileID: 6010507052436451879}
   - {fileID: 8534862928656139355}
+  - {fileID: 1004677016769305315}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -50,18 +51,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MinHP: 1800
-  FirstAttack: 4
+  FirstAttack: 5
   Attacks:
   - {fileID: 807538454964093753}
   - {fileID: 404081514580924327}
   - {fileID: 4307519830915032430}
   - {fileID: 5596897245960897113}
+  - {fileID: 434282296705944439}
   DiveStats: {fileID: 3728819409160070971}
   EmptyTeleportStats: {fileID: 2956078922529798382}
   GorbStormStats: {fileID: 1720482504391799160}
   RainingPancakesStats: {fileID: 2393960190602140730}
   StaggerStats: {fileID: 1217171236579124090}
   UltraInstinctStats: {fileID: 605255954292065798}
+  XeroArmadaStats: {fileID: 1048964334504136048}
 --- !u!1 &2206071225364861104
 GameObject:
   m_ObjectHideFlags: 0
@@ -106,7 +109,7 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Choice: 2
+  Choice: 3
   Weight: 1
   Cooldown: 2
   InitialCooldown: 0
@@ -248,6 +251,99 @@ MonoBehaviour:
   ShockwaveYScale: 1.25
   ShockwaveSpeed: 40
   TallShockwaveSpeed: 16
+--- !u!1 &6315989308893004562
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1004677016769305315}
+  - component: {fileID: 434282296705944439}
+  - component: {fileID: 1048964334504136048}
+  m_Layer: 0
+  m_Name: XeroArmada
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1004677016769305315
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315989308893004562}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 6
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &434282296705944439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315989308893004562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 6
+  Weight: 0.75
+  Cooldown: 3
+  InitialCooldown: 2
+  WeightIncrease: 0.25
+  ForbiddenPredecessors: 03000000
+--- !u!114 &1048964334504136048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6315989308893004562}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -2108150118, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BobPeriod: 1.8
+  BobRadius: 0.3
+  GracePeriod: 0.85
+  HeightMax: 10.5
+  HeightMin: 8.5
+  NailXInitialSpace: 2
+  NailXSpace: 1.3
+  NailYInitialSpace: -0.25
+  NailYSpace: 0.25
+  ProjectileDecelerateTime: 0.3
+  ProjectileInitTime: 0.45
+  ProjectileHeightMax: 7.5
+  ProjectileHeightMin: 0
+  ProjectilePointTime: 0.2
+  ProjectileReturnDeceleration: 0.85
+  ProjectileReturnPauseDeceleration: 0.9
+  ProjectileReturnPauseTime: 0.25
+  ProjectileShootTime: 0.5
+  ProjectileSpeed: 46
+  ProjectileSpinTime: 0.35
+  WaitBetweenNailFires: 0.3
+  WaitBetweenNailSpawns: 0.1
+  WaitInitial: 0.6
+  WaitLastSpawnToMove: 1.15
+  WaitLastSpawnToFire: 0.65
+  XBuffer: 8.5
+  XMoveAccel: 25
+  XMoveDuration: 8
+  XMoveSpeed: 7
+  XRangeMin: 6
+  XRangeMax: 10
 --- !u!1 &6652528314850364912
 GameObject:
   m_ObjectHideFlags: 0
@@ -292,7 +388,7 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Choice: 4
+  Choice: 5
   Weight: 1
   Cooldown: 3
   InitialCooldown: 0
@@ -429,7 +525,7 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  Choice: 1
+  Choice: 2
   Weight: 1
   Cooldown: 2
   InitialCooldown: 0

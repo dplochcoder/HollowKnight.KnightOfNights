@@ -19,7 +19,7 @@ internal class Bobber : MonoBehaviour
         this.period = period;
         timer = upFirst ? 0 : (period / 2);
 
-        this.enabled = true;
+        enabled = true;
     }
 
     internal void ResetRandom(float radius, float period) => Reset(radius, period, MathExt.CoinFlip());
@@ -30,11 +30,10 @@ internal class Bobber : MonoBehaviour
         timer += Time.deltaTime;
         float y2 = ComputeY(timer);
 
-        var p = transform.position;
-        p.y += y2 - y1;
-        if (rigidbody != null) rigidbody.MovePosition(p);
-        else transform.position = p;
+        transform.Translate(new(0, y2 - y1), Space.World);
     }
+
+    internal float OffsetY() => ComputeY(timer);
 
     private float ComputeY(float time) => radius * Mathf.Sin(2 * Mathf.PI * time / period);
 }

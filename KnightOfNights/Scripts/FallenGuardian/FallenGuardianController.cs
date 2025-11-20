@@ -86,6 +86,7 @@ internal class FallenGuardianController : MonoBehaviour
     private Animator? animator;
     private AudioSource? audio;
     private Bobber? bobber;
+    private YFixer? yFixer;
     private PancakePool? pancakePool;
 
     private ParticleSystem? idleParticles;
@@ -115,6 +116,8 @@ internal class FallenGuardianController : MonoBehaviour
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
         bobber = gameObject.AddComponent<Bobber>();
         bobber.enabled = false;
+        yFixer = gameObject.AddComponent<YFixer>();
+        yFixer.enabled = false;
         pancakePool = gameObject.AddComponent<PancakePool>();
 
         DiveWarningParticles?.FixSpawnBug();
@@ -379,7 +382,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = null;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.XeroArmada;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -402,7 +405,7 @@ internal class FallenGuardianController : MonoBehaviour
             case AttackChoice.UltraInstinct:
                 return Coroutines.Sequence(UltraInstinct());
             case AttackChoice.XeroArmada:
-                return Coroutines.SleepSeconds(1);
+                return Coroutines.Sequence(XeroArmada());
             default:
                 KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
                 return Coroutines.SleepSeconds(1);
@@ -825,6 +828,179 @@ internal class FallenGuardianController : MonoBehaviour
         }
 
         yield return Coroutines.SleepSeconds(stats.Tail);
+    }
+
+    private const int NUM_XERO_NAILS = 6;
+
+    private readonly List<GameObject> xeroNailLeftSpawns = [];
+    private readonly List<GameObject> xeroNailRightSpawns = [];
+
+    private void CreateXeroNailSpawns()
+    {
+        if (xeroNailLeftSpawns.Count > 0) return;
+
+        var stats = this.stats!.XeroArmadaStats!;
+
+        float xOff = stats.NailXInitialSpace;
+        float yOff = stats.NailYInitialSpace;
+        for (int i = 0; i < NUM_XERO_NAILS; i++)
+        {
+            GameObject left = new();
+            left.SetParent(gameObject);
+            left.transform.localPosition = new(-xOff, yOff);
+            xeroNailLeftSpawns.Add(left);
+
+            GameObject right = new();
+            right.SetParent(gameObject);
+            right.transform.localPosition = new(xOff, yOff);
+            xeroNailRightSpawns.Add(right);
+
+            xOff += stats.NailXSpace;
+            yOff += stats.NailYSpace;
+        }
+    }
+
+    private IEnumerator<CoroutineElement> XeroArmada()
+    {
+        var stats = this.stats!.XeroArmadaStats!;
+
+        bool ChoosePosDirected(bool left, out Vector2 pos)
+        {
+            var kX = HeroController.instance.transform.position.x;
+            pos = Vector2.zero;
+
+            float min = kX + (left ? -stats.XRangeMax : stats.XRangeMin);
+            min = Mathf.Max(min, Bounds().min.x + stats.XBuffer);
+            float max = kX + (left ? -stats.XRangeMin : stats.XRangeMax);
+            max = Mathf.Min(max, Bounds().max.x - stats.XBuffer);
+
+            if (min >= max) return false;
+
+            pos = new(Random.Range(min, max), Bounds().min.y + Random.Range(stats.HeightMin, stats.HeightMax));
+            return true;
+        }
+        Vector2 ChoosePos()
+        {
+            bool left = MathExt.CoinFlip();
+            if (ChoosePosDirected(left, out var pos)) return pos;
+
+            ChoosePosDirected(!left, out pos);
+            return pos;
+        }
+
+        var pos = ChoosePos();
+        yFixer?.Reset(pos.y, 1.5f);
+
+        transform.position = pos;
+        FacePlayer();
+
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SpellStartToLoopController!]));
+        yield return Coroutines.SleepSeconds(stats.WaitInitial);
+
+        CreateXeroNailSpawns();
+
+        List<XeroNail> left = [];
+        List<XeroNail> right = [];
+        KnightOfNightsPreloader.Instance.DreamEnterClip?.PlayAtPosition(transform.position);
+        for (int i = 0; i < NUM_XERO_NAILS; i++)
+        {
+            XeroNailSpec specs = new()
+            {
+                initTime = stats.ProjectileInitTime,
+                decelerateTime = stats.ProjectileDecelerateTime,
+                maxY = Bounds().min.y + stats.ProjectileHeightMax,
+                minY = Bounds().min.y + stats.ProjectileHeightMin,
+                returnDeceleration = stats.ProjectileReturnDeceleration,
+                returnPauseDeceleration = stats.ProjectileReturnPauseDeceleration,
+                returnPauseTime = stats.ProjectileReturnPauseTime,
+                pointTime = stats.ProjectilePointTime,
+                shootTime = stats.ProjectileShootTime,
+                speed = stats.ProjectileSpeed,
+                spinTime = stats.ProjectileSpinTime
+            };
+
+            left.Add(XeroNail.Spawn(xeroNailLeftSpawns[i], specs));
+            SpawnTeleportBurst(0.5f, left.Last().Position);
+            right.Add(XeroNail.Spawn(xeroNailRightSpawns[i], specs));
+            SpawnTeleportBurst(0.5f, right.Last().Position);
+
+            if (i != NUM_XERO_NAILS - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenNailSpawns);
+        }
+
+        if (MathExt.CoinFlip())
+        {
+            left.Reverse();
+            right.Reverse();
+        }
+
+        IEnumerator<CoroutineElement> FireRoutine()
+        {
+            yield return Coroutines.SleepSeconds(stats.WaitLastSpawnToFire);
+
+            var (a, b) = (left, right);
+            if (MathExt.CoinFlip()) (a, b) = (b, a);
+
+            List<XeroNail> queue = [];
+            for (int j = 0; j < 2; j++)
+            {
+                for (int kk = 0; kk < a.Count; kk++)
+                {
+                    queue.RemoveWhere(n => n.Attack());
+                    var nail = a[kk];
+                    if (!nail.Attack()) queue.Add(nail);
+                    yield return Coroutines.SleepSeconds(stats.WaitBetweenNailFires);
+
+                    queue.RemoveWhere(n => n.Attack());
+                    nail = b[kk];
+                    if (!nail.Attack()) queue.Add(nail);
+                    yield return Coroutines.SleepSeconds(stats.WaitBetweenNailFires);
+                }
+            }
+        }
+        this.StartLibCoroutine(FireRoutine());
+
+        yield return Coroutines.SleepSeconds(stats.WaitLastSpawnToMove);
+        bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
+
+        Wrapped<float> speed = new(0);
+        Wrapped<bool> goRight = new(transform.position.x < Bounds().center.x);
+        yield return Coroutines.SleepSecondsUpdateDelta(stats.XMoveDuration, delta =>
+        {
+            if (goRight.Value)
+            {
+                if (transform.position.x > Bounds().max.x - stats.XBuffer) goRight.Value = false;
+            }
+            else if (transform.position.x < Bounds().min.x + stats.XBuffer) goRight.Value = true;
+
+            speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, goRight.Value ? stats.XMoveSpeed : -stats.XMoveSpeed);
+
+            rigidbody!.velocity = rigidbody.velocity with { x = speed.Value };
+            return false;
+        });
+
+        IEnumerator<CoroutineElement> DespawnRoutine()
+        {
+            for (int i = 0; i < left.Count; i++)
+            {
+                left[i].Despawn();
+                SpawnTeleportBurst(0.5f, left[i].Position);
+                right[i].Despawn();
+                SpawnTeleportBurst(0.5f, right[i].Position);
+                yield return Coroutines.SleepSeconds(stats.WaitBetweenNailSpawns);
+            }
+        }
+        this.StartLibCoroutine(DespawnRoutine());
+
+        bobber!.enabled = false;
+        yFixer!.enabled = false;
+
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
+        yield return Coroutines.SleepSecondsUpdateDelta(stats.GracePeriod, delta =>
+        {
+            speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, 0);
+            rigidbody!.velocity = rigidbody.velocity with { x = speed.Value };
+            return false;
+        });
     }
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;

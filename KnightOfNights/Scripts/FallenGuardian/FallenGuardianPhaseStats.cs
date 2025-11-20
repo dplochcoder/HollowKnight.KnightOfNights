@@ -54,6 +54,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public RainingPancakesStats? RainingPancakesStats;
     [ShimField] public StaggerStats? StaggerStats;
     [ShimField] public UltraInstinctStats? UltraInstinctStats;
+    [ShimField] public XeroArmadaStats? XeroArmadaStats;
 
     internal bool DidFirstAttack = false;
 }
