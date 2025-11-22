@@ -277,7 +277,7 @@ MonoBehaviour:
   ExpansionStart: 1.5
   ExpansionStartSpeed: 0
   ExpansionTopSpeed: 8
-  GracePeriod: 0.75
+  GracePeriod: 1
   NumDaggerSpawns: 12
   NumShieldWaves: 7
   RotationOffsetPerWave: 36
