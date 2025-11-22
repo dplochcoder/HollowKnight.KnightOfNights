@@ -22,7 +22,7 @@ internal class YFixer : MonoBehaviour
         if (gameObject.TryGetComponent<Bobber>(out var bobber) && bobber.enabled) target += bobber.OffsetY();
 
         var pos = transform.position;
-        pos.y += (targetY - pos.y) * ratioPerSecond * Time.fixedDeltaTime;
+        pos.y += (target - pos.y) * ratioPerSecond * Time.fixedDeltaTime;
         transform.Translate(pos - transform.position, Space.World);
     }
 }

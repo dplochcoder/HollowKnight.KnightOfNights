@@ -11,6 +11,7 @@ internal class FallenGuardianContainer : MonoBehaviour
     [ShimField] public HeroDetectorProxy? Trigger;
     [ShimField] public FallenGuardianController? Boss;
     [ShimField] public BoxCollider2D? Arena;
+    [ShimField] public BoxCollider2D? DaggerBox;
     [ShimField] public BoxCollider2D? GorbStormFinaleBox;
 
     private void OnEnable() => StartCoroutine(Run());

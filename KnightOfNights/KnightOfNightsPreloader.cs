@@ -1,4 +1,5 @@
 ﻿using ItemChanger;
+using ItemChanger.Extensions;
 using PurenailCore.ModUtil;
 using System.Collections.Generic;
 using UnityEngine;
@@ -45,8 +46,10 @@ internal class KnightOfNightsPreloader : Preloader
     [PrefabPreload(SceneNames.Deepnest_East_10, "Shot Markoth Nail")]
     public GameObject? MarkothNail { get; private set; }
 
-    [PrefabPreload(SceneNames.Deepnest_East_10, "Markoth Shield/Shield")]
-    public GameObject? MarkothShield { get; private set; }
+    [PrefabPreload(SceneNames.Deepnest_East_10, "Markoth Shield")]
+    public GameObject? MarkothShieldParent { get; private set; }
+
+    public GameObject? MarkothShield => MarkothShieldParent?.FindChild("Shield");
 
     [PrefabPreload(SceneNames.Fungus1_35, "No Eyes Head")]
     public GameObject? NoEyesHead { get; private set; }

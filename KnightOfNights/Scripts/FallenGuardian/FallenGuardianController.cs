@@ -86,6 +86,7 @@ internal class FallenGuardianController : MonoBehaviour
     private Animator? animator;
     private AudioSource? audio;
     private Bobber? bobber;
+    private XFixer? xFixer;
     private YFixer? yFixer;
     private PancakePool? pancakePool;
 
@@ -116,6 +117,8 @@ internal class FallenGuardianController : MonoBehaviour
         audio.outputAudioMixerGroup = AudioMixerGroups.Actors();
         bobber = gameObject.AddComponent<Bobber>();
         bobber.enabled = false;
+        xFixer = gameObject.AddComponent<XFixer>();
+        xFixer.enabled = false;
         yFixer = gameObject.AddComponent<YFixer>();
         yFixer.enabled = false;
         pancakePool = gameObject.AddComponent<PancakePool>();
@@ -382,7 +385,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.XeroArmada;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.ShieldCyclone;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -401,7 +404,7 @@ internal class FallenGuardianController : MonoBehaviour
             case AttackChoice.RainingPancakes:
                 return Coroutines.Sequence(RainingPancakes());
             case AttackChoice.ShieldCyclone:
-                return Coroutines.SleepSeconds(1);
+                return Coroutines.Sequence(ShieldCyclone());
             case AttackChoice.UltraInstinct:
                 return Coroutines.Sequence(UltraInstinct());
             case AttackChoice.XeroArmada:
@@ -742,6 +745,65 @@ internal class FallenGuardianController : MonoBehaviour
 
             yield return Coroutines.SleepSeconds(i == 2 ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
         }
+    }
+
+    private IEnumerator<CoroutineElement> ShieldCyclone()
+    {
+        var stats = this.stats!.ShieldCycloneStats!;
+
+        List<MarkothNail> nails = [];
+        for (int i = 0; i < stats.NumDaggerSpawns; i++)
+        {
+            if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenDaggerSpawns);
+            nails.Add(MarkothNail.Spawn(stats, Container!.DaggerBox!));
+        }
+
+        yield return Coroutines.SleepSeconds(stats.WaitLastDaggerSpawnToShieldTeleport);
+
+        Vector2 ChooseSpawn()
+        {
+            List<Vector2> options = [];
+            var cx = Bounds().center.x;
+            var y = Bounds().min.y + stats.CenterHeight;
+            options.Add(new(cx - stats.CenterXRange, y));
+            options.Add(new(cx, y));
+            options.Add(new(cx + stats.CenterXRange, y));
+
+            var kPos = HeroController.instance.transform.position.To2d();
+            return options.Where(p => (kPos - p).magnitude > stats.CycloneMinDistance).OrderBy(p => (kPos - p).magnitude).First();
+        }
+
+        var centerPos = ChooseSpawn();
+        transform.position = centerPos;
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToSpellController!, SpellStartToLoopController!]));
+
+        bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
+        xFixer?.Reset(centerPos.x, 1.5f);
+        yFixer?.Reset(centerPos.y, 1.5f);
+
+        yield return Coroutines.SleepSeconds(stats.WaitAfterShieldTeleport);
+        KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(transform.position);
+
+        float offset = Random.Range(0f, 360f);
+        float flipOffset = offset;
+        List<MarkothShieldWave> waves = [];
+        bool flipped = MathExt.CoinFlip();
+        for (int i = 0; i < stats.NumShieldWaves; i++)
+        {
+            if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenShieldWaves);
+
+            SpawnTeleportBurst(0.75f);
+            waves.Add(MarkothShieldWave.Spawn(stats, flipped ? offset : flipOffset, centerPos, flipped));
+
+            if (flipped) flipOffset -= stats.RotationOffsetPerWave;
+            else offset += stats.RotationOffsetPerWave;
+            flipped = !flipped;
+        }
+
+        yield return Coroutines.SleepSeconds(stats.WaitAfterLastShieldSpawn);
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
+
+        yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
     private static List<List<int>> GenUltraInstinctGroupings()

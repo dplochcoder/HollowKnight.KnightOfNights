@@ -35,6 +35,7 @@ Transform:
   - {fileID: 6010507052436451879}
   - {fileID: 8534862928656139355}
   - {fileID: 1004677016769305315}
+  - {fileID: 2941213674367425441}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -62,6 +63,7 @@ MonoBehaviour:
   EmptyTeleportStats: {fileID: 2956078922529798382}
   GorbStormStats: {fileID: 1720482504391799160}
   RainingPancakesStats: {fileID: 2393960190602140730}
+  ShieldCycloneStats: {fileID: 2898286881439553022}
   StaggerStats: {fileID: 1217171236579124090}
   UltraInstinctStats: {fileID: 605255954292065798}
   XeroArmadaStats: {fileID: 1048964334504136048}
@@ -201,6 +203,93 @@ MonoBehaviour:
   NextAttackDelay: 0.85
   OscillationPeriod: 1.75
   OscillationRadius: 0.25
+--- !u!1 &3732090500643452068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2941213674367425441}
+  - component: {fileID: 7358773278708957545}
+  - component: {fileID: 2898286881439553022}
+  m_Layer: 0
+  m_Name: ShieldCyclone
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2941213674367425441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3732090500643452068}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 7
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7358773278708957545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3732090500643452068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 4
+  Weight: 1.5
+  Cooldown: 3
+  InitialCooldown: 0
+  WeightIncrease: 0.75
+  ForbiddenPredecessors: 06000000
+--- !u!114 &2898286881439553022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3732090500643452068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1886151078, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BobPeriod: 2.5
+  BobRadius: 0.4
+  CenterHeight: 10
+  CenterXRange: 8
+  CycloneMinDistance: 7
+  DaggerMaxDistance: 11
+  DaggerMinDistance: 7
+  ExpansionAccel: 16
+  ExpansionLimit: 40
+  ExpansionStart: 1.5
+  ExpansionStartSpeed: 0
+  ExpansionTopSpeed: 8
+  GracePeriod: 0.75
+  NumDaggerSpawns: 12
+  NumShieldWaves: 7
+  RotationOffsetPerWave: 36
+  RotationSpeedDecel: 240
+  RotationSpeedMinimum: 110
+  RotationSpeedStart: 240
+  ShieldsPerWave: 5
+  WaitAfterShieldTeleport: 1.15
+  WaitAfterLastShieldSpawn: 1.5
+  WaitBetweenDaggerSpawns: 0.35
+  WaitBetweenShieldWaves: 0.75
+  WaitLastDaggerSpawnToShieldTeleport: 0.75
 --- !u!1 &4344641435690619969
 GameObject:
   m_ObjectHideFlags: 0
@@ -300,7 +389,7 @@ MonoBehaviour:
   Cooldown: 3
   InitialCooldown: 2
   WeightIncrease: 0.25
-  ForbiddenPredecessors: 03000000
+  ForbiddenPredecessors: 04000000
 --- !u!114 &1048964334504136048
 MonoBehaviour:
   m_ObjectHideFlags: 0

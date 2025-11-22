@@ -164,6 +164,58 @@ namespace KnightOfNights.Scripts.SharedLib
             }
         }
 
+        public static void SimpleAccelerate(this ref float pos, ref float velocity, float maxSpeed, float accel, float deltaTime)
+        {
+            float aTime = 0;
+            float vel2 = velocity;
+            if (Mathf.Abs(velocity) < maxSpeed)
+            {
+                aTime = (maxSpeed - Mathf.Abs(velocity)) / accel;
+                if (aTime > deltaTime)
+                {
+                    aTime = deltaTime;
+                    vel2 = velocity + Mathf.Sign(velocity) * accel * deltaTime;
+                }
+                else
+                {
+                    aTime = deltaTime;
+                    vel2 = maxSpeed * Mathf.Sign(velocity);
+                }
+            }
+
+            pos += (velocity + vel2) / 2 * aTime;
+            velocity = vel2;
+            float rTime = deltaTime - aTime;
+
+            if (rTime > 0) pos += rTime * velocity;
+        }
+
+        public static void SimpleDecelerate(this ref float pos, ref float velocity, float minSpeed, float decel, float deltaTime)
+        {
+            float dTime = 0;
+            float vel2 = velocity;
+            if (Mathf.Abs(velocity) > minSpeed)
+            {
+                dTime = (Mathf.Abs(velocity) - minSpeed) / decel;
+                if (dTime > deltaTime)
+                {
+                    dTime = deltaTime;
+                    vel2 = velocity - Mathf.Sign(velocity) * decel * deltaTime;
+                }
+                else
+                {
+                    dTime = deltaTime;
+                    vel2 = minSpeed * Mathf.Sign(velocity);
+                }
+            }
+
+            pos += (velocity + vel2) / 2 * dTime;
+            velocity = vel2;
+            float rTime = deltaTime - dTime;
+
+            if (rTime > 0) pos += rTime * velocity;
+        }
+
         public static void AdvanceAngle(this ref float self, float delta) => self = ClampAngle(self + delta, 0, 360);
 
         public static float AdvanceFloatAbs(this ref float self, float delta, float target)
