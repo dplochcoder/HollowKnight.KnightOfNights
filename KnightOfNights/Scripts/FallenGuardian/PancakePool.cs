@@ -49,10 +49,8 @@ internal class PancakePool : MonoBehaviour
 
         fsm.GetFsmState("Land").AddFirstAction(new Lambda(() =>
         {
-            if (landClipTimer > 0 || !playSound.Value) return;
-
+            if (!playSound.Value) return;
             KnightOfNightsPreloader.Instance.ElderHuImpactClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, fsm.gameObject.transform.position.y));
-            landClipTimer = 0.1f;
         }));
 
         return obj;
@@ -61,11 +59,8 @@ internal class PancakePool : MonoBehaviour
     // Invoke the returned action to fire the pancake.
     public Pancake SpawnPancake(Vector3 pos, float launchPitch, float speed, float minY, bool playSound)
     {
-        if (spawnClipTimer == 0)
-        {
+        if (playSound)
             KnightOfNightsPreloader.Instance.MageShotClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, pos.y), launchPitch);
-            spawnClipTimer = 0.1f;
-        }
 
         var obj = inactive.Count > 0 ? inactive.Dequeue() : SpawnNew(pos);
 
@@ -86,16 +81,8 @@ internal class PancakePool : MonoBehaviour
         return new(obj.LocateMyFSM("Control").FsmVariables.GetFsmBool("Fire"));
     }
 
-    private float spawnClipTimer;
-    private float landClipTimer;
-
     private void Update()
     {
-        spawnClipTimer -= Time.deltaTime;
-        if (spawnClipTimer < 0) spawnClipTimer = 0;
-        landClipTimer -= Time.deltaTime;
-        if (landClipTimer < 0) landClipTimer = 0;
-
         foreach (var obj in inactiveOneFrame) inactive.Enqueue(obj);
         inactiveOneFrame.Clear();
 

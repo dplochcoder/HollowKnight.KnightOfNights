@@ -761,7 +761,7 @@ internal class FallenGuardianController : MonoBehaviour
             if (mainPlatform && !spawns[i]) continue;
 
             var minY = Bounds().min.y - (mainPlatform ? 0 : 8);
-            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, mainPlatform));
+            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, playSound: i == 0));
         }
         return ret;
     }
