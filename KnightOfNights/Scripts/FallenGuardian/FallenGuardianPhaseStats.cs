@@ -54,6 +54,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public GorbStormStats? GorbStormStats;
     [ShimField] public RainingPancakesStats? RainingPancakesStats;
     [ShimField] public ShieldCycloneStats? ShieldCycloneStats;
+    [ShimField] public SlashAmbushStats? SlashAmbushStats;
     [ShimField] public StaggerStats? StaggerStats;
     [ShimField] public UltraInstinctStats? UltraInstinctStats;
     [ShimField] public XeroArmadaStats? XeroArmadaStats;

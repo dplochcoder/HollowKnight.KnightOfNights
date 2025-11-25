@@ -34,6 +34,9 @@ internal class KnightOfNightsPreloader : Preloader
     [PrefabPreload(SceneNames.Fungus1_35, "Shot Slug Spear")]
     public GameObject? GorbSpear { get; private set; }
 
+    [PrefabPreload(SceneNames.RestingGrounds_08, "hornet_parry_prepare")]
+    public AudioClip? HornetParryClip { get; private set; }
+
     [PrefabPreload(SceneNames.Room_Colosseum_Gold, "mage_knight_projectile_shoot")]
     public AudioClip? MageShotClip { get; private set; }
 
@@ -78,6 +81,9 @@ internal class KnightOfNightsPreloader : Preloader
 
     [PrefabPreload(SceneNames.Crossroads_10_boss, "Shockwave Wave")]
     public GameObject? Shockwave { get; private set; }
+
+    [PrefabPreload(SceneNames.RestingGrounds_08, "brkn_wand_horizontal_dash_dash")]
+    public AudioClip? SlashAttackClip { get; private set; }
 
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }

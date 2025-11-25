@@ -16,15 +16,16 @@ using UnityEngine;
 namespace KnightOfNights.Scripts.FallenGuardian;
 
 [Shim]
-internal enum AttackChoice
+internal enum AttackChoice : int
 {
-    AxeHopscotch,
-    EmptyTeleport,
-    GorbStorm,
-    RainingPancakes,
-    ShieldCyclone,
-    UltraInstinct,
-    XeroArmada
+    AxeHopscotch = 0,
+    EmptyTeleport = 1,
+    GorbStorm = 2,
+    RainingPancakes = 3,
+    ShieldCyclone = 4,
+    SlashAmbush = 7,
+    UltraInstinct = 5,
+    XeroArmada = 6
 }
 
 [Shim]
@@ -39,7 +40,7 @@ internal class FallenGuardianAttack : MonoBehaviour
 }
 
 [Shim]
-internal class FallenGuardianController : MonoBehaviour
+internal class FallenGuardianController : MonoBehaviour, IParryResponder
 {
     [ShimField] public FallenGuardianContainer? Container;
 
@@ -57,6 +58,7 @@ internal class FallenGuardianController : MonoBehaviour
     [ShimField] public GameObject? StaggerBurst;
     [ShimField] public GameObject? TeleportBurst;
 
+    [ShimField] public RuntimeAnimatorController? BigSlashController;
     [ShimField] public RuntimeAnimatorController? DiveAnticLoopController;
     [ShimField] public RuntimeAnimatorController? DiveAnticToDiveLoopController;
     [ShimField] public RuntimeAnimatorController? DiveImpactController;
@@ -167,6 +169,23 @@ internal class FallenGuardianController : MonoBehaviour
         UpdateFacePlayer();
     }
 
+    private Vector2 bigSlashVelocity;
+    private float bigSlashDeceleration;
+
+    private void FixedUpdateBigSlashMove()
+    {
+        if (animator!.runtimeAnimatorController != BigSlashController)
+        {
+            bigSlashVelocity = Vector2.zero;
+            return;
+        }
+
+        transform.Translate(bigSlashVelocity * Time.fixedDeltaTime, Space.World);
+        bigSlashVelocity *= bigSlashDeceleration;
+    }
+
+    private void FixedUpdate() => FixedUpdateBigSlashMove();
+
     private IEnumerator<SlashAttackSequence> SpecTutorial()
     {
         yield return new FlippableSlashAttackSequence([
@@ -249,7 +268,7 @@ internal class FallenGuardianController : MonoBehaviour
             var oneof = Coroutines.OneOf(
                 ExecuteAttack(attack),
                 Coroutines.SleepUntil(() => healthManager!.hp <= 0),
-                Coroutines.SleepUntil(() => staggerAttack != null));
+                Coroutines.SleepUntil(() => staggerParams != null));
             yield return oneof;
 
             if (oneof.Choice == 1)
@@ -264,18 +283,36 @@ internal class FallenGuardianController : MonoBehaviour
     }
 
     private int multiParries;
-    private SlashAttack? staggerAttack;
 
-    private bool MaybeStagger(SlashAttack attack)
+    internal record StaggerParams
     {
-        RevekAddons.SpawnSoul(attack!.ParryPos);
-        RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
+        internal Vector2 Pos;
+        internal bool FacingLeft;
+        internal float? DamageDirection;
+        internal float? MagnitudeMultiplier;
+    }
+    private StaggerParams? staggerParams;
+
+    private static StaggerParams MakeStaggerParams(SlashAttack attack) => new()
+    {
+        Pos = attack.ParryPos,
+        FacingLeft = attack.Spec.SpawnOffset.x > 0,
+        DamageDirection = attack.DamageDirection,
+        MagnitudeMultiplier = attack.MagnitudeMultiplier
+    };
+
+    private bool MaybeStagger(SlashAttack attack) => MaybeStagger(MakeStaggerParams(attack));
+
+    private bool MaybeStagger(StaggerParams staggerParams)
+    {
+        RevekAddons.SpawnSoul(staggerParams.Pos);
+        RevekAddons.GetHurtClip().PlayAtPosition(staggerParams.Pos);
 
         if (++multiParries < StaggerCount) return false;
 
         multiParries = 0;
-        staggerAttack = attack;
-        RevekAddons.SpawnSoul(attack.ParryPos);
+        this.staggerParams = staggerParams;
+        RevekAddons.SpawnSoul(staggerParams.Pos);
         return true;
     }
 
@@ -283,15 +320,15 @@ internal class FallenGuardianController : MonoBehaviour
     {
         var stats = this.stats!.StaggerStats!;
 
-        var prevAttack = staggerAttack!;
-        staggerAttack = null;
+        var prevParams = staggerParams!;
+        staggerParams = null;
         OnStagger?.Invoke();
         OnStagger = null;
 
-        var pos = prevAttack.ParryPos.To3d();
+        var pos = prevParams.Pos;
 
         // Force hero distance.
-        var kPos = HeroController.instance.transform.position;
+        Vector2 kPos = HeroController.instance.transform.position;
         if ((pos - kPos).magnitude < StaggerDistance) pos = kPos + (pos - kPos).normalized * StaggerDistance;
 
         // Force above grounds.
@@ -307,12 +344,12 @@ internal class FallenGuardianController : MonoBehaviour
         }
 
         transform.position = pos;
-        transform.localScale = new(prevAttack.Spec.SpawnOffset.x >= 0 ? 1 : -1, 1, 1);
+        transform.localScale = new(prevParams.FacingLeft ? 1 : -1, 1, 1);
         StaggerBurst?.Spawn(pos);
         KnightOfNightsPreloader.Instance.StunEffect!.Spawn(pos);
 
-        if (!recoil!.IsRecoiling && prevAttack.DamageDirection.HasValue && prevAttack.MagnitudeMultiplier.HasValue)
-            recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(prevAttack.DamageDirection.Value), prevAttack.MagnitudeMultiplier.Value);
+        if (!recoil!.IsRecoiling && prevParams.DamageDirection.HasValue && prevParams.MagnitudeMultiplier.HasValue)
+            recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(prevParams.DamageDirection.Value), prevParams.MagnitudeMultiplier.Value);
 
         SetTangible(false);
         animator!.runtimeAnimatorController = StaggerController!;
@@ -337,8 +374,6 @@ internal class FallenGuardianController : MonoBehaviour
 
         transform.position = new(-100, -100);
         yield return Coroutines.SleepSeconds(stats.NextAttackDelay);
-
-        staggerAttack = null;
     }
 
     internal event System.Action? OnDeath;  // Invoked once.
@@ -389,7 +424,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.AxeHopscotch;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.SlashAmbush;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -409,6 +444,8 @@ internal class FallenGuardianController : MonoBehaviour
                 return Coroutines.Sequence(RainingPancakes());
             case AttackChoice.ShieldCyclone:
                 return Coroutines.Sequence(ShieldCyclone());
+            case AttackChoice.SlashAmbush:
+                return Coroutines.Sequence(SlashAmbush());
             case AttackChoice.UltraInstinct:
                 return Coroutines.Sequence(UltraInstinct());
             case AttackChoice.XeroArmada:
@@ -901,6 +938,122 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
+    private static List<List<int>> GenSlashAmbushGroupings()
+    {
+        List<int> template = [0, 0, 1, 1, 2, 2];
+        List<List<int>> ret = [];
+        template.ForEachPermutation(p =>
+        {
+            if (p.IndexOf(1) < p.IndexOf(0) || p.IndexOf(2) < p.IndexOf(1)) return;
+            if (p.Pairs().Any(pair => pair.Item1 == pair.Item2)) return;
+            ret.Add([.. p]);
+        });
+        return ret;
+    }
+
+    private static readonly List<List<int>> SlashAmbushGroupings = GenSlashAmbushGroupings();
+
+    private List<SlashAttackSpec> GenSlashAmbushSpecs()
+    {
+        var stats = this.stats!.SlashAmbushStats!;
+        List<List<SlashAttackSpec>> pools = [[
+            SlashAttackSpec.LEFT.Down(1.25f),
+            SlashAttackSpec.LEFT.Up(1.25f)
+        ], [
+            SlashAttackSpec.RIGHT.Down(1.25f),
+            SlashAttackSpec.RIGHT.Up(1.25f)
+        ], [
+            SlashAttackSpec.HIGH_LEFT,
+            SlashAttackSpec.HIGH_RIGHT
+        ]];
+
+        System.Random r = new();
+        pools.ForEach(l => l.Shuffle(r));
+        pools.Shuffle(r);
+        List<int> indices = [0, 0, 0];
+
+        List<SlashAttackSpec> ret = [];
+        float telegraph = stats.FirstTelegraph;
+        foreach (var group in SlashAmbushGroupings.Choose())
+        {
+            ret.Add(pools[group][indices[group]].WithTelegraph(telegraph).WithSpeed(stats.SlashSpeed).WithDeceleration(stats.SlashDeceleration));
+            indices[group] = (indices[group] + 1) % pools[group].Count;
+            telegraph += stats.TelegraphStagger;
+        }
+        return ret;
+    }
+
+    private bool parried = false;
+    public void Parried(float direction) => parried = true;
+
+    [ShimMethod]
+    public void BigSlashFollowup() => KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(transform.position, 0.9f);
+
+    [ShimMethod]
+    public void BigSlashMove()
+    {
+        var stats = this.stats!.SlashAmbushStats!;
+
+        Vector2 kPos = HeroController.instance.transform.position.To2d() + stats.BigSlashTargetOffset;
+        Vector2 pos = transform.position;
+
+        KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(pos);
+        KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(pos, 1.1f);
+
+        float angle = FacingLeft ? 180 : 0;
+        if (FacingLeft == kPos.x < pos.x)
+            angle = MathExt.ClampAngle((kPos - pos).ToAngle(), angle - stats.BigSlashAngleRange, angle + stats.BigSlashAngleRange);
+
+        bigSlashVelocity = Quaternion.Euler(0, 0, angle) * new Vector3(stats.BigSlashSpeed, 0, 0);
+        bigSlashDeceleration = stats.BigSlashDeceleration;
+    }
+
+    [ShimMethod]
+    public void BigSlashPrepare() => KnightOfNightsPreloader.Instance.HornetParryClip?.PlayAtPosition(transform.position);
+
+    private IEnumerator<CoroutineElement> SlashAmbush()
+    {
+        var stats = this.stats!.SlashAmbushStats!;
+
+        Wrapped<int> parries = new(0);
+        List<SlashAttack> attacks = [.. GenSlashAmbushSpecs().Select(SlashAttack.Spawn)];
+        attacks.ForEach(a =>
+        {
+            a.OnResult += result =>
+            {
+                if (result != SlashAttackResult.PARRIED) return;
+                ++parries.Value;
+            };
+        });
+
+        yield return Coroutines.SleepSeconds(stats.BigSlashDelay);
+
+        var kPos = HeroController.instance.transform.position;
+        bool attackLeft = kPos.x > Bounds().max.x - stats.BigSlashXBuffer || (kPos.x > Bounds().min.x + stats.BigSlashXBuffer && MathExt.CoinFlip());
+
+        Vector2 pos = new(kPos.x + stats.BigSlashSpawnOffset.x * (attackLeft ? 1 : -1), kPos.y + stats.BigSlashSpawnOffset.y);
+
+        transform.position = pos;
+        FacePlayer();
+
+        var choice = Coroutines.OneOf(
+            Coroutines.SleepSeconds(stats.GracePeriod).WithDisposable(Coroutines.PlayAnimations(animator!, [TeleportInController!, BigSlashController!, TeleportOutController!])),
+            Coroutines.SleepUntil(() => parries.Value == attacks.Count).Then(DeferredOnTakeDamage()));
+        yield return choice;
+
+        if (choice.Choice == 1)
+        {
+            FacePlayer();
+            MaybeStagger(new StaggerParams()
+            {
+                Pos = transform.position,
+                FacingLeft = FacingLeft,
+            });
+
+            yield return Coroutines.SleepSeconds(stats.HitGracePeriod);
+        }
+    }
+
     private static List<List<int>> GenUltraInstinctGroupings()
     {
         List<int> template = [0, 0, 0, 1, 1, 1, 2, 2];
@@ -1155,6 +1308,8 @@ internal class FallenGuardianController : MonoBehaviour
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;
 
+    private bool FacingLeft => transform.localScale.x > 0;
+
     private bool FacePlayer(bool reverse = false)
     {
         var kPos = HeroController.instance.transform.position;
@@ -1308,4 +1463,6 @@ internal class FallenGuardianController : MonoBehaviour
         var prev = healthManager!.hp;
         return Coroutines.SleepUntil(() => healthManager!.hp < prev);
     }
+
+    private CoroutineElement DeferredOnTakeDamage() => Coroutines.Deferred(_ => OnTakeDamage());
 }

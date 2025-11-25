@@ -9,6 +9,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         ShieldCyclone,
         UltraInstinct,
         XeroArmada,
+        SlashAmbush,
         
     }
 }

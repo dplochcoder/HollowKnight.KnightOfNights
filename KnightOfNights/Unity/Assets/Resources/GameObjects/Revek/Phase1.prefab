@@ -126,6 +126,7 @@ Transform:
   - {fileID: 1004677016769305315}
   - {fileID: 2941213674367425441}
   - {fileID: 3557326965417236917}
+  - {fileID: 7051927807146792789}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -155,6 +156,7 @@ MonoBehaviour:
   GorbStormStats: {fileID: 1720482504391799160}
   RainingPancakesStats: {fileID: 2393960190602140730}
   ShieldCycloneStats: {fileID: 2898286881439553022}
+  SlashAmbushStats: {fileID: 8508689667801155758}
   StaggerStats: {fileID: 1217171236579124090}
   UltraInstinctStats: {fileID: 605255954292065798}
   XeroArmadaStats: {fileID: 1048964334504136048}
@@ -573,7 +575,7 @@ MonoBehaviour:
   Cooldown: 3
   InitialCooldown: 0
   WeightIncrease: 0.5
-  ForbiddenPredecessors: 00000000
+  ForbiddenPredecessors: 07000000
 --- !u!114 &605255954292065798
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -748,3 +750,78 @@ MonoBehaviour:
   WaitFirst: 0.75
   WaitSpikeFinale: 0.1
   WaitSpikeSmall: 0.2
+--- !u!1 &8688072018254553474
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7051927807146792789}
+  - component: {fileID: 7350130011251350089}
+  - component: {fileID: 8508689667801155758}
+  m_Layer: 0
+  m_Name: SlashAmbush
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7051927807146792789
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688072018254553474}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 9
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7350130011251350089
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688072018254553474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 7
+  Weight: 1
+  Cooldown: 3
+  InitialCooldown: 3
+  WeightIncrease: 0.5
+  ForbiddenPredecessors: 05000000
+--- !u!114 &8508689667801155758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8688072018254553474}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1250012122, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  BigSlashAngleRange: 25
+  BigSlashDelay: 2.85
+  BigSlashSpawnOffset: {x: 4.75, y: 0.5}
+  BigSlashSpeed: 105
+  BigSlashTargetOffset: {x: 0, y: -0.5}
+  BigSlashXBuffer: 8
+  BigSlashDeceleration: 0.84
+  FirstTelegraph: 0.75
+  GracePeriod: 1.6
+  HitGracePeriod: 1.1
+  SlashSpeed: 180
+  SlashDeceleration: 0.9
+  TelegraphStagger: 0.31

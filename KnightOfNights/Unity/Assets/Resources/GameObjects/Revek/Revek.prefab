@@ -110,6 +110,7 @@ MonoBehaviour:
   m_Script: {fileID: 1517521384, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ParryResponder: {fileID: 7989141326161804240}
 --- !u!1 &1565957682022973564
 GameObject:
   m_ObjectHideFlags: 0
@@ -210,6 +211,7 @@ MonoBehaviour:
   m_Script: {fileID: 1517521384, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ParryResponder: {fileID: 7989141326161804240}
 --- !u!1 &2852715840957909893
 GameObject:
   m_ObjectHideFlags: 0
@@ -693,6 +695,7 @@ MonoBehaviour:
   DiveWarningParticles: {fileID: 7206719451512712455, guid: d43f34eef163efb41859d8d64ce724ab, type: 3}
   StaggerBurst: {fileID: 7206719451512712455, guid: ce835af18719ab348b26157ef228f670, type: 3}
   TeleportBurst: {fileID: 7206719451512712455, guid: 3b63bd6c939529741af834b96c6fb53f, type: 3}
+  BigSlashController: {fileID: 9100000, guid: 48527a79e67fd1f4fafdef519ed323c5, type: 2}
   DiveAnticLoopController: {fileID: 9100000, guid: b2ded8c5ef693d1409530044b60e008a, type: 2}
   DiveAnticToDiveLoopController: {fileID: 9100000, guid: 908126aa5ca58a7428c6c3c12721c992, type: 2}
   DiveImpactController: {fileID: 9100000, guid: 4042bc5a9deeb504094fe5d59e14ccf2, type: 2}

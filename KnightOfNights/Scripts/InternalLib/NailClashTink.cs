@@ -13,16 +13,16 @@ internal class NailParrySingleton : SceneSingleton<NailParrySingleton>
 {
     private bool nailParryActive = false;
 
-    internal void DoParry(GameObject src, Collider2D collider)
+    internal void DoParry(GameObject src, Collider2D collider, IParryResponder? parryResponder)
     {
         if (collider.gameObject.layer != 16) return;
         if (nailParryActive) return;
 
         nailParryActive = true;
-        this.StartLibCoroutine(DoParryImpl(src, collider));
+        this.StartLibCoroutine(DoParryImpl(src, collider, parryResponder));
     }
 
-    private IEnumerator<CoroutineElement> DoParryImpl(GameObject src, Collider2D collider)
+    private IEnumerator<CoroutineElement> DoParryImpl(GameObject src, Collider2D collider, IParryResponder? parryResponder)
     {
         GameManager.instance.FreezeMoment(3);
 
@@ -44,21 +44,25 @@ internal class NailParrySingleton : SceneSingleton<NailParrySingleton>
         {
             hc.RecoilLeft();
             offset = new(1.5f, 0);
+            parryResponder?.Parried(0);
         }
         else if (attackDir <= 135)
         {
             hc.RecoilDown();
             offset = new(0, 1.5f);
+            parryResponder?.Parried(90);
         }
         else if (attackDir <= 225)
         {
             hc.RecoilRight();
             offset = new(-1.5f, 0);
+            parryResponder?.Parried(180);
         }
         else
         {
             hc.Bounce();
             offset = new(0, -1.5f);
+            parryResponder?.Parried(270);
         }
 
         var pos = hc.transform.position + offset;
@@ -76,5 +80,10 @@ internal class NailParrySingleton : SceneSingleton<NailParrySingleton>
 [Shim]
 internal class NailClashTink : MonoBehaviour
 {
-    private void OnTriggerEnter2D(Collider2D collider) => NailParrySingleton.Get()?.DoParry(gameObject, collider);
+    [ShimField] public GameObject? ParryResponder;
+
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        NailParrySingleton.Get()?.DoParry(gameObject, collider, ParryResponder?.GetComponent<IParryResponder>());
+    }
 }

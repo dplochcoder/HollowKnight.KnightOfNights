@@ -11,6 +11,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public GorbStormStats GorbStormStats;
         public RainingPancakesStats RainingPancakesStats;
         public ShieldCycloneStats ShieldCycloneStats;
+        public SlashAmbushStats SlashAmbushStats;
         public StaggerStats StaggerStats;
         public UltraInstinctStats UltraInstinctStats;
         public XeroArmadaStats XeroArmadaStats;
