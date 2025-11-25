@@ -51,6 +51,11 @@ internal class KnightOfNightsPreloader : Preloader
 
     public GameObject? MarkothShield => MarkothShieldParent?.FindChild("Shield");
 
+    public PlayMakerFSM? NailClashTinkFSM => NailSlash?.LocateMyFSM("nail_clash_tink");
+
+    [Preload(SceneNames.Ruins2_04, "Great Shield Zombie/Slash1")]
+    public GameObject? NailSlash { get; private set; }
+
     [PrefabPreload(SceneNames.Fungus1_35, "No Eyes Head")]
     public GameObject? NoEyesHead { get; private set; }
 
