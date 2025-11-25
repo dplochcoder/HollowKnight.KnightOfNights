@@ -48,6 +48,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public AttackChoice FirstAttack;
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
 
+    [ShimField] public AxeHopscotchStats? AxeHopscotchStats;
     [ShimField] public DiveStats? DiveStats;
     [ShimField] public EmptyTeleportStats? EmptyTeleportStats;
     [ShimField] public GorbStormStats? GorbStormStats;

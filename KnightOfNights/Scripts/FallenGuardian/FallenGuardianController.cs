@@ -268,10 +268,14 @@ internal class FallenGuardianController : MonoBehaviour
 
     private bool MaybeStagger(SlashAttack attack)
     {
+        RevekAddons.SpawnSoul(attack!.ParryPos);
+        RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
+
         if (++multiParries < StaggerCount) return false;
 
         multiParries = 0;
         staggerAttack = attack;
+        RevekAddons.SpawnSoul(attack.ParryPos);
         return true;
     }
 
@@ -385,7 +389,7 @@ internal class FallenGuardianController : MonoBehaviour
 
 #if DEBUG
     private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.ShieldCyclone;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.AxeHopscotch;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -396,7 +400,7 @@ internal class FallenGuardianController : MonoBehaviour
         switch (choice)
         {
             case AttackChoice.AxeHopscotch:
-                return Coroutines.SleepSeconds(1);
+                return Coroutines.Sequence(AxeHopscotch());
             case AttackChoice.EmptyTeleport:
                 return Coroutines.Sequence(EmptyTeleport());
             case AttackChoice.GorbStorm:
@@ -413,6 +417,97 @@ internal class FallenGuardianController : MonoBehaviour
                 KnightOfNightsMod.BUG($"Unhandled attack: {choice}");
                 return Coroutines.SleepSeconds(1);
         }
+    }
+
+    private IEnumerator<CoroutineElement> AxeHopscotch()
+    {
+        var stats = this.stats!.AxeHopscotchStats!;
+
+        Vector2 ChoosePos()
+        {
+            while (true)
+            {
+                float x = Random.Range(Bounds().min.x + stats.SpawnXBuffer, Bounds().max.x - stats.SpawnXBuffer);
+                var kX = HeroController.instance.transform.position.x;
+
+                if (Mathf.Abs(kX - x) >= stats.SpawnXDistance)
+                    return new(x, Bounds().min.y + stats.AxeFloatHeight);
+            }
+        }
+
+        var pos = ChoosePos();
+
+        transform.position = pos;
+        FacePlayer();
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SwordToSpellController!, SpellStartToLoopController!]));
+
+        bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
+        xFixer?.Reset(pos.x, 1.5f);
+        yFixer?.Reset(pos.y, 1.5f);
+
+        yield return Coroutines.SleepSeconds(stats.WaitInitial);
+
+        FacePlayer();
+        animator!.runtimeAnimatorController = SpellCastToLoopController!;
+
+        List<float> xs = [
+            pos.x - stats.AxeSpawnXSpaceInner - stats.AxeSpawnXSpaceOuter,
+            pos.x - stats.AxeSpawnXSpaceInner,
+            pos.x + stats.AxeSpawnXSpaceInner,
+            pos.x + stats.AxeSpawnXSpaceInner + stats.AxeSpawnXSpaceOuter];
+        if (MathExt.CoinFlip()) xs.Reverse();
+
+        Wrapped<int> despawns = new(0);
+        List<GalienAxe> axes = [];
+        for (int i = 0; i < xs.Count; i++)
+        {
+            if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenAxeSpawns);
+
+            var axe = GalienAxe.Spawn(stats, Container!.Arena!, new(xs[i], pos.y));
+            axe.OnDespawn += p =>
+            {
+                SpawnTeleportBurst(0.5f, p);
+                despawns.Value++;
+            };
+
+            axes.Add(axe);
+        }
+
+        bobber!.enabled = false;
+        xFixer!.enabled = false;
+        yFixer!.enabled = false;
+
+        yield return Coroutines.SleepSeconds(stats.WaitAfterLastSpawnToTeleportOut);
+        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
+
+        yield return Coroutines.SleepSeconds(stats.WaitAfterTeleportToSlashAttack);
+
+        List<SlashAttack> attacks = [];
+        Wrapped<int> parries = new(0);
+        Wrapped<SlashAttack?> lastAttack = new(null);
+        for (int i = 0; i < stats.NumSlashAttacks; i++)
+        {
+            if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenSlashAttacks);
+
+            var attack = SlashAttack.Spawn(MathExt.CoinFlip() ? SlashAttackSpec.LEFT : SlashAttackSpec.RIGHT);
+            attack.OnResult += result =>
+            {
+                if (result != SlashAttackResult.PARRIED) return;
+                
+                lastPos = attack.ParryPos;
+                lastAttack.Value = attack;
+                healthManager!.hp -= attack.DamageDealt;
+
+                if (++parries.Value == stats.NumSlashAttacks && MaybeStagger(attack))
+                    axes.ForEach(a => a.Despawn());
+            };
+
+            attacks.Add(attack);
+        }
+
+        yield return Coroutines.SleepSeconds(stats.GracePeriod);
+        axes.ForEach(a => a.Despawn());
+        yield return Coroutines.SleepSeconds(stats.GracePeriod2);
     }
 
     private IEnumerator<CoroutineElement> EmptyTeleport()
@@ -880,14 +975,7 @@ internal class FallenGuardianController : MonoBehaviour
         yield return Coroutines.SleepUntil(() => remaining.Value == 0);
 
         if (attacks.All(a => a.Result == SlashAttackResult.PARRIED))
-        {
-            var attack = lastAttack.Value;
-
-            RevekAddons.SpawnSoul(attack!.ParryPos);
-            RevekAddons.GetHurtClip().PlayAtPosition(attack.ParryPos);
-
-            if (MaybeStagger(attack)) RevekAddons.SpawnSoul(attack.ParryPos);
-        }
+            MaybeStagger(lastAttack.Value!);
 
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
@@ -1083,7 +1171,10 @@ internal class FallenGuardianController : MonoBehaviour
     private void SpawnTeleportBurst(float scale, Vector3? pos = null)
     {
         pos ??= transform.position;
-        TeleportBurst!.Spawn(pos.Value).transform.localScale = new(scale, scale, 1);
+
+        var obj = TeleportBurst!.Spawn(pos.Value);
+        recyclables.Add(obj);
+        obj.transform.localScale = new(scale, scale, 1);
     }
 
     private void PlayTeleportSound(Vector3? pos = null) => KnightOfNightsPreloader.Instance.MageTeleportClip?.PlayAtPosition(pos ?? transform.position, 1.1f);

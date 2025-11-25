@@ -1,5 +1,94 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &608020367273098610
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3557326965417236917}
+  - component: {fileID: 4655546145068510623}
+  - component: {fileID: 3477161486371040526}
+  m_Layer: 0
+  m_Name: AxeHopscotch
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3557326965417236917
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608020367273098610}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 8
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4655546145068510623
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608020367273098610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 0
+  Weight: 1
+  Cooldown: 3
+  InitialCooldown: 2
+  WeightIncrease: 0.25
+  ForbiddenPredecessors: 
+--- !u!114 &3477161486371040526
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 608020367273098610}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: -1848391234, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  WallImpactLPrefab: {fileID: 7206719451512712455, guid: 5b2dedc83ccdb3c46a43a0c8fafc3c54, type: 3}
+  AxeAccel: 0.55
+  AxeAnticTime: 0.3
+  AxeBounceSpeed: 21.3333
+  AxeDecelTime: 0.65
+  AxeAnticRiseY: 2
+  AxeEmergeTime: 0.6
+  AxeFloatHeight: 8
+  AxeGravity: 0.5688
+  AxeMaxSpeed: 24
+  AxeSpawnXSpaceInner: 3
+  AxeSpawnXSpaceOuter: 4.5
+  AxeSpinTime: 0.75
+  AxeTimer: 6
+  BobPeriod: 1.8
+  BobRadius: 0.4
+  GracePeriod: 1.35
+  GracePeriod2: 0.75
+  NumSlashAttacks: 3
+  SpawnXBuffer: 11
+  SpawnXDistance: 6
+  WaitAfterLastSpawnToTeleportOut: 0.85
+  WaitAfterTeleportToSlashAttack: 1.9
+  WaitAnticAfterSpawn: 0.8
+  WaitBetweenAxeSpawns: 0.3
+  WaitBetweenSlashAttacks: 1.52
+  WaitInitial: 0.85
 --- !u!1 &1346293579354258627
 GameObject:
   m_ObjectHideFlags: 0
@@ -36,6 +125,7 @@ Transform:
   - {fileID: 8534862928656139355}
   - {fileID: 1004677016769305315}
   - {fileID: 2941213674367425441}
+  - {fileID: 3557326965417236917}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -59,6 +149,7 @@ MonoBehaviour:
   - {fileID: 4307519830915032430}
   - {fileID: 5596897245960897113}
   - {fileID: 434282296705944439}
+  AxeHopscotchStats: {fileID: 3477161486371040526}
   DiveStats: {fileID: 3728819409160070971}
   EmptyTeleportStats: {fileID: 2956078922529798382}
   GorbStormStats: {fileID: 1720482504391799160}
@@ -562,14 +653,14 @@ MonoBehaviour:
   m_Script: {fileID: -1512721553, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  DistanceMax: 12
+  DistanceMax: 11
   DistanceMin: 7
-  HeightMax: 10
+  HeightMax: 9
   HeightMin: 2.5
-  GracePeriod: 0.8
-  WaitToTeleOutMax: 1.5
-  WaitToTeleOutMin: 1
-  XBuffer: 3
+  GracePeriod: 0.85
+  WaitToTeleOutMax: 1.25
+  WaitToTeleOutMin: 0.75
+  XBuffer: 4
 --- !u!1 &8179795735541059478
 GameObject:
   m_ObjectHideFlags: 0
