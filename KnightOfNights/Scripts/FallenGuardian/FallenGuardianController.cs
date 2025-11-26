@@ -403,11 +403,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
                 WeightAdditions.RemoveAll(c.Choice);
                 Cooldowns.Add(c.Choice, c.Cooldown);
             }
-            else
-            {
-                if (Cooldowns.CountOf(c.Choice) > 0) Cooldowns.Remove(c.Choice);
-                else WeightAdditions.Add(c.Choice);
-            }
+            else if (!Cooldowns.Remove(c.Choice)) WeightAdditions.Add(c.Choice);
         }
     }
 
@@ -423,7 +419,6 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         IndexedWeightedSet<AttackChoice> choices = new();
         foreach (var c in stats!.Attacks)
         {
-            if (previous == c.Choice) continue;
             if (Cooldowns.CountOf(c.Choice) > 0) continue;
             if (c.ForbiddenPredecessors.Contains(previous)) continue;
 
@@ -433,7 +428,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     }
 
 #if DEBUG
-    private static readonly AttackChoice? ForceAttack = null;
+    private static readonly AttackChoice? ForceAttack = AttackChoice.XeroArmada;
 #else
     private static readonly AttackChoice? ForceAttack = null;
 #endif
@@ -590,6 +585,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, ToSlashAnticLoopController!]));
 
         stayFacing = true;
+        reverseFacing = false;
         yield return Coroutines.OneOf(Coroutines.SleepSeconds(Random.Range(stats.WaitToTeleOutMin, stats.WaitToTeleOutMax)), OnTakeDamage());
         stayFacing = false;
 

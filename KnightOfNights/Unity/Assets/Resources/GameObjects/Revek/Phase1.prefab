@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallImpactLPrefab: {fileID: 7206719451512712455, guid: 5b2dedc83ccdb3c46a43a0c8fafc3c54, type: 3}
-  AxeAccel: 0.4
+  AxeAccel: 0.5
   AxeAnticTime: 0.3
   AxeBounceSpeed: 21.3333
   AxeDecelTime: 0.65
@@ -71,7 +71,7 @@ MonoBehaviour:
   AxeEmergeTime: 0.6
   AxeFloatHeight: 8
   AxeGravity: 0.5688
-  AxeMaxSpeed: 24
+  AxeMaxSpeed: 20
   AxeSpawnXSpaceInner: 3
   AxeSpawnXSpaceOuter: 4.5
   AxeSpinTime: 0.75
@@ -659,8 +659,8 @@ MonoBehaviour:
   HeightMax: 9
   HeightMin: 2.5
   GracePeriod: 0.85
-  WaitToTeleOutMax: 1.25
-  WaitToTeleOutMin: 1
+  WaitToTeleOutMax: 1.75
+  WaitToTeleOutMin: 1.25
   XBuffer: 4
 --- !u!1 &8179795735541059478
 GameObject:

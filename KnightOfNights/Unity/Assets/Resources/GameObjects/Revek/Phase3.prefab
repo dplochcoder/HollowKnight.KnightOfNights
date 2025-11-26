@@ -97,11 +97,11 @@ PrefabInstance:
       objectReference: {fileID: 5039007906410850728}
     - target: {fileID: 5796109406348271876, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitToTeleOutMax
-      value: 1
+      value: 1.25
       objectReference: {fileID: 0}
     - target: {fileID: 5796109406348271876, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitToTeleOutMin
-      value: 0.75
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: NumShieldWaves
