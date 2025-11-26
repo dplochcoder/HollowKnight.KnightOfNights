@@ -15,6 +15,7 @@ internal class XeroArmadaStats : MonoBehaviour
     [ShimField] public float NailXSpace;
     [ShimField] public float NailYInitialSpace;
     [ShimField] public float NailYSpace;
+    [ShimField] public int NumNailsPerWing;
     [ShimField] public float ProjectileDecelerateTime;
     [ShimField] public float ProjectileInitTime;
     [ShimField] public float ProjectileHeightMax;

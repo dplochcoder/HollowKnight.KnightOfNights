@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: -885883358, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinHP: 1800
+  MinHP: 1600
   FirstAttack: 5
   Attacks:
   - {fileID: 807538454964093753}
@@ -224,9 +224,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   DiveHeightMax: 8.5
   DiveHeightMin: 7
-  DiveImpactScale: 2
-  DivePlungeSpeed: 45
-  DiveRetreatSpeed: 4
   DiveXBuffer: 1
   DiveXRange: 5
   PancakePitchIncrement: 0.2
@@ -245,6 +242,7 @@ MonoBehaviour:
   WaitFinal: 0.85
   WaitFromDiveToNextSpawn: 0.4
   WaitFromLastDropToDive: 0.35
+  WaveCounts: 020000000200000003000000
   WingCount: 3
 --- !u!1 &3211539505212584972
 GameObject:
@@ -369,19 +367,19 @@ MonoBehaviour:
   ExpansionLimit: 40
   ExpansionStart: 1.5
   ExpansionStartSpeed: 0
-  ExpansionTopSpeed: 8
+  ExpansionTopSpeed: 8.5
   GracePeriod: 1
-  NumDaggerSpawns: 12
-  NumShieldWaves: 7
+  NumDaggerSpawns: 10
+  NumShieldWaves: 5
   RotationOffsetPerWave: 36
   RotationSpeedDecel: 240
   RotationSpeedMinimum: 110
   RotationSpeedStart: 240
-  ShieldsPerWave: 5
+  ShieldsPerWave: 4
   WaitAfterShieldTeleport: 1.15
   WaitAfterLastShieldSpawn: 1.5
   WaitBetweenDaggerSpawns: 0.35
-  WaitBetweenShieldWaves: 0.75
+  WaitBetweenShieldWaves: 0.85
   WaitLastDaggerSpawnToShieldTeleport: 0.75
 --- !u!1 &4344641435690619969
 GameObject:
@@ -504,6 +502,7 @@ MonoBehaviour:
   NailXSpace: 1.3
   NailYInitialSpace: -0.25
   NailYSpace: 0.25
+  NumNailsPerWing: 6
   ProjectileDecelerateTime: 0.3
   ProjectileInitTime: 0.45
   ProjectileHeightMax: 7.5
@@ -589,7 +588,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Deceleration: 0.9
-  Interval: 0.31
+  Interval: 0.325
   Speed: 180
   Tail: 0.7
   Telegraph: 0.6
@@ -661,7 +660,7 @@ MonoBehaviour:
   HeightMin: 2.5
   GracePeriod: 0.85
   WaitToTeleOutMax: 1.25
-  WaitToTeleOutMin: 0.75
+  WaitToTeleOutMin: 1
   XBuffer: 4
 --- !u!1 &8179795735541059478
 GameObject:
@@ -824,4 +823,4 @@ MonoBehaviour:
   HitGracePeriod: 1.1
   SlashSpeed: 180
   SlashDeceleration: 0.9
-  TelegraphStagger: 0.31
+  TelegraphStagger: 0.325

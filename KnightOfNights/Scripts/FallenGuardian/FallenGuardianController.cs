@@ -423,8 +423,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     }
 
 #if DEBUG
-    private const bool SkipTutorial = true;
-    private static readonly AttackChoice? ForceAttack = AttackChoice.SlashAmbush;
+    private const bool SkipTutorial = false;
+    private static readonly AttackChoice? ForceAttack = null;
 #else
     private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
@@ -815,10 +815,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             return Random.Range(Mathf.Max(b.min.x + stats.DiveXBuffer, kX - stats.DiveXRange), Mathf.Min(b.max.x - stats.DiveXBuffer, kX + stats.DiveXRange));
         }
 
-        for (int i = 0; i < 3; i++)
+        for (int i = 0; i < stats.WaveCounts.Count; i++)
         {
             // Generate waves forwards, spawn them in reverse then fire them forwards.
-            int numWaves = i + 1;
+            int numWaves = stats.WaveCounts[i];
             var spawns = GeneratePancakeSpawns(numWaves);
             float y = Bounds().min.y + stats.PancakeY;
             float pitch = 0.85f;
@@ -1133,8 +1133,6 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yield return Coroutines.SleepSeconds(stats.Tail);
     }
 
-    private const int NUM_XERO_NAILS = 6;
-
     private readonly List<GameObject> xeroNailLeftSpawns = [];
     private readonly List<GameObject> xeroNailRightSpawns = [];
 
@@ -1146,7 +1144,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         float xOff = stats.NailXInitialSpace;
         float yOff = stats.NailYInitialSpace;
-        for (int i = 0; i < NUM_XERO_NAILS; i++)
+        for (int i = 0; i < stats.NumNailsPerWing; i++)
         {
             GameObject left = new();
             left.SetParent(gameObject);
@@ -1205,8 +1203,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         List<XeroNail> left = [];
         List<XeroNail> right = [];
         KnightOfNightsPreloader.Instance.DreamEnterClip?.PlayAtPosition(transform.position);
-        for (int i = 0; i < NUM_XERO_NAILS; i++)
+        for (int i = 0; i < stats.NumNailsPerWing; i++)
         {
+            if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenNailSpawns);
+
             XeroNailSpec specs = new()
             {
                 initTime = stats.ProjectileInitTime,
@@ -1226,8 +1226,6 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             SpawnTeleportBurst(0.5f, left.Last().Position);
             right.Add(XeroNail.Spawn(xeroNailRightSpawns[i], specs));
             SpawnTeleportBurst(0.5f, right.Last().Position);
-
-            if (i != NUM_XERO_NAILS - 1) yield return Coroutines.SleepSeconds(stats.WaitBetweenNailSpawns);
         }
 
         if (MathExt.CoinFlip())

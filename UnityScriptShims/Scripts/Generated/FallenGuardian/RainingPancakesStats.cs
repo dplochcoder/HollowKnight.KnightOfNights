@@ -4,9 +4,6 @@ namespace KnightOfNights.Scripts.FallenGuardian
     {
         public float DiveHeightMax;
         public float DiveHeightMin;
-        public float DiveImpactScale;
-        public float DivePlungeSpeed;
-        public float DiveRetreatSpeed;
         public float DiveXBuffer;
         public float DiveXRange;
         public float PancakePitchIncrement;
@@ -25,6 +22,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float WaitFinal;
         public float WaitFromDiveToNextSpawn;
         public float WaitFromLastDropToDive;
+        public System.Collections.Generic.List<int> WaveCounts;
         public int WingCount;
         
     }

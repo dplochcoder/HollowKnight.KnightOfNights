@@ -1,4 +1,5 @@
 ﻿using KnightOfNights.Scripts.SharedLib;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.FallenGuardian;
@@ -8,9 +9,6 @@ internal class RainingPancakesStats : MonoBehaviour
 {
     [ShimField] public float DiveHeightMax;
     [ShimField] public float DiveHeightMin;
-    [ShimField] public float DiveImpactScale;
-    [ShimField] public float DivePlungeSpeed;
-    [ShimField] public float DiveRetreatSpeed;
     [ShimField] public float DiveXBuffer;
     [ShimField] public float DiveXRange;
     [ShimField] public float PancakePitchIncrement;
@@ -29,5 +27,6 @@ internal class RainingPancakesStats : MonoBehaviour
     [ShimField] public float WaitFinal;
     [ShimField] public float WaitFromDiveToNextSpawn;
     [ShimField] public float WaitFromLastDropToDive;
+    [ShimField] public List<int> WaveCounts = [];
     [ShimField] public int WingCount;
 }

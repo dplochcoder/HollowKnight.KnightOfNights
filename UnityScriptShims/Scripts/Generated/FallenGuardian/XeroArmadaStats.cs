@@ -11,6 +11,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public float NailXSpace;
         public float NailYInitialSpace;
         public float NailYSpace;
+        public int NumNailsPerWing;
         public float ProjectileDecelerateTime;
         public float ProjectileInitTime;
         public float ProjectileHeightMax;
