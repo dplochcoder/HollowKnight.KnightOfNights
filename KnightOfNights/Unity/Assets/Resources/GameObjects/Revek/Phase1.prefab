@@ -240,8 +240,8 @@ MonoBehaviour:
   WaitBetweenWaveDrops: 0.3
   WaitBetweenWaveSpawns: 0.125
   WaitFinal: 0.85
-  WaitFromDiveToNextSpawn: 0.4
-  WaitFromLastDropToDive: 0.35
+  WaitFromDiveToNextSpawn: 0.45
+  WaitFromLastDropToDive: 0.55
   WaveCounts: 020000000200000003000000
   WingCount: 3
 --- !u!1 &3211539505212584972
@@ -379,7 +379,7 @@ MonoBehaviour:
   WaitAfterShieldTeleport: 1.15
   WaitAfterLastShieldSpawn: 1.5
   WaitBetweenDaggerSpawns: 0.35
-  WaitBetweenShieldWaves: 0.85
+  WaitBetweenShieldWaves: 0.75
   WaitLastDaggerSpawnToShieldTeleport: 0.75
 --- !u!1 &4344641435690619969
 GameObject:
@@ -517,8 +517,8 @@ MonoBehaviour:
   WaitBetweenNailFires: 0.3
   WaitBetweenNailSpawns: 0.1
   WaitInitial: 0.6
-  WaitLastSpawnToMove: 1.15
-  WaitLastSpawnToFire: 0.65
+  WaitLastSpawnToMove: 1.05
+  WaitLastSpawnToFire: 0.55
   XBuffer: 8.5
   XMoveAccel: 25
   XMoveDuration: 8
@@ -733,17 +733,17 @@ MonoBehaviour:
   NumSmallBursts: 3
   PitchIncrementFinale: 0.1
   PitchIncrementSmall: 0.15
-  SmallXMin: 6.5
-  SmallXMax: 10.5
-  SmallYMin: 5.5
-  SmallYMax: 10.5
+  SmallXMin: 5.5
+  SmallXMax: 8.5
+  SmallYMin: 4.5
+  SmallYMax: 8.5
   SpikeAccel: 1.1
   SpokeCountFinale: 5
   SpokeCountSmall: 10
   SpokeRotationFinale: 0.2857
   SpokeRotationSmall: 0.5
-  WaitAfterFinale: 0.6
-  WaitAfterTeleport: 0.5
+  WaitAfterFinale: 0.8
+  WaitAfterTeleport: 0.6
   WaitBeforeFinale: 0.6
   WaitBeforeTeleport: 0.25
   WaitFirst: 0.75

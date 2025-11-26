@@ -2,6 +2,7 @@
 using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
+using KnightOfNights.IC;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using KnightOfNights.Util;
@@ -226,13 +227,16 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
     private IEnumerator<CoroutineElement> RunBoss()
     {
-        // TODO: Aura farm intro.
 
         IEnumerator<SlashAttackSequence> tutorial = SpecTutorial();
-        if (SkipTutorial)
+        if (FallenGuardianModule.Get()!.CompletedBossIntro)
         {
             List<SlashAttackSequence> empty = [];
             tutorial = empty.GetEnumerator();
+        }
+        else
+        {
+            // TODO: Aura farm intro.
         }
 
         while (tutorial.MoveNext())
@@ -252,10 +256,15 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             }
         }
 
-        // TODO: Aura farm escalation pause.
+        if (FallenGuardianModule.Get()!.CompletedBossIntro)
+            yield return Coroutines.SleepSeconds(1);
+        else
+        {
+            FallenGuardianModule.Get()!.CompletedBossIntro = true;
 
-        if (SkipTutorial) EscalationPause = 1f;
-        yield return Coroutines.SleepSeconds(EscalationPause);
+            // TODO: Aura farm escalation pause.
+            yield return Coroutines.SleepSeconds(EscalationPause);
+        }
 
         if (CharmIds.HeavyBlow.IsEquipped()) --StaggerCount;
 
@@ -423,10 +432,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     }
 
 #if DEBUG
-    private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
 #else
-    private const bool SkipTutorial = false;
     private static readonly AttackChoice? ForceAttack = null;
 #endif
 
@@ -933,6 +940,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         }
 
         yield return Coroutines.SleepSeconds(stats.WaitAfterLastShieldSpawn);
+
+        bobber!.enabled = false;
+        xFixer!.enabled = false;
+        yFixer!.enabled = false;
         this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);

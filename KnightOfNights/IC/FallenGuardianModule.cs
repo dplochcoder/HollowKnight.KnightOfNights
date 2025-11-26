@@ -22,6 +22,8 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
     private readonly Dictionary<string, AssetBundle?> sceneBundles = [];
     private SceneLoaderModule? coreModule;
 
+    public bool CompletedBossIntro = false;
+
     public override void Initialize()
     {
         base.Initialize();

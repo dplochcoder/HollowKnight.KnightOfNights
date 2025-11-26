@@ -1,7 +1,6 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
-using PurenailCore.CollectionUtil;
 using SFCore.Utils;
 using UnityEngine;
 
@@ -79,12 +78,6 @@ internal class GalienAxe : MonoBehaviour
         var axe = obj.AddComponent<GalienAxe>();
         axe.timeToAntic = stats.WaitAnticAfterSpawn;
         attack.GetFsmState("Recel").AddFirstAction(new Lambda(() => axe.Despawn()));
-
-        attack.GetFsmState("Floor Bounce").AddFirstAction(new Lambda(() =>
-        {
-            KnightOfNightsMod.LogError($"BOUNCE TIME: {axe.bounceTime:0.000}");
-            axe.bounceTime = 0;
-        }));
 
         obj.SetActive(true);
         return axe;
