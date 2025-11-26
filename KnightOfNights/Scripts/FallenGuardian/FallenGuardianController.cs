@@ -272,6 +272,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         while (true)
         {
             var attack = ChooseAttack(previousAttack);
+            previousAttack = attack;
 
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
@@ -1239,11 +1240,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             SpawnTeleportBurst(0.5f, right.Last().Position);
         }
 
-        if (MathExt.CoinFlip())
-        {
-            left.Reverse();
-            right.Reverse();
-        }
+        if (MathExt.CoinFlip()) left.Reverse();
+        else right.Reverse();
 
         IEnumerator<CoroutineElement> FireRoutine()
         {
@@ -1255,16 +1253,11 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             List<XeroNail> queue = [];
             for (int j = 0; j < 2; j++)
             {
-                for (int kk = 0; kk < a.Count; kk++)
+                for (int k = 0; k < a.Count; k++)
                 {
                     queue.RemoveWhere(n => n.Attack());
-                    var nail = a[kk];
-                    if (!nail.Attack()) queue.Add(nail);
-                    yield return Coroutines.SleepSeconds(stats.WaitBetweenNailFires);
-
-                    queue.RemoveWhere(n => n.Attack());
-                    nail = b[kk];
-                    if (!nail.Attack()) queue.Add(nail);
+                    if (!a[k].Attack()) queue.Add(a[k]);
+                    if (!b[k].Attack()) queue.Add(b[k]);
                     yield return Coroutines.SleepSeconds(stats.WaitBetweenNailFires);
                 }
             }
@@ -1275,18 +1268,15 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         bobber?.ResetRandom(stats.BobRadius, stats.BobPeriod);
 
         Wrapped<float> speed = new(0);
-        Wrapped<bool> goRight = new(transform.position.x < Bounds().center.x);
+        PeriodicChooser<float> offset = new(0.75f, 1.5f, [-4, -2, 0, 2, 4]);
         yield return Coroutines.SleepSecondsUpdateDelta(stats.XMoveDuration, delta =>
         {
-            if (goRight.Value)
-            {
-                if (transform.position.x > Bounds().max.x - stats.XBuffer) goRight.Value = false;
-            }
-            else if (transform.position.x < Bounds().min.x + stats.XBuffer) goRight.Value = true;
+            float x = transform.position.x;
+            var tx = MathExt.Clamp(HeroController.instance.transform.position.x, Bounds().min.x + stats.XBuffer, Bounds().max.x - stats.XBuffer) + offset.Update(delta);
 
-            speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, goRight.Value ? stats.XMoveSpeed : -stats.XMoveSpeed);
+            speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, x > tx ? -stats.XMoveSpeed : stats.XMoveSpeed);
+            transform.Translate(new(speed.Value * delta, 0), Space.World);
 
-            rigidbody!.velocity = rigidbody.velocity with { x = speed.Value };
             return false;
         });
 

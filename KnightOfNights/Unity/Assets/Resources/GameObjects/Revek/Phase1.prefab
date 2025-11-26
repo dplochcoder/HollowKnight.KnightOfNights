@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallImpactLPrefab: {fileID: 7206719451512712455, guid: 5b2dedc83ccdb3c46a43a0c8fafc3c54, type: 3}
-  AxeAccel: 0.55
+  AxeAccel: 0.4
   AxeAnticTime: 0.3
   AxeBounceSpeed: 21.3333
   AxeDecelTime: 0.65
@@ -142,7 +142,7 @@ MonoBehaviour:
   m_Script: {fileID: -885883358, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinHP: 1600
+  MinHP: 1200
   FirstAttack: 5
   Attacks:
   - {fileID: 807538454964093753}
@@ -514,15 +514,15 @@ MonoBehaviour:
   ProjectileShootTime: 0.5
   ProjectileSpeed: 46
   ProjectileSpinTime: 0.35
-  WaitBetweenNailFires: 0.3
+  WaitBetweenNailFires: 0.725
   WaitBetweenNailSpawns: 0.1
   WaitInitial: 0.6
-  WaitLastSpawnToMove: 1.05
-  WaitLastSpawnToFire: 0.55
-  XBuffer: 8.5
-  XMoveAccel: 25
-  XMoveDuration: 8
-  XMoveSpeed: 7
+  WaitLastSpawnToMove: 1.1
+  WaitLastSpawnToFire: 0.65
+  XBuffer: 8
+  XMoveAccel: 22
+  XMoveDuration: 9.2
+  XMoveSpeed: 9
   XRangeMin: 6
   XRangeMax: 10
 --- !u!1 &6652528314850364912

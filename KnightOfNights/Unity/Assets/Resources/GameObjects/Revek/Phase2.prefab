@@ -19,9 +19,13 @@ PrefabInstance:
       propertyPath: m_Name
       value: Phase2
       objectReference: {fileID: 0}
+    - target: {fileID: 2898286881439553022, guid: 467d8ba712234e14fbe513f18d9de568, type: 3}
+      propertyPath: ShieldsPerWave
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 3505297119352190816, guid: 467d8ba712234e14fbe513f18d9de568, type: 3}
       propertyPath: MinHP
-      value: 800
+      value: 600
       objectReference: {fileID: 0}
     - target: {fileID: 3505297119352190816, guid: 467d8ba712234e14fbe513f18d9de568, type: 3}
       propertyPath: FirstAttack

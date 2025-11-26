@@ -164,6 +164,12 @@ namespace KnightOfNights.Scripts.SharedLib
             }
         }
 
+        public static void SmoothAccelerate(this ref Vector2 pos, ref Vector2 velocity, Vector2 maxSpeed, Vector2 accel, Vector2 target, float deltaTime)
+        {
+            pos.x.SmoothAccelerate(ref velocity.x, maxSpeed.x, accel.x, target.x, deltaTime);
+            pos.y.SmoothAccelerate(ref velocity.y, maxSpeed.y, accel.y, target.y, deltaTime);
+        }
+
         public static void SimpleAccelerate(this ref float pos, ref float velocity, float maxSpeed, float accel, float deltaTime)
         {
             float aTime = 0;
