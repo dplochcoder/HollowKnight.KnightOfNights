@@ -5,6 +5,18 @@ using UnityEngine;
 namespace KnightOfNights.Scripts.FallenGuardian;
 
 [Shim]
+internal class BigSlashStats : MonoBehaviour
+{
+    [ShimField] public float AngleRange;
+    [ShimField] public float AttackDuration;
+    [ShimField] public Vector2 SpawnOffset;
+    [ShimField] public float Speed;
+    [ShimField] public Vector2 TargetOffset;
+    [ShimField] public float XBuffer;
+    [ShimField] public float Deceleration;
+}
+
+[Shim]
 internal class DiveStats : MonoBehaviour
 {
     [ShimField] public float ImpactScale;
@@ -49,6 +61,7 @@ internal class FallenGuardianPhaseStats : MonoBehaviour
     [ShimField] public List<FallenGuardianAttack> Attacks = [];
 
     [ShimField] public AxeHopscotchStats? AxeHopscotchStats;
+    [ShimField] public BigSlashStats? BigSlashStats;
     [ShimField] public DiveStats? DiveStats;
     [ShimField] public EmptyTeleportStats? EmptyTeleportStats;
     [ShimField] public GorbStormStats? GorbStormStats;

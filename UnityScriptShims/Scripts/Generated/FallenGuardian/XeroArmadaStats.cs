@@ -4,6 +4,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
     {
         public float BobPeriod;
         public float BobRadius;
+        public bool Dive;
         public float GracePeriod;
         public float HeightMax;
         public float HeightMin;

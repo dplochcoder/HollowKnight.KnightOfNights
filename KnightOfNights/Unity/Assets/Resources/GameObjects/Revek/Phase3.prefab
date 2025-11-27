@@ -7,13 +7,13 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 1116049356341580100, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: BigSlashDelay
-      value: 2.75
+    - target: {fileID: 2263367331131098019, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: Cooldown
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 1116049356341580100, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: TelegraphStagger
-      value: 0.275
+    - target: {fileID: 3802688116373101491, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: Cooldown
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4385532284449396349, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: m_RootOrder
@@ -60,8 +60,12 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5317803370213797514, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: MinHP
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5317803370213797514, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: FirstAttack
-      value: 5
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5317803370213797514, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: Attacks.Array.size
@@ -90,11 +94,11 @@ PrefabInstance:
     - target: {fileID: 5317803370213797514, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: Attacks.Array.data[5]
       value: 
-      objectReference: {fileID: 7166665438060650110}
+      objectReference: {fileID: 5039007906410850728}
     - target: {fileID: 5317803370213797514, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: Attacks.Array.data[6]
       value: 
-      objectReference: {fileID: 5039007906410850728}
+      objectReference: {fileID: 4943530632052784742}
     - target: {fileID: 5796109406348271876, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitToTeleOutMax
       value: 1.25
@@ -102,6 +106,10 @@ PrefabInstance:
     - target: {fileID: 5796109406348271876, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitToTeleOutMin
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: GracePeriod
+      value: 0.75
       objectReference: {fileID: 0}
     - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: NumShieldWaves
@@ -112,8 +120,24 @@ PrefabInstance:
       value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: ExpansionTopSpeed
-      value: 8
+      propertyPath: NumDaggerSpawns
+      value: 12
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: RotationOffsetPerWave
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: WaitBetweenShieldWaves
+      value: 0.675
+      objectReference: {fileID: 0}
+    - target: {fileID: 5859526463026957332, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: WaitBetweenDaggerSpawns
+      value: 0.275
+      objectReference: {fileID: 0}
+    - target: {fileID: 6363866416786720208, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: WaitFinal
+      value: 0.7
       objectReference: {fileID: 0}
     - target: {fileID: 6363866416786720208, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaveCounts.Array.size
@@ -149,11 +173,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitSpikeSmall
-      value: 0.1
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: BurstCountSmall
-      value: 5
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeCountSmall
@@ -161,11 +185,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitAfterFinale
-      value: 0.6
+      value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitSpikeFinale
-      value: 0.05
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: BurstCountFinale
@@ -180,20 +204,28 @@ PrefabInstance:
       value: 0.65
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: WaitAfterTeleport
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeRotationSmall
-      value: 0.4
+      value: 0.333333
+      objectReference: {fileID: 0}
+    - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: WaitBeforeTeleport
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: PitchIncrementSmall
-      value: 0.1
+      value: 0.15
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeRotationFinale
-      value: 0.7
+      value: 0.4
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: PitchIncrementFinale
-      value: 0.075
+      value: 0.1
       objectReference: {fileID: 0}
     - target: {fileID: 8146938885752807404, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: Tail
@@ -208,20 +240,20 @@ PrefabInstance:
       value: 0.55
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: NailXSpace
-      value: 1.15
+      propertyPath: Dive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: NumNailsPerWing
-      value: 8
+      propertyPath: GracePeriod
+      value: 1.75
+      objectReference: {fileID: 0}
+    - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+      propertyPath: XMoveDuration
+      value: 7.6
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitBetweenNailFires
-      value: 0.55
-      objectReference: {fileID: 0}
-    - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: WaitBetweenNailSpawns
-      value: 0.075
+      value: 0.575
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2423f052ae18adb4399d1da963551782, type: 3}
@@ -280,9 +312,9 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7166665438060650110 stripped
+--- !u!114 &5039007906410850728 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4175437567923549301, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2263367331131098019, guid: 2423f052ae18adb4399d1da963551782, type: 3}
   m_PrefabInstance: {fileID: 6523251196068358667}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
@@ -291,9 +323,9 @@ MonoBehaviour:
   m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &5039007906410850728 stripped
+--- !u!114 &4943530632052784742 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2263367331131098019, guid: 2423f052ae18adb4399d1da963551782, type: 3}
+  m_CorrespondingSourceObject: {fileID: 2170115498364064877, guid: 2423f052ae18adb4399d1da963551782, type: 3}
   m_PrefabInstance: {fileID: 6523251196068358667}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}

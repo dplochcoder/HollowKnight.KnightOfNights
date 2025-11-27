@@ -606,7 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 1065641544, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 1800
+  hp: 2200
   SoulGain: 1
   hasSpecialDeath: 1
   deathReset: 0

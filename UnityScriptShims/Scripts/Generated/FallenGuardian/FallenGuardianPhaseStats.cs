@@ -6,6 +6,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public AttackChoice FirstAttack;
         public System.Collections.Generic.List<FallenGuardianAttack> Attacks;
         public AxeHopscotchStats AxeHopscotchStats;
+        public BigSlashStats BigSlashStats;
         public DiveStats DiveStats;
         public EmptyTeleportStats EmptyTeleportStats;
         public GorbStormStats GorbStormStats;

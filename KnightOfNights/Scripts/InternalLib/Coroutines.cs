@@ -61,6 +61,11 @@ public class CoroutineInstant : CoroutineElement
     }
 }
 
+public class CoroutineNever : CoroutineElement
+{
+    protected override CoroutineUpdate UpdateImpl(float deltaTime) => new(false, 0);
+}
+
 public class CoroutineLoop : CoroutineElement
 {
     private readonly Action<float> action;
@@ -357,6 +362,8 @@ public class CoroutineAllOf : CoroutineElement
 public static class Coroutines
 {
     public static CoroutineInstant Instant(Action action) => new(action);
+
+    public static CoroutineNever Never() => new();
 
     public static CoroutineGenerator Deferred(Func<float, CoroutineElement> generator) => new(generator);
 

@@ -20,6 +20,7 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 internal enum AttackChoice : int
 {
     AxeHopscotch = 0,
+    BigSlash = 8,
     EmptyTeleport = 1,
     GorbStorm = 2,
     RainingPancakes = 3,
@@ -181,7 +182,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             return;
         }
 
-        transform.Translate(bigSlashVelocity * Time.fixedDeltaTime, Space.World);
+        rigidbody?.MovePosition(rigidbody.position + bigSlashVelocity * Time.fixedDeltaTime);
         bigSlashVelocity *= bigSlashDeceleration;
     }
 
@@ -428,7 +429,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     }
 
 #if DEBUG
-    private static readonly AttackChoice? ForceAttack = AttackChoice.XeroArmada;
+    private static readonly AttackChoice? ForceAttack = null;
 #else
     private static readonly AttackChoice? ForceAttack = null;
 #endif
@@ -439,6 +440,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         {
             case AttackChoice.AxeHopscotch:
                 return Coroutines.Sequence(AxeHopscotch());
+            case AttackChoice.BigSlash:
+                return Coroutines.Sequence(BigSlash());
             case AttackChoice.EmptyTeleport:
                 return Coroutines.Sequence(EmptyTeleport());
             case AttackChoice.GorbStorm:
@@ -548,6 +551,50 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
         axes.ForEach(a => a.Despawn());
         yield return Coroutines.SleepSeconds(stats.GracePeriod2);
+    }
+
+    [ShimMethod]
+    public void BigSlashFollowup() => KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(transform.position, 0.9f);
+
+    [ShimMethod]
+    public void BigSlashMove()
+    {
+        var stats = this.stats!.BigSlashStats!;
+
+        Vector2 kPos = HeroController.instance.transform.position.To2d() + stats.TargetOffset;
+        Vector2 pos = transform.position;
+
+        KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(pos);
+        KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(pos, 1.1f);
+
+        float angle = FacingLeft ? 180 : 0;
+        if (FacingLeft == kPos.x < pos.x)
+            angle = MathExt.ClampAngle((kPos - pos).ToAngle(), angle - stats.AngleRange, angle + stats.AngleRange);
+
+        bigSlashVelocity = Quaternion.Euler(0, 0, angle) * new Vector3(stats.Speed, 0, 0);
+        bigSlashDeceleration = stats.Deceleration;
+    }
+
+    [ShimMethod]
+    public void BigSlashPrepare() => KnightOfNightsPreloader.Instance.HornetParryClip?.PlayAtPosition(transform.position);
+
+    private CoroutineElement DoBigSlash()
+    {
+        var stats = this.stats!.BigSlashStats!;
+        var kPos = HeroController.instance.transform.position;
+        bool attackLeft = kPos.x > Bounds().max.x - stats.XBuffer || (kPos.x > Bounds().min.x + stats.XBuffer && MathExt.CoinFlip());
+
+        Vector2 pos = new(kPos.x + stats.SpawnOffset.x * (attackLeft ? 1 : -1), kPos.y + stats.SpawnOffset.y);
+
+        transform.position = pos;
+        FacePlayer();
+    
+        return Coroutines.PlayAnimations(animator!, [TeleportInController!, BigSlashController!, TeleportOutController!]);
+    }
+
+    private IEnumerator<CoroutineElement> BigSlash()
+    {
+        yield return Coroutines.SleepSeconds(stats!.BigSlashStats!.AttackDuration).WithDisposable(DoBigSlash());
     }
 
     private IEnumerator<CoroutineElement> EmptyTeleport()
@@ -796,13 +843,16 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         List<Pancake> ret = [];
         var extra = stats.WingCount;
+        bool playedSound = false;
         for (int i = -extra; i < NUM_PANCAKES + extra; i++)
         {
             bool mainPlatform = i >= 0 && i < NUM_PANCAKES;
             if (mainPlatform && !spawns[i]) continue;
 
             var minY = Bounds().min.y - (mainPlatform ? 0 : 8);
-            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, playSound: i == 0));
+            bool playSound = mainPlatform && !playedSound;
+            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, playSound));
+            playedSound |= playSound;
         }
         return ret;
     }
@@ -877,9 +927,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             yield return Coroutines.SleepSeconds(stats.WaitFromLastDropToDive);
 
             stayFacing = false;
-            yield return Coroutines.Sequence(Dive(i == 2));
+            bool last = i == stats.WaveCounts.Count - 1;
+            yield return Coroutines.Sequence(Dive(tallWave: last));
 
-            yield return Coroutines.SleepSeconds(i == 2 ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
+            yield return Coroutines.SleepSeconds(last ? stats.WaitFinal : stats.WaitFromDiveToNextSpawn);
         }
     }
 
@@ -994,31 +1045,6 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     private bool parried = false;
     public void Parried(float direction) => parried = true;
 
-    [ShimMethod]
-    public void BigSlashFollowup() => KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(transform.position, 0.9f);
-
-    [ShimMethod]
-    public void BigSlashMove()
-    {
-        var stats = this.stats!.SlashAmbushStats!;
-
-        Vector2 kPos = HeroController.instance.transform.position.To2d() + stats.BigSlashTargetOffset;
-        Vector2 pos = transform.position;
-
-        KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(pos);
-        KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(pos, 1.1f);
-
-        float angle = FacingLeft ? 180 : 0;
-        if (FacingLeft == kPos.x < pos.x)
-            angle = MathExt.ClampAngle((kPos - pos).ToAngle(), angle - stats.BigSlashAngleRange, angle + stats.BigSlashAngleRange);
-
-        bigSlashVelocity = Quaternion.Euler(0, 0, angle) * new Vector3(stats.BigSlashSpeed, 0, 0);
-        bigSlashDeceleration = stats.BigSlashDeceleration;
-    }
-
-    [ShimMethod]
-    public void BigSlashPrepare() => KnightOfNightsPreloader.Instance.HornetParryClip?.PlayAtPosition(transform.position);
-
     private IEnumerator<CoroutineElement> SlashAmbush()
     {
         var stats = this.stats!.SlashAmbushStats!;
@@ -1030,36 +1056,22 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             a.OnResult += result =>
             {
                 if (result != SlashAttackResult.PARRIED) return;
-                ++parries.Value;
+
+                lastPos = a.ParryPos;
+                healthManager!.hp -= a.DamageDealt;
+                if (++parries.Value == attacks.Count)
+                    MaybeStagger(a);
             };
         });
 
-        yield return Coroutines.SleepSeconds(stats.BigSlashDelay);
-
-        var kPos = HeroController.instance.transform.position;
-        bool attackLeft = kPos.x > Bounds().max.x - stats.BigSlashXBuffer || (kPos.x > Bounds().min.x + stats.BigSlashXBuffer && MathExt.CoinFlip());
-
-        Vector2 pos = new(kPos.x + stats.BigSlashSpawnOffset.x * (attackLeft ? 1 : -1), kPos.y + stats.BigSlashSpawnOffset.y);
-
-        transform.position = pos;
-        FacePlayer();
-
-        var choice = Coroutines.OneOf(
-            Coroutines.SleepSeconds(stats.GracePeriod).WithDisposable(Coroutines.PlayAnimations(animator!, [TeleportInController!, BigSlashController!, TeleportOutController!])),
-            Coroutines.SleepUntil(() => parries.Value == attacks.Count).Then(DeferredOnTakeDamage()));
-        yield return choice;
-
-        if (choice.Choice == 1)
+        IEnumerator<CoroutineElement> MaybeDoBigSlash()
         {
-            FacePlayer();
-            MaybeStagger(new StaggerParams()
-            {
-                Pos = transform.position,
-                FacingLeft = FacingLeft,
-            });
-
-            yield return Coroutines.SleepSeconds(stats.HitGracePeriod);
+            yield return parries.Value == attacks.Count ? Coroutines.Never() : Coroutines.AllOf(DoBigSlash(), Coroutines.SleepSeconds(stats.GracePeriod));
         }
+
+        yield return Coroutines.OneOf(
+            Coroutines.SleepUntil(() => parries.Value == attacks.Count).Then(Coroutines.SleepSeconds(stats.HitGracePeriod)),
+            Coroutines.SleepSeconds(stats.BigSlashDelay).Then(MaybeDoBigSlash()));
     }
 
     private static List<List<int>> GenUltraInstinctGroupings()
@@ -1144,22 +1156,20 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     private readonly List<GameObject> xeroNailLeftSpawns = [];
     private readonly List<GameObject> xeroNailRightSpawns = [];
 
-    private void CreateXeroNailSpawns()
+    private void EnsureXeroNailSpawns()
     {
-        if (xeroNailLeftSpawns.Count > 0) return;
-
         var stats = this.stats!.XeroArmadaStats!;
 
         float xOff = stats.NailXInitialSpace;
         float yOff = stats.NailYInitialSpace;
         for (int i = 0; i < stats.NumNailsPerWing; i++)
         {
-            GameObject left = new();
+            GameObject left = xeroNailLeftSpawns.Count > i ? xeroNailLeftSpawns[i] : new();
             left.SetParent(gameObject);
             left.transform.localPosition = new(-xOff, yOff);
             xeroNailLeftSpawns.Add(left);
 
-            GameObject right = new();
+            GameObject right = xeroNailRightSpawns.Count > i ? xeroNailRightSpawns[i] : new();
             right.SetParent(gameObject);
             right.transform.localPosition = new(xOff, yOff);
             xeroNailRightSpawns.Add(right);
@@ -1206,7 +1216,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [TeleportInController!, SpellStartToLoopController!]));
         yield return Coroutines.SleepSeconds(stats.WaitInitial);
 
-        CreateXeroNailSpawns();
+        EnsureXeroNailSpawns();
 
         List<XeroNail> left = [];
         List<XeroNail> right = [];
@@ -1292,13 +1302,20 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         bobber!.enabled = false;
         yFixer!.enabled = false;
 
-        this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
-        yield return Coroutines.SleepSecondsUpdateDelta(stats.GracePeriod, delta =>
+        if (!stats.Dive)
         {
-            speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, 0);
-            rigidbody!.velocity = rigidbody.velocity with { x = speed.Value };
-            return false;
-        });
+            this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
+            yield return Coroutines.SleepSecondsUpdateDelta(stats.GracePeriod, delta =>
+            {
+                speed.Value.AdvanceFloatAbs(delta * stats.XMoveAccel, 0);
+                rigidbody!.velocity = rigidbody.velocity with { x = speed.Value };
+                return false;
+            });
+            yield break;
+        }
+
+        yield return Coroutines.PlayAnimation(animator!, SpellLoopToSwordController!);
+        yield return Coroutines.SleepSeconds(stats.GracePeriod).WithDisposable(Coroutines.Sequence(Dive(true)));
     }
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;

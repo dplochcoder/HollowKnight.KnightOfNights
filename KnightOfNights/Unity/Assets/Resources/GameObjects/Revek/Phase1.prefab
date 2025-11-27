@@ -46,7 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 0
   Weight: 1
-  Cooldown: 3
+  Cooldown: 2
   InitialCooldown: 2
   WeightIncrease: 0.25
   ForbiddenPredecessors: 
@@ -89,6 +89,75 @@ MonoBehaviour:
   WaitBetweenAxeSpawns: 0.3
   WaitBetweenSlashAttacks: 1.52
   WaitInitial: 0.85
+--- !u!1 &1296194510656451111
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8614229888158119064}
+  - component: {fileID: 7454649639180389767}
+  - component: {fileID: 6560040589187630128}
+  m_Layer: 11
+  m_Name: BigSlash
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8614229888158119064
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296194510656451111}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 5023055879092899735}
+  m_RootOrder: 10
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7454649639180389767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296194510656451111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 813019028, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Choice: 8
+  Weight: 0.75
+  Cooldown: 3
+  InitialCooldown: 3
+  WeightIncrease: 0.5
+  ForbiddenPredecessors: 0700000005000000
+--- !u!114 &6560040589187630128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1296194510656451111}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 1052977229, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AngleRange: 45
+  AttackDuration: 1.6
+  SpawnOffset: {x: 5.5, y: 0.5}
+  Speed: 110
+  TargetOffset: {x: 0, y: -0.5}
+  XBuffer: 8
+  Deceleration: 0.86
 --- !u!1 &1346293579354258627
 GameObject:
   m_ObjectHideFlags: 0
@@ -127,6 +196,7 @@ Transform:
   - {fileID: 2941213674367425441}
   - {fileID: 3557326965417236917}
   - {fileID: 7051927807146792789}
+  - {fileID: 8614229888158119064}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -142,7 +212,7 @@ MonoBehaviour:
   m_Script: {fileID: -885883358, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  MinHP: 1200
+  MinHP: 1600
   FirstAttack: 5
   Attacks:
   - {fileID: 807538454964093753}
@@ -151,6 +221,7 @@ MonoBehaviour:
   - {fileID: 5596897245960897113}
   - {fileID: 434282296705944439}
   AxeHopscotchStats: {fileID: 3477161486371040526}
+  BigSlashStats: {fileID: 6560040589187630128}
   DiveStats: {fileID: 3728819409160070971}
   EmptyTeleportStats: {fileID: 2956078922529798382}
   GorbStormStats: {fileID: 1720482504391799160}
@@ -340,7 +411,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 4
   Weight: 1.5
-  Cooldown: 3
+  Cooldown: 2
   InitialCooldown: 0
   WeightIncrease: 0.75
   ForbiddenPredecessors: 06000000
@@ -375,7 +446,7 @@ MonoBehaviour:
   RotationSpeedDecel: 240
   RotationSpeedMinimum: 110
   RotationSpeedStart: 240
-  ShieldsPerWave: 4
+  ShieldsPerWave: 5
   WaitAfterShieldTeleport: 1.15
   WaitAfterLastShieldSpawn: 1.5
   WaitBetweenDaggerSpawns: 0.35
@@ -477,7 +548,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 6
   Weight: 0.75
-  Cooldown: 3
+  Cooldown: 2
   InitialCooldown: 2
   WeightIncrease: 0.25
   ForbiddenPredecessors: 04000000
@@ -495,9 +566,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BobPeriod: 1.8
   BobRadius: 0.3
+  Dive: 0
   GracePeriod: 0.85
   HeightMax: 10.5
-  HeightMin: 8.5
+  HeightMin: 9.5
   NailXInitialSpace: 2
   NailXSpace: 1.3
   NailYInitialSpace: -0.25
@@ -514,14 +586,14 @@ MonoBehaviour:
   ProjectileShootTime: 0.5
   ProjectileSpeed: 46
   ProjectileSpinTime: 0.35
-  WaitBetweenNailFires: 0.725
+  WaitBetweenNailFires: 0.675
   WaitBetweenNailSpawns: 0.1
   WaitInitial: 0.6
   WaitLastSpawnToMove: 1.1
   WaitLastSpawnToFire: 0.65
   XBuffer: 8
   XMoveAccel: 22
-  XMoveDuration: 9.2
+  XMoveDuration: 8.9
   XMoveSpeed: 9
   XRangeMin: 6
   XRangeMax: 10
@@ -571,7 +643,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 5
   Weight: 1
-  Cooldown: 3
+  Cooldown: 2
   InitialCooldown: 0
   WeightIncrease: 0.5
   ForbiddenPredecessors: 07000000
@@ -638,9 +710,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 1
   Weight: 0.5
-  Cooldown: 5
+  Cooldown: 3
   InitialCooldown: 3
-  WeightIncrease: 0.1
+  WeightIncrease: 0.25
   ForbiddenPredecessors: 05000000
 --- !u!114 &2956078922529798382
 MonoBehaviour:
@@ -743,7 +815,7 @@ MonoBehaviour:
   SpokeRotationFinale: 0.2857
   SpokeRotationSmall: 0.5
   WaitAfterFinale: 0.8
-  WaitAfterTeleport: 0.6
+  WaitAfterTeleport: 0.65
   WaitBeforeFinale: 0.6
   WaitBeforeTeleport: 0.25
   WaitFirst: 0.75
@@ -795,10 +867,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Choice: 7
   Weight: 1
-  Cooldown: 3
+  Cooldown: 2
   InitialCooldown: 3
   WeightIncrease: 0.5
-  ForbiddenPredecessors: 05000000
+  ForbiddenPredecessors: 0500000008000000
 --- !u!114 &8508689667801155758
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -811,16 +883,10 @@ MonoBehaviour:
   m_Script: {fileID: 1250012122, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  BigSlashAngleRange: 25
-  BigSlashDelay: 2.85
-  BigSlashSpawnOffset: {x: 4.75, y: 0.5}
-  BigSlashSpeed: 105
-  BigSlashTargetOffset: {x: 0, y: -0.5}
-  BigSlashXBuffer: 8
-  BigSlashDeceleration: 0.84
+  BigSlashDelay: 2.75
   FirstTelegraph: 0.75
-  GracePeriod: 1.6
+  GracePeriod: 1.45
   HitGracePeriod: 1.1
   SlashSpeed: 180
   SlashDeceleration: 0.9
-  TelegraphStagger: 0.325
+  TelegraphStagger: 0.275

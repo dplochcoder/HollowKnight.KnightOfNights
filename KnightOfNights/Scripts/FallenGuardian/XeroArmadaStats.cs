@@ -8,6 +8,7 @@ internal class XeroArmadaStats : MonoBehaviour
 {
     [ShimField] public float BobPeriod;
     [ShimField] public float BobRadius;
+    [ShimField] public bool Dive;
     [ShimField] public float GracePeriod;
     [ShimField] public float HeightMax;
     [ShimField] public float HeightMin;
