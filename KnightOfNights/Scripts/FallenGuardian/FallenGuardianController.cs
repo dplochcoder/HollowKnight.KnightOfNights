@@ -131,6 +131,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         StaggerBurst?.FixSpawnBug();
         TeleportBurst?.FixSpawnBug();
 
+        animator.runtimeAnimatorController = null;
         SetTangible(false);
         InitParticles();
     }
@@ -578,7 +579,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     [ShimMethod]
     public void BigSlashPrepare() => KnightOfNightsPreloader.Instance.HornetParryClip?.PlayAtPosition(transform.position);
 
-    private CoroutineElement DoBigSlash()
+    private IEnumerator<CoroutineElement> DoBigSlash()
     {
         var stats = this.stats!.BigSlashStats!;
         var kPos = HeroController.instance.transform.position;
@@ -588,13 +589,16 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         transform.position = pos;
         FacePlayer();
-    
-        return Coroutines.PlayAnimations(animator!, [TeleportInController!, BigSlashController!, TeleportOutController!]);
+
+        int prev = healthManager!.hp;
+        yield return Coroutines.PlayAnimation(animator!, TeleportInController!);
+        yield return Coroutines.OneOf(Coroutines.PlayAnimation(animator!, BigSlashController!), Coroutines.SleepUntil(() => healthManager!.hp < prev));
+        yield return Coroutines.PlayAnimation(animator!, TeleportOutController!);
     }
 
     private IEnumerator<CoroutineElement> BigSlash()
     {
-        yield return Coroutines.SleepSeconds(stats!.BigSlashStats!.AttackDuration).WithDisposable(DoBigSlash());
+        yield return Coroutines.SleepSeconds(stats!.BigSlashStats!.AttackDuration).WithDisposable(Coroutines.Sequence(DoBigSlash()));
     }
 
     private IEnumerator<CoroutineElement> EmptyTeleport()
@@ -1066,7 +1070,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         IEnumerator<CoroutineElement> MaybeDoBigSlash()
         {
-            yield return parries.Value == attacks.Count ? Coroutines.Never() : Coroutines.AllOf(DoBigSlash(), Coroutines.SleepSeconds(stats.GracePeriod));
+            yield return parries.Value == attacks.Count ? Coroutines.Never() : Coroutines.AllOf(Coroutines.Sequence(DoBigSlash()), Coroutines.SleepSeconds(stats.GracePeriod));
         }
 
         yield return Coroutines.OneOf(
@@ -1314,7 +1318,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             yield break;
         }
 
-        yield return Coroutines.PlayAnimation(animator!, SpellLoopToSwordController!);
+        yield return Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, SwordToDiveAnticNoLoopController!]);
         yield return Coroutines.SleepSeconds(stats.GracePeriod).WithDisposable(Coroutines.Sequence(Dive(true)));
     }
 

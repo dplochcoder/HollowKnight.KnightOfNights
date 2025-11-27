@@ -136,10 +136,6 @@ PrefabInstance:
       value: 0.275
       objectReference: {fileID: 0}
     - target: {fileID: 6363866416786720208, guid: 2423f052ae18adb4399d1da963551782, type: 3}
-      propertyPath: WaitFinal
-      value: 0.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6363866416786720208, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaveCounts.Array.size
       value: 2
       objectReference: {fileID: 0}
@@ -245,11 +241,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: GracePeriod
-      value: 1.75
+      value: 1.95
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: XMoveDuration
-      value: 7.6
+      value: 7.45
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitBetweenNailFires

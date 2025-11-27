@@ -152,9 +152,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   AngleRange: 45
-  AttackDuration: 1.6
-  SpawnOffset: {x: 5.5, y: 0.5}
-  Speed: 110
+  AttackDuration: 1.7
+  SpawnOffset: {x: 5.25, y: 0.5}
+  Speed: 120
   TargetOffset: {x: 0, y: -0.5}
   XBuffer: 8
   Deceleration: 0.86
@@ -310,7 +310,7 @@ MonoBehaviour:
   WaitAfterSpawnForTeleport: 0.35
   WaitBetweenWaveDrops: 0.3
   WaitBetweenWaveSpawns: 0.125
-  WaitFinal: 0.85
+  WaitFinal: 1.05
   WaitFromDiveToNextSpawn: 0.45
   WaitFromLastDropToDive: 0.55
   WaveCounts: 020000000200000003000000
@@ -885,7 +885,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   BigSlashDelay: 2.75
   FirstTelegraph: 0.75
-  GracePeriod: 1.45
+  GracePeriod: 1.55
   HitGracePeriod: 1.1
   SlashSpeed: 180
   SlashDeceleration: 0.9

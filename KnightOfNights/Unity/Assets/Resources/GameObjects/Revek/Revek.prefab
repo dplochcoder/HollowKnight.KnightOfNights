@@ -585,7 +585,7 @@ Animator:
   m_GameObject: {fileID: 7989141326161804240}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 0338b42b5d066b948a0519e984400222, type: 2}
+  m_Controller: {fileID: 9100000, guid: ab8e5ed425d085848b66f77edb8f2517, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -606,7 +606,7 @@ MonoBehaviour:
   m_Script: {fileID: 1065641544, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hp: 2200
+  hp: 999
   SoulGain: 1
   hasSpecialDeath: 1
   deathReset: 0

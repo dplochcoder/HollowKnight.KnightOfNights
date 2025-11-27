@@ -105,7 +105,11 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 
     private IEnumerator LoadSceneAsyncRelease(string assetBundleName, Action cb)
     {
-        if (sceneBundles[assetBundleName] != null) yield break;
+        if (sceneBundles[assetBundleName] != null)
+        {
+            cb();
+            yield break;
+        }
 
         var sceneRequest = LoadAssetAsync(assetBundleName);
         yield return sceneRequest;
