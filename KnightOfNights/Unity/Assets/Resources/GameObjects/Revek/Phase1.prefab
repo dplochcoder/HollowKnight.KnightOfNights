@@ -807,7 +807,7 @@ MonoBehaviour:
   PitchIncrementSmall: 0.15
   SmallXMin: 5.5
   SmallXMax: 8.5
-  SmallYMin: 4.5
+  SmallYMin: 5.5
   SmallYMax: 8.5
   SpikeAccel: 1.1
   SpokeCountFinale: 5

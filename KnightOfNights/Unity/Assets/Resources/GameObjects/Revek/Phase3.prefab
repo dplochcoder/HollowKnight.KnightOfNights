@@ -177,7 +177,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeCountSmall
-      value: 9
+      value: 12
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitAfterFinale
@@ -205,7 +205,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeRotationSmall
-      value: 0.333333
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitBeforeTeleport
@@ -217,7 +217,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: SpokeRotationFinale
-      value: 0.4
+      value: 0.222222
       objectReference: {fileID: 0}
     - target: {fileID: 7965057313743841426, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: PitchIncrementFinale
@@ -241,7 +241,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: GracePeriod
-      value: 1.95
+      value: 1.9
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: XMoveDuration
@@ -249,7 +249,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8639974829991416986, guid: 2423f052ae18adb4399d1da963551782, type: 3}
       propertyPath: WaitBetweenNailFires
-      value: 0.575
+      value: 0.6
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2423f052ae18adb4399d1da963551782, type: 3}

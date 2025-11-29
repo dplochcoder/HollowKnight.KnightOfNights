@@ -557,9 +557,12 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     [ShimMethod]
     public void BigSlashFollowup() => KnightOfNightsPreloader.Instance.SlashAttackClip?.PlayAtPosition(transform.position, 0.9f);
 
+    private bool didBigSlashMove = false;
+
     [ShimMethod]
     public void BigSlashMove()
     {
+        didBigSlashMove = true;
         var stats = this.stats!.BigSlashStats!;
 
         Vector2 kPos = HeroController.instance.transform.position.To2d() + stats.TargetOffset;
@@ -592,7 +595,11 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         int prev = healthManager!.hp;
         yield return Coroutines.PlayAnimation(animator!, TeleportInController!);
-        yield return Coroutines.OneOf(Coroutines.PlayAnimation(animator!, BigSlashController!), Coroutines.SleepUntil(() => healthManager!.hp < prev));
+
+        // Attack can be interrupted if hit before slash.
+        didBigSlashMove = false;
+        yield return Coroutines.OneOf(Coroutines.PlayAnimation(animator!, BigSlashController!), Coroutines.SleepUntil(() => !didBigSlashMove && healthManager!.hp < prev));
+
         yield return Coroutines.PlayAnimation(animator!, TeleportOutController!);
     }
 
