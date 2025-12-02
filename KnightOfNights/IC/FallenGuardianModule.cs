@@ -13,7 +13,7 @@ namespace KnightOfNights.IC;
 [PlandoSubmodule]
 internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 {
-    private static readonly Transition TARGET_TRANSITION = new("RevekFight", "bot1");
+    private static readonly Transition TARGET_TRANSITION = new("Summit_EntryHall", "bot1");
 
     private const string PREFIX = "KnightOfNights.Unity.Assets.AssetBundles.";
 
