@@ -256,6 +256,13 @@ namespace KnightOfNights.Scripts.SharedLib
             }
         }
 
+        public static Vector2 AdvanceVecAbs(this ref Vector2 self, Vector2 delta, Vector2 target) => new Vector2(
+            self.x.AdvanceFloatAbs(delta.x, target.x),
+            self.y.AdvanceFloatAbs(delta.y, target.y));
+        public static Vector2 AdvanceVecAbs(this ref Vector2 self, float delta, Vector2 target) => self.AdvanceVecAbs((target - self).normalized * delta, target);
+
+        public static bool Contains(this Collider2D self, Vector2 point) => (point - self.ClosestPoint(point)).sqrMagnitude <= 0.1f;
+
         public static float Snap(float f, float epsilon) => epsilon * Mathf.Round(f / epsilon);
 
         public static bool NeedsSnap(float f, float epsilon) => Mathf.Abs(f - Snap(f, epsilon)) > 1e-6f;

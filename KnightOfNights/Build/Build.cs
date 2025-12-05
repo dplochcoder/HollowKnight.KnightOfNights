@@ -3,6 +3,7 @@ using PurenailCore.CollectionUtil;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -101,6 +102,7 @@ public static class Build
 
         // Code generation.
         GenerateUnityShims(root);
+        GenerateSceneNames(root);
     }
 
     private static void BuildProject(string root, string project, bool release)
@@ -283,6 +285,27 @@ public static class Build
     {
         ValidateType(type);
         return $"[UnityEngine.RequireComponent(typeof({PrintType(ns, type)}))]";
+    }
+
+    private static void GenerateSceneNames(string root)
+    {
+        List<string> sceneNames = [];
+        foreach (var path in Directory.EnumerateFiles($"{root}/KnightOfNights/Unity/Assets/Scenes"))
+        {
+            var ext = Path.GetExtension(path);
+            if (ext != ".unity") continue;
+
+            sceneNames.Add(Path.GetFileNameWithoutExtension(path));
+        }
+
+        sceneNames.Sort();
+        sceneNames.Dedup();
+        WriteSourceCode($"{root}/KnightOfNights/IC/SummitSceneNames.cs", $@"namespace KnightOfNights.IC;
+
+internal static class SummitSceneNames
+{{
+    {JoinIndented([.. sceneNames.Select(n => $"public const string {n} = \"{n}\";")], 4)}
+}}");
     }
 
     private static void WriteSourceCode(string path, string content)

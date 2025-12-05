@@ -80,6 +80,14 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
             return "With the fliers, it may be possible, but their movement is so erratic. There must be another way to the queen's side.";
         if (sceneName == SceneNames.Ruins2_03 && HasWings && !AcquiredLoc(LocationNames.Geo_Chest_Watcher_Knights))
             return "It is just barely possible from the platform, I need only maximize my flight. Was it architected for this purpose all along?";
+        if (sceneName == SummitSceneNames.Summit_EntryHall)
+            return "So it begins. Warriors be with me, it will take much to reach the peak...";
+        if (sceneName == SummitSceneNames.Summit_EntryPlain)
+            return "The entryway tests my horizontal. I should use the wings, dash, then dash again immediately after each parry into another flap of the wings.";
+        if (sceneName == SummitSceneNames.Summit_Tunnels)
+            return "The tunnels test my vertical quite treacherously. I need to maximize my jumps from floor and wall alike before ascending through the first two tunnels.<br>For the third, I must be more resourceful.  Three parries is not enough, I must find a way to forestall my flight after the second so I can ascend anew past the gap.";
+        if (sceneName == SummitSceneNames.Summit_WindCliffs)
+            return "As the entryway, I must maximize my horizontal to cross this impossible mountain. I can stall past the peak and let the wind carry me to the ledge.  To ascend the other side I must fight the wind as I rise, dashing against it.";
         if (sceneName == SceneNames.Town && HasWings)
             return "It is so tantalizing, but I think I cannot reach the great door; perhaps there is another way around. The lever I think I can reach, but even if I did, surely I cannot pass the crystal sea.";
         if (sceneName == SceneNames.Waterways_06 && !HasWings && !AcquiredLoc(LocationNames.Rancid_Egg_Waterways_Main))

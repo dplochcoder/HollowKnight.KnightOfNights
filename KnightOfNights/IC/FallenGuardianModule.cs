@@ -56,7 +56,7 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
     private void OnBeforeSceneLoad(string sceneName, Action cb)
     {
         var assetBundleName = AssetBundleName(sceneName);
-        if (!sceneBundles.ContainsKey(assetBundleName))
+        if (!sceneBundles.ContainsKey(assetBundleName) && !DebugAssetExists(assetBundleName))
         {
             cb();
             return;
@@ -75,6 +75,16 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
             assetBundle?.Unload(true);
             sceneBundles[assetBundleName] = null;
         }
+    }
+
+    private bool DebugAssetExists(string name)
+    {
+#if DEBUG
+        var debugData = DebugData.Get();
+        return File.Exists($"{debugData.LocalAssetBundlesPath}/{name}");
+#else
+        return false;
+#endif
     }
 
     private AssetBundleCreateRequest LoadAssetAsync(string name)
