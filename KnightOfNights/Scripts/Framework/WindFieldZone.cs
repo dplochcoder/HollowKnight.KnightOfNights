@@ -1,6 +1,6 @@
 ﻿using KnightOfNights.Scripts.SharedLib;
+using KnightOfNights.Util;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.Framework;
@@ -17,17 +17,17 @@ internal abstract class WindFieldZone : MonoBehaviour
 [RequireComponent(typeof(Collider2D))]
 internal abstract class ColliderWindFieldZone : WindFieldZone
 {
-    protected abstract bool GetWindSpeed(Collider2D collider, Vector2 pos, out Vector2 windSpeed);
+    protected abstract bool GetWindSpeed(Vector2 pos, out Vector2 windSpeed);
 
     internal override IEnumerable<(PurenailCore.CollectionUtil.Rect, WindFieldZoneCallback)> GetCallbacks()
     {
         foreach (var collider in GetComponentsInChildren<Collider2D>())
         {
-            var colliderCopy = collider;
+            var containmentFunc = collider.QuantizedContainmentTest(4f);
             bool Callback(Vector2 pos, out Vector2 windSpeed)
             {
                 windSpeed = Vector2.zero;
-                return colliderCopy.Contains(pos) && GetWindSpeed(colliderCopy, pos, out windSpeed);
+                return containmentFunc(pos) && GetWindSpeed(pos, out windSpeed);
             }
 
             yield return (new(collider.bounds), Callback);
@@ -40,7 +40,7 @@ internal class ConstantWindFieldZone : ColliderWindFieldZone
 {
     [ShimField] public Vector2 WindSpeed;
 
-    protected override bool GetWindSpeed(Collider2D collider, Vector2 pos, out Vector2 windSpeed)
+    protected override bool GetWindSpeed(Vector2 pos, out Vector2 windSpeed)
     {
         windSpeed = WindSpeed;
         return true;
@@ -55,7 +55,7 @@ internal class GradientWindFieldZone : ColliderWindFieldZone
     [ShimField] public Transform? PointB;
     [ShimField] public Vector2 SpeedB;
 
-    protected override bool GetWindSpeed(Collider2D collider, Vector2 pos, out Vector2 windSpeed)
+    protected override bool GetWindSpeed(Vector2 pos, out Vector2 windSpeed)
     {
         if (PointA == null || PointB == null)
         {

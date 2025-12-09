@@ -10,9 +10,8 @@ internal class WindFieldParticles : MonoBehaviour
 {
     private record ParticleData(Vector2 pos)
     {
-        public Vector2 PrevPos = pos;
-        public Vector2? LockedVelocity;
-        public readonly CompactDict<Vector2> WindSpeed = new();
+        public bool Initialized = false;
+        public Vector2 WindSpeed = WindField.ActiveWindEffects(pos, WindTargetType.Particle);
     }
 
     private PartileSystemExtension<ParticleData>? particleWindData;
@@ -20,51 +19,6 @@ internal class WindFieldParticles : MonoBehaviour
     private void Awake()
     {
         if (TryGetComponent<ParticleSystem>(out var system)) particleWindData = new(system);
-    }
-
-    private void UpdateParticle(ref ParticleSystem.Particle particle, ref ParticleData data)
-    {
-        if (particle.remainingLifetime <= 0) return;
-
-        if (data.LockedVelocity.HasValue)
-        {
-            particle.position = particle.position.To2d() + data.LockedVelocity.Value * Time.deltaTime;
-            return;
-        }
-
-        Vector2 pPos = particle.position;
-        Vector2 windDelta = Vector2.zero;
-        foreach (var windField in WindField.ActiveWindFields())
-        {
-            bool initialized = data.WindSpeed.TryGetValue(windField.Id, out var windSpeed);
-            var target = windField.WindSpeedAtPos(pPos, WindTargetType.Particle);
-            if (initialized) windSpeed.AdvanceVecAbs(Time.deltaTime * windField.ParticleWindAccel, target);
-            else windSpeed = target;
-
-            data.WindSpeed[windField.Id] = windSpeed;
-            windDelta += windSpeed;
-        }
-
-        particle.position = pPos + windDelta * Time.deltaTime;
-        Vector2 prevTarget = WindField.ActiveWindEffects(data.PrevPos, WindTargetType.Particle);
-        Vector2 newTarget = WindField.ActiveWindEffects(particle.position, WindTargetType.Particle);
-        if (prevTarget.sqrMagnitude > 0)
-        {
-            var ratio = newTarget.magnitude / prevTarget.magnitude;
-            if (ratio < 0.5f)
-            {
-                // Check if this is due to a horizontal wall.
-                newTarget = WindField.ActiveWindEffects(particle.position with { y = data.PrevPos.y }, WindTargetType.Particle) * ratio;
-                var liveProb = newTarget.magnitude / prevTarget.magnitude;
-                if (liveProb < 0.5f && Random.Range(0f, 1f) >= liveProb)
-                {
-                    particle.remainingLifetime = Mathf.Min(particle.startLifetime * 0.15f, particle.remainingLifetime);
-                    data.LockedVelocity = windDelta;
-                }
-            }
-        }
-
-        data.PrevPos = particle.position;
     }
 
     private void LateUpdate()
@@ -75,7 +29,14 @@ internal class WindFieldParticles : MonoBehaviour
         for (int i = 0; i < session.Count; i++)
         {
             var (particle, data) = session.Get(i);
-            UpdateParticle(ref particle, ref data);
+
+            if (!data.Initialized)
+            {
+                data.Initialized = true;
+                particle.position -= data.WindSpeed.To3d() * particle.remainingLifetime / 2;
+            }
+            particle.position += data.WindSpeed.To3d() * Time.deltaTime;
+
             session.Set(i, particle, data);
         }
     }
