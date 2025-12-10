@@ -8,10 +8,12 @@ namespace KnightOfNights.Scripts.Framework;
 [RequireComponent(typeof(ParticleSystem))]
 internal class WindFieldParticles : MonoBehaviour
 {
-    private record ParticleData(Vector2 pos)
+    private record ParticleData
     {
         public bool Initialized = false;
-        public Vector2 WindSpeed = WindField.ActiveWindEffects(pos, WindTargetType.Particle);
+        public Vector2 WindSpeed;
+        
+        public ParticleData(Vector2 pos) => WindSpeed = WindField.ActiveWindEffects(pos, WindTargetType.Particle);
     }
 
     private PartileSystemExtension<ParticleData>? particleWindData;

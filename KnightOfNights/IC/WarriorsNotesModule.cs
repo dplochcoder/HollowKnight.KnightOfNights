@@ -84,6 +84,8 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
             return "So it begins. Warriors be with me, it will take much to reach the peak...";
         if (sceneName == SummitSceneNames.Summit_EntryPlain)
             return "The entryway tests my horizontal. I should use the wings, dash, then dash again immediately after each parry into another flap of the wings.";
+        if (sceneName == SummitSceneNames.Summit_SpikeTunnels)
+            return "More tunnels... more precise than the last. The first requires me to dash to and fro; I should summon the guardian in alternating strikes to facilitate this.<br><br>The second is a cruel challenge, there is not room enough to parry downwards freely. I could enter the tunnel early, stall, then my dash would be recharged for instant use after the first parry...";
         if (sceneName == SummitSceneNames.Summit_Tunnels)
             return "The tunnels test my vertical quite treacherously. I need to maximize my jumps from floor and wall alike before ascending through the first two tunnels.<br><br>For the third, I must be more resourceful. Three parries is not enough, I must find a way to forestall my flight after the second so I can ascend anew past the pincer.";
         if (sceneName == SummitSceneNames.Summit_WindCliffs)
