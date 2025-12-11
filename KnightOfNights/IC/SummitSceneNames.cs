@@ -2,6 +2,7 @@ namespace KnightOfNights.IC;
 
 internal static class SummitSceneNames
 {
+    public const string Summit_BigWindClimb = "Summit_BigWindClimb";
     public const string Summit_Boss = "Summit_Boss";
     public const string Summit_EntryHall = "Summit_EntryHall";
     public const string Summit_EntryPlain = "Summit_EntryPlain";

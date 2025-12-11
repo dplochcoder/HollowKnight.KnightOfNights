@@ -80,6 +80,8 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
             return "With the fliers, it may be possible, but their movement is so erratic. There must be another way to the queen's side.";
         if (sceneName == SceneNames.Ruins2_03 && HasWings && !AcquiredLoc(LocationNames.Geo_Chest_Watcher_Knights))
             return "It is just barely possible from the platform, I need only maximize my flight. Was it architected for this purpose all along?";
+        if (sceneName == SummitSceneNames.Summit_BigWindClimb)
+            return "I feel the air growing thin already, how much higher does this go? The wind is softer here, but the mountainside... it is not uniform at all, every ledge necessitates a different approach. This tests my mind as much as my mettle. After the fourth ledge, I must fly with the wind through the sluice, and coast to the alcove after.<br><br>The slope beyond... it's softer, I must be close to the summit. But how am I to ascend? There is no ledge, no floor, no wall, nothing to aid my climb. Am I meant to conquer the air itself?";
         if (sceneName == SummitSceneNames.Summit_EntryHall)
             return "So it begins. Warriors be with me, it will take much to reach the peak...";
         if (sceneName == SummitSceneNames.Summit_EntryPlain)
