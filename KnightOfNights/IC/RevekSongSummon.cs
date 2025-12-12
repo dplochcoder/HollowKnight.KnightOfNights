@@ -16,10 +16,10 @@ internal class RevekSongSummon
 {
     internal static bool revekActive = false;
 
-    internal static void MoveWithWind(FsmState state)
+    internal static void MoveWithHero(FsmState state)
     {
         var t = state.Fsm.FsmComponent.transform;
-        state.AddFirstAction(new LambdaEveryFrame(() => t.Translate(WindField.ActiveWindEffects(t.position, WindTargetType.Hero) * Time.deltaTime, Space.World)));
+        state.AddFirstAction(new LambdaEveryFrame(() => t.Translate(WindField.HeroWindEffects() * Time.deltaTime, Space.World)));
     }
 
     internal static void Summon(List<FluteNote> notes)
@@ -91,12 +91,12 @@ internal class RevekSongSummon
             fsm.FsmVariables.GetFsmFloat("Y Distance").Value = 3f;
         }));
 
-        MoveWithWind(fsm.GetFsmState("Slash Antic"));
+        MoveWithHero(fsm.GetFsmState("Slash Antic"));
 
         var slashState = fsm.GetFsmState("Slash");
         slashState.AddFsmTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = new(0, -1.5f, 0);
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = 0.925f;
-        MoveWithWind(slashState);
+        MoveWithHero(slashState);
     }
 }

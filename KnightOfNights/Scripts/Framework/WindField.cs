@@ -48,6 +48,8 @@ internal class WindField : MonoBehaviour
 
     internal static Vector2 ActiveWindEffects(Vector2 pos, WindTargetType windTargetType) => windFields.Select(w => w.WindSpeedAtPos(pos, windTargetType)).Sum();
 
+    internal static Vector2 HeroWindEffects() => windFields.Select(w => w.heroWindEffect).Sum();
+
     private static readonly CompactIdGen idGen = new();
 
     internal int Id { get; private set; } = -1;
