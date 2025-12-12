@@ -89,7 +89,7 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
         SpawnSoul(obj.transform);
     }
 
-    private static Lazy<List<AudioClip>> hurtClips = new(() => [.. KnightOfNightsPreloader.Instance.Revek.LocateMyFSM("Control").GetFsmState("Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips]);
+    private static readonly Lazy<List<AudioClip>> hurtClips = new(() => [.. KnightOfNightsPreloader.Instance.Revek.LocateMyFSM("Control").GetFsmState("Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips]);
 
     internal static AudioClip GetHurtClip() => hurtClips.Get().Choose();
 }

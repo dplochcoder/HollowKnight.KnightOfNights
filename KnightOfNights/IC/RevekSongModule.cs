@@ -25,7 +25,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         ItemHelper.AddNormalItem(sprite.Value, nameof(HasRevekSong), NAME_KEY, DESC_KEY);
     }
 
-    private static FsmID dreamNailId = new("Knight", "Dream Nail");
+    private static readonly FsmID dreamNailId = new("Knight", "Dream Nail");
 
     public bool HasRevekSong;
 
@@ -75,8 +75,8 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
     }
 
     private bool inSession;
-    private HashSet<FluteNote> activeNotes = [];
-    private List<FluteNote> finishedNotes = [];
+    private readonly HashSet<FluteNote> activeNotes = [];
+    private readonly List<FluteNote> finishedNotes = [];
 
     private void StartSessopm()
     {

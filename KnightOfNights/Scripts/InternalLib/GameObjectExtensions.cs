@@ -15,7 +15,7 @@ internal class OnAwaken : MonoBehaviour
 
 internal static class GameObjectExtensions
 {
-    private static HashSet<GameObject> spawnBugFixed = [];
+    private static readonly HashSet<GameObject> spawnBugFixed = [];
 
     public static void FixSpawnBug(this GameObject self)
     {
