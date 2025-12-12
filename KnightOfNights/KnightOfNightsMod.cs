@@ -1,4 +1,5 @@
 using KnightOfNights.IC;
+using KnightOfNights.Rando;
 using Modding;
 using System;
 using System.Collections;
@@ -6,7 +7,7 @@ using System.Collections.Generic;
 
 namespace KnightOfNights;
 
-public class KnightOfNightsMod : Mod
+public class KnightOfNightsMod : Mod, IGlobalSettings<GlobalSettings>
 {
     public static KnightOfNightsMod? Instance { get; private set; }
 
@@ -24,7 +25,22 @@ public class KnightOfNightsMod : Mod
         WarriorsNotesModule.HookItemHelper();
     }
 
+    internal static GlobalSettings GS = new();
+    internal static RandomizationSettings RS => GS.RS;
+
+    public void OnLoadGlobal(GlobalSettings s) => GS = s ?? new();
+
+    public GlobalSettings OnSaveGlobal() => GS;
+
     private static void SetupDebug() => Debug.DebugInterop.Setup();
+
+    private static void SetupRando()
+    {
+        RandoInterop.Setup();
+        if (ModHooks.GetMod("RandoSettingsManager") is Mod) SetupRSM();
+    }
+
+    private static void SetupRSM() => SettingsProxy.Setup();
 
     public override List<(string, string)> GetPreloadNames() => KnightOfNightsPreloader.Instance.GetPreloadNames();
 
@@ -36,6 +52,7 @@ public class KnightOfNightsMod : Mod
 
         On.UIManager.StartNewGame += OnStartNewGame;
 
+        if (ModHooks.GetMod("Randomizer 4") is Mod) SetupRando();
         if (ModHooks.GetMod("DebugMod") is Mod) SetupDebug();
     }
 

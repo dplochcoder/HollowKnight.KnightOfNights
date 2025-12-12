@@ -7,3 +7,6 @@ RandomizerCore.Json
 SFCore
 
 Satchel
+MenuChanger
+RandoSettingsManager
+RandoPlus

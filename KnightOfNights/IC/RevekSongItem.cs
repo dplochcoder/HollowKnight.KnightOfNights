@@ -5,8 +5,11 @@ namespace KnightOfNights.IC;
 
 internal class RevekSongItem : AbstractItem
 {
-    public override void ResolveItem(GiveEventArgs args)
+    internal const string ITEM_NAME = "RevekSong";
+
+    internal RevekSongItem()
     {
+        name = ITEM_NAME;
         UIDef = new BigUIDef()
         {
             bigSprite = new EmbeddedSprite("reveksong_big"),
