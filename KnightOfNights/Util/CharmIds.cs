@@ -1,12 +1,12 @@
-﻿namespace KnightOfNights.Util;
+﻿using System.Linq;
 
-internal class CharmId
+namespace KnightOfNights.Util;
+
+internal class CharmId(int id)
 {
-    private readonly int id;
+    public readonly int Id = id;
 
-    internal CharmId(int id) => this.id = id;
-
-    public bool IsEquipped() => PlayerData.instance.GetBool($"equippedCharm_{id}");
+    public bool IsEquipped() => PlayerData.instance.GetBool($"equippedCharm_{Id}");
 }
 
 internal static class CharmIds
@@ -55,4 +55,10 @@ internal static class CharmIds
     public static readonly CharmId Dreamshield = new(38);
     public static readonly CharmId Weaversong = new(39);
     public static readonly CharmId Grimmchild = new(40);
+
+    internal static bool EquippedAnyCharmsBesidesVoidHeart()
+    {
+        var pd = PlayerData.instance;
+        return !pd.equippedCharms.Any(id => id != VoidHeart.Id || pd.GetInt(nameof(pd.royalCharmState)) == 3);
+    }
 }
