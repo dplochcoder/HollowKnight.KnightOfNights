@@ -70,7 +70,13 @@ internal class RevekSongSummon
         var damagedWait = damagedPauseState.GetFirstActionOfType<WaitRandom>();
         fsm.GetFsmState("Damaged Pause").AddFirstAction(new Lambda(() =>
         {
-            var wait = (++consecutiveHits.Value == 3) ? 4.5f : 0f;
+            float wait = 0f;
+            if (consecutiveHits.Value == 3)
+            {
+                wait = 4.5f;
+                revekActive = false;
+            }
+
             damagedWait.timeMin.Value = wait;
             damagedWait.timeMax.Value = wait;
         }));
@@ -79,7 +85,6 @@ internal class RevekSongSummon
         {
             if (consecutiveHits.Value == 3)
             {
-                revekActive = false;
                 fsm.SendEvent("REVEK KILLED");
                 Object.Destroy(fsm.gameObject);
                 return;
