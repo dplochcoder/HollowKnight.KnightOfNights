@@ -12,6 +12,8 @@ using UnityEngine;
 
 namespace KnightOfNights.IC;
 
+internal delegate bool InterceptRevekSummon(List<FluteNote> notes);
+
 internal class RevekSongSummon
 {
     internal static bool revekActive = false;
@@ -22,12 +24,22 @@ internal class RevekSongSummon
         state.AddFirstAction(new LambdaEveryFrame(() => t.Translate(WindField.HeroWindEffects() * Time.deltaTime, Space.World)));
     }
 
+    private static HashSet<InterceptRevekSummon> interceptors = [];
+
+    internal static void AddInterceptor(InterceptRevekSummon interceptor) => interceptors.Add(interceptor);
+
+    internal static void RemoveInterceptor(InterceptRevekSummon interceptor) => interceptors.Remove(interceptor);
+
     internal static void Summon(List<FluteNote> notes)
     {
         var mapZone = GameManager.instance.GetCurrentMapZone();
         if (mapZone == nameof(MapZone.DREAM_WORLD) || mapZone == nameof(MapZone.WHITE_PALACE) || mapZone == nameof(MapZone.GODS_GLORY)) return;
 
         if (notes.Count < 3 || revekActive) return;
+
+        foreach (var interceptor in interceptors)
+            if (interceptor(notes)) return;
+
         revekActive = true;
 
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
