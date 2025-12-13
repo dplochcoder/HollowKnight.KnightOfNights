@@ -109,7 +109,7 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
         var header = "A strange scroll awash with the glyphs of higher beings. They shift and change as the parchment moves within your grasp.";
 
         var desc = FillDesc(sceneName);
-        if (desc.Length == 0) desc = "The glyphs are currently indecipherable, a collage of disparate words and phrases. Perhaps elsewhere they will prove more enlightening.";
+        if (desc.Length == 0) desc = "The notes appear indecipherable in this area, dissonant and frivolous. Perhaps in another room they will conspire to create meaning.";
         else desc = $"\"{desc}\"";
 
         value = $"{header}<br><br>{desc}";
