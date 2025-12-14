@@ -10,13 +10,13 @@ using UnityEngine.Tilemaps;
 
 namespace KnightOfNights.Scripts.Proxy;
 
-// TODO: Write our own camera management system, the game's is wonky.
 [Shim]
 internal class CameraLockAreaProxy : MonoBehaviour
 {
     [ShimField] public bool preventLookUp;
     [ShimField] public bool preventLookDown;
     [ShimField] public bool maxPriority;
+    [ShimField("true")] public bool Snap;
 
     internal Deferred<List<CameraLockArea>> LockAreas = new();
 

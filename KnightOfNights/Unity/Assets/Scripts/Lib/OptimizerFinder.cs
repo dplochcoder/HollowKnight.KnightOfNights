@@ -311,6 +311,8 @@ namespace KnightOfNights.Scripts.Lib
 
         private static FixResult FixCLAP(CameraLockAreaProxy clap)
         {
+            if (!clap.Snap) return FixResult.UNCHANGED;
+
             bool changed = false;
             if (MathExt.NeedsSnap(clap.gameObject.transform.position, 0.5f))
             {
