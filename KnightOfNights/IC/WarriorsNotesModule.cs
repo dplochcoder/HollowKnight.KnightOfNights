@@ -82,12 +82,14 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
             return "It is just barely possible from the platform, I need only maximize my flight. Was it architected for this purpose all along?";
         if (sceneName == SummitSceneNames.Summit_BigWindClimb)
             return "I feel the air growing thin already, how much higher does this go? The wind is softer here, but the mountainside... it is not uniform at all, every ledge necessitates a different approach. This tests my mind as much as my mettle. After the fourth ledge, I must fly with the wind through the sluice, and coast to the alcove after.<br><br>The slope beyond... it's softer, I must be close to the summit. But how am I to ascend? There is no ledge, no floor, no wall, nothing to aid my climb. Am I meant to conquer the air itself?";
+        if (sceneName == SummitSceneNames.Summit_Checkpoint)
+            return "I did it! I didn't think it was possible, but as long as I am patient and steady... I shall enjoy this brief rest, warrior.<br><br>...<br><br>...<br><br>Warrior?...";
         if (sceneName == SummitSceneNames.Summit_EntryHall)
             return "So it begins. Warriors be with me, it will take much to reach the peak...";
         if (sceneName == SummitSceneNames.Summit_EntryPlain)
             return "The entryway tests my horizontal. I should use the wings, dash, then dash again immediately after each parry into another flap of the wings.";
         if (sceneName == SummitSceneNames.Summit_Intermission)
-            return "They cannot hear me anymore, this far from the kingdom; my calls go unanswered. Henceforth I must go it alone.";
+            return "They cannot hear me anymore. This far from the kingdom, my calls go unanswered.<br><br>Henceforth I must go it alone.";
         if (sceneName == SummitSceneNames.Summit_SpikeTunnels)
             return "More tunnels... more precise than the last. The first requires me to dash to and fro; I should summon the guardian in alternating strikes to facilitate this.<br><br>The second is a cruel challenge, there is not room enough to parry downwards freely. I could enter the tunnel early, stall, then my dash would be recharged for instant use after the first parry...";
         if (sceneName == SummitSceneNames.Summit_Tunnels)
