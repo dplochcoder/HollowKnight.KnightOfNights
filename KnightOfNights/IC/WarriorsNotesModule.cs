@@ -161,10 +161,10 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
     {
         var sceneName = UnityEngine.SceneManagement.SceneManager.GetActiveScene().name;
 
-        var header = "A strange scroll awash with the glyphs of higher beings. They shift and change as the parchment moves within your grasp.";
+        var header = "A collection of inferences and observations collected by one known only as 'The Warrior'. They appear supernaturally localized, changing as the bearer moves from place to place.";
 
         var desc = FillDesc(sceneName);
-        if (desc.Length == 0) desc = "The notes appear indecipherable in this area, dissonant and frivolous. Perhaps in another room they will conspire to create meaning.";
+        if (desc.Length == 0) desc = "The notes for this room appear lacking, or at least, negligible. Perhaps in another room they may reveal more substantive knowledge.";
         else desc = $"\"{desc}\"";
 
         value = $"{header}<br><br>{desc}";
