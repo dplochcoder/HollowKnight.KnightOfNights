@@ -88,6 +88,9 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Tutorial_01, "_Scenery/plat_float_07")]
     public GameObject? SmallPlatform { get; private set; }
 
+    [Preload(SceneNames.Fungus2_10, "Soul Totem mini_horned")]
+    public GameObject? SoulTotem { get; private set; }
+
     [ResourcePreload("Stun Effect")]
     public GameObject? StunEffect { get; private set; }
 
