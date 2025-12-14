@@ -9,6 +9,7 @@ internal static class SummitSceneNames
     public const string Summit_EntryPlain = "Summit_EntryPlain";
     public const string Summit_Intermission = "Summit_Intermission";
     public const string Summit_SpikeTunnels = "Summit_SpikeTunnels";
+    public const string Summit_TransCliffs = "Summit_TransCliffs";
     public const string Summit_Tunnels = "Summit_Tunnels";
     public const string Summit_WindCliffs = "Summit_WindCliffs";
     

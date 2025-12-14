@@ -134,6 +134,8 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
                 return "They cannot hear me anymore. This far from the kingdom, my calls go unanswered.<br><br>Henceforth I must go it alone.";
             case SummitSceneNames.Summit_SpikeTunnels:
                 return "More tunnels... more precise than the last. The first requires me to dash to and fro; I should summon the guardian in alternating strikes to facilitate this.<br><br>The second is a cruel challenge, there is not room enough to parry downwards freely. I could enter the tunnel early, stall, then my dash would be recharged for instant use after the first parry...";
+            case SummitSceneNames.Summit_TransCliffs:
+                return "The columns, I remember. They can be scaled with a precise technique, a... something-dash. It has been so long, I forget the name, but the technique shall return to me I am certain.";
             case SummitSceneNames.Summit_Tunnels:
                 return "The tunnels test my vertical quite treacherously. I need to maximize my jumps from floor and wall alike before ascending through the first two tunnels.<br><br>For the third, I must be more resourceful. Three parries is not enough, I must find a way to forestall my flight after the second so I can ascend anew past the pincer.";
             case SummitSceneNames.Summit_WindCliffs:
