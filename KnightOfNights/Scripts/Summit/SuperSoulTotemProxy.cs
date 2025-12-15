@@ -18,6 +18,7 @@ internal class SuperSoulTotemProxy : MonoBehaviour
         var totem = Instantiate(KnightOfNightsPreloader.Instance.SoulTotem!, transform.position, Quaternion.identity);
         totem.transform.localScale = transform.localScale;
         totem.AddComponent<SuperSoulTotem>();
+        totem.SetActive(true);
 
         Destroy(gameObject);
     }
