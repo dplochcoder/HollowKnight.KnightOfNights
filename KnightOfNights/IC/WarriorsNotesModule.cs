@@ -140,6 +140,8 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
                 return "The tunnels test my vertical quite treacherously. I need to maximize my jumps from floor and wall alike before ascending through the first two tunnels.<br><br>For the third, I must be more resourceful. Three parries is not enough, I must find a way to forestall my flight after the second so I can ascend anew past the pincer.";
             case SummitSceneNames.Summit_WindCliffs:
                 return "As the entryway, I must maximize my horizontal to cross this impossible mountain. I can stall past the peak and let the wind carry me to the ledge.<br><br>From the basin the only way forward is up, a treacherous climb against the wind... I must dash westwards at every opportunity to reach the alcove above.";
+            case SummitSceneNames.Summit_WindHops:
+                return "I have never seen the mountain so fierce, I cannot resist it at all. To soar as the wind flies...";
             case SceneNames.Town:
                 if (HasWings)
                     return "It is so tantalizing, but I think I cannot reach the great door; perhaps there is another way around. The lever I think I can reach, but even if I did, surely I cannot pass the crystal sea.";
