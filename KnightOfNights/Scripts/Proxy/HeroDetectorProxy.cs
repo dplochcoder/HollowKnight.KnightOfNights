@@ -28,7 +28,6 @@ internal class HeroDetectorProxy : MonoBehaviour
     public void Listen(Action detect, Action undetect)
     {
         if (Detected()) detect.Invoke();
-        else undetect.Invoke();
 
         OnDetectedEvent += detect;
         OnUndetectedEvent += undetect;
