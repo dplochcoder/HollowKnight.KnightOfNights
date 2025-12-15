@@ -1787,7 +1787,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781532438149113176, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: entryPoint
-      value: right1
+      value: right2
       objectReference: {fileID: 0}
     - target: {fileID: 781532438149113176, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: targetScene
