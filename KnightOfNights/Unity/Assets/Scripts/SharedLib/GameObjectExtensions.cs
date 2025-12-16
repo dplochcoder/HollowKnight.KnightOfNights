@@ -1,16 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace KnightOfNights.Scripts.SharedLib
 {
-    internal class Dummy : MonoBehaviour
-    {
-        public new void StartCoroutine(IEnumerator coroutine) => base.StartCoroutine(coroutine);
-    }
-
     public static class GameObjectExtensions
     {
         public static void SetVelocityX(this Rigidbody2D self, float x)
@@ -151,18 +145,6 @@ namespace KnightOfNights.Scripts.SharedLib
             var children = new List<GameObject>(self.Children());
             foreach (var child in children) if (filter == null || filter(child)) UnityEngine.Object.DestroyImmediate(child, true);
         }
-
-        public static void DoAfter(this GameObject self, Action action, float delay)
-        {
-            IEnumerator Routine()
-            {
-                yield return new WaitForSeconds(delay);
-                action();
-            }
-            self.GetOrAddComponent<Dummy>().StartCoroutine(Routine());
-        }
-
-        public static void DestroyAfter(this GameObject self, float delay) => self.DoAfter(() => UnityEngine.Object.Destroy(self), delay);
 
         public static GameObject ResetCompiled(this GameObject self, string name = "Compiled")
         {

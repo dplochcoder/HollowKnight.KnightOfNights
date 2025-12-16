@@ -10,6 +10,9 @@ internal class KnightOfNightsPreloader : Preloader
 {
     public static readonly KnightOfNightsPreloader Instance = new();
 
+    [ResourcePreload("Arrow Prompt")]
+    public GameObject? ArrowPrompt { get; private set; }
+
     [Preload(SceneNames.Mines_11, "Crystal Crawler")]
     public GameObject? CrystalCrawler { get; private set; }
 

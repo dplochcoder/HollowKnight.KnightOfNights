@@ -4,16 +4,14 @@ using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
 
-internal class OnDestroyHelper : MonoBehaviour
+internal class OnDestroyHelper : LifecycleOnceHelper
 {
-    internal Action? Action;
-
-    private void OnDestroy() => Action?.Invoke();
+    private void OnDestroy() => Invoke();
 }
 
 internal static class OnDestroyHelperExtensions
 {
-    internal static void DoOnDestroy(this GameObject self, Action action) => self.GetOrAddComponent<OnDestroyHelper>().Action += action;
+    internal static void DoOnDestroy(this GameObject self, Action action) => self.GetOrAddComponent<OnDestroyHelper>().OnEvent += action;
 
     internal static void DoOnDestroy(this MonoBehaviour self, Action action) => self.gameObject.DoOnDestroy(action);
 }

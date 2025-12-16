@@ -80,7 +80,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             compress.Value = timeToStrike / clockDuration;
             SpawnClock();
         }
-        else revek.OnAwake(() => revek.DoAfter(SpawnClock, timeToStrike - clockDuration));
+        else revek.DoOnAwake(() => revek.DoAfter(SpawnClock, timeToStrike - clockDuration));
 
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
@@ -107,7 +107,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         idleWait.timeMax = spec.Telegraph;
 
         var slashHit = revek.FindChild("Slash Hit")!;
-        slashHit.OnAwake(() =>
+        slashHit.DoOnAwake(() =>
         {
             var tink = slashHit.LocateMyFSM("nail_clash_tink");
             var blockedHitState = tink.GetFsmState("Blocked Hit");

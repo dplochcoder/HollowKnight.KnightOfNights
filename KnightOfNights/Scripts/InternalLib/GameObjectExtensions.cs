@@ -34,8 +34,6 @@ internal static class GameObjectExtensions
         while (!co.Update(Time.deltaTime).done) yield return 0;
     }
 
-    public static void OnAwake(this GameObject self, System.Action action) => self.GetOrAddComponent<OnAwaken>().Action += action;
-
     public static void PlayAtPosition(this AudioClip self, Vector2 pos, float pitch = 1f)
     {
         var obj = new GameObject();
@@ -53,6 +51,6 @@ internal static class GameObjectExtensions
             yield return null;
             Object.Destroy(obj);
         }
-        obj.AddComponent<Dummy>().StartCoroutine(Routine());
+        obj.AddComponent<DelayHelper>().StartCoroutine(Routine());
     }
 }
