@@ -333,6 +333,22 @@ namespace KnightOfNights.Scripts.Lib
             return ChangedResult(changed);
         }
 
+        private static FixResult FixDH(DamageHero damageHero)
+        {
+            bool changed = false;
+            foreach (var collider in damageHero.gameObject.GetComponents<Collider2D>())
+            {
+                if (!collider.isTrigger)
+                {
+                    collider.isTrigger = true;
+                    UnityEditorShims.MarkDirty(collider);
+                    changed = true;
+                }
+            }
+
+            return ChangedResult(changed);
+        }
+
         private static FixResult FixHDP(HeroDetectorProxy hdp)
         {
             bool changed = false;
