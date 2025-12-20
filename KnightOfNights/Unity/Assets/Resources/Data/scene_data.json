@@ -1,0 +1,12 @@
+{
+  "Summit_EntryPlain": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": false,
+      "MinX": 78.0,
+      "MaxX": 1000.0,
+      "MinY": 0.0,
+      "MaxY": 1000.0
+    }
+  ]
+}

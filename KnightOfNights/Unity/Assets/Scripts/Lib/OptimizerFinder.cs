@@ -1,7 +1,9 @@
+using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.Proxy;
 using KnightOfNights.Scripts.SharedLib;
 using SFCore.MonoBehaviours;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.Lib
@@ -123,7 +125,15 @@ namespace KnightOfNights.Scripts.Lib
             return changed;
         }
 
-        public static List<string> FixScene()
+        private static List<object> GetSceneData()
+        {
+            List<object> data = new List<object>();
+            foreach (var provider in GameObjectExtensions.GetComponentsInScene<SceneDataProvider>(true).OrderBy(p => p.name))
+                data.Add(provider.GetSceneData());
+            return data;
+        }
+
+        public static List<string> FixScene(SceneDataPack pack)
         {
             var updates = new List<string>();
             void Update(string name, bool fnResult)
@@ -141,6 +151,7 @@ namespace KnightOfNights.Scripts.Lib
             Update("FixAll<HazardRespawnTrigger>(...)", FixAll<HazardRespawnTrigger>(FixHRT));
             Update("FixSDOs()", FixSDOs());
             Update("FixAll<TransitionPoint>(...)", FixAll<TransitionPoint>(FixTP));
+            if (pack.Update(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name, GetSceneData())) updates.Add("SceneDataPack");
 
             return updates;
         }

@@ -181,7 +181,8 @@ public class MainMenuExtensions
     [MenuItem("KnightOfNights/Scene/Optimize")]
     static void OptimizeCurrentScene()
     {
-        var updates = OptimizerFinder.FixScene();
+        var pack = SceneDataPack.Load();
+        var updates = OptimizerFinder.FixScene(pack);
         if (updates.Count > 0)
         {
             Debug.Log("Optimized scene");
@@ -189,6 +190,7 @@ public class MainMenuExtensions
             EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());
         }
         else Debug.Log("Scene already optimized");
+        pack.Save();
     }
 
     private static string AssetBundleName(string sceneName) => sceneName.Replace("_", "").ToLower();
@@ -230,6 +232,7 @@ public class MainMenuExtensions
         int scenesUnfixed = 0;
         int scenesErrored = 0;
         var sceneNames = new HashSet<string>();
+        var pack = SceneDataPack.Load();
         foreach (var path in ForEachScene())
         {
             var scene = SceneManager.GetActiveScene();
@@ -246,7 +249,7 @@ public class MainMenuExtensions
 
             try
             {
-                var updates = OptimizerFinder.FixScene();
+                var updates = OptimizerFinder.FixScene(pack);
                 if (updates.Count > 0 || changed)
                 {
                     EditorSceneManager.MarkSceneDirty(scene);
@@ -264,8 +267,9 @@ public class MainMenuExtensions
         }
 
         AssetDatabase.RemoveUnusedAssetBundleNames();
+        string packSaved = pack.Save() ? "Updated scene data; " : "";
 
-        Debug.Log($"Optimized {scenesFixed + scenesUnfixed + scenesErrored} scenes; updated {scenesFixed}, {scenesUnfixed} already optimal, {scenesErrored} errors");
+        Debug.Log($"Optimized {scenesFixed + scenesUnfixed + scenesErrored} scenes; {packSaved}updated {scenesFixed}, {scenesUnfixed} already optimal, {scenesErrored} errors");
         EditorSceneManager.OpenScene(origPath);
         EditorUtility.ClearProgressBar();
     }

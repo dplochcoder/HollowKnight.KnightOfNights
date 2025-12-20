@@ -148,8 +148,10 @@ namespace KnightOfNights.Scripts.SharedLib
         {
             if (list.Count == 0) return list;
 
-            var ret = new List<T>();
-            ret.Add(list[0]);
+            var ret = new List<T>
+            {
+                list[0]
+            };
             for (int i = 1; i < list.Count; i++) if (!similar(ret[ret.Count - 1], list[i])) ret.Add(list[i]);
 
             return ret;

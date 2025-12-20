@@ -97,6 +97,8 @@ namespace KnightOfNights.Scripts.SharedLib
             foreach (var obj in self.GetRootGameObjects()) foreach (var t in obj.GetComponentsInChildren<T>(inactive)) yield return t;
         }
 
+        public static IEnumerable<T> GetComponentsInScene<T>(bool inactive = false) where T : Component => UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetComponentsInChildren<T>(inactive);
+
         public static IEnumerable<T> FindInterfacesRecursive<T>(this GameObject self, bool inactive = false)
         {
             foreach (var component in self.GetComponentsInChildren<Component>(inactive)) if (component is T t) yield return t;

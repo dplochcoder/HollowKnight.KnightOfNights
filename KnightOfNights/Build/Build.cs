@@ -3,7 +3,6 @@ using PurenailCore.CollectionUtil;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -220,7 +219,8 @@ public static class Build
         string pathDir = ns.Length == 0 ? $"{dir}" : $"{dir}/{ns.Replace('.', '/')}";
         string path = $"{pathDir}/{type.Name}.cs";
 
-        var baseType = type.GetCustomAttribute<Shim>()?.baseType ?? typeof(MonoBehaviour);
+        Type? baseType = type.GetCustomAttribute<Shim>()?.baseType ?? typeof(MonoBehaviour);
+        baseType = type.IsSubclassOf(baseType!) ? baseType : null;
         string header;
         List<string> fieldStrs = [];
         List<string> attrStrs = [];
@@ -241,8 +241,10 @@ public static class Build
                 if (rc.m_Type1 != null) attrStrs.Add(RequireComponentStr(origNs, rc.m_Type1));
                 if (rc.m_Type2 != null) attrStrs.Add(RequireComponentStr(origNs, rc.m_Type2));
             }
+            if (type.GetCustomAttribute<SerializableAttribute>() != null) attrStrs.Add("[System.Serializable]");
 
-            header = $"class {type.Name} : {PrintType(origNs, baseType)}";
+            header = $"class {type.Name}";
+            if (baseType != null) header = $"{header} : {PrintType(origNs, baseType)}";
             foreach (var interfaceType in type.GetInterfaces())
             {
                 if (interfaceType.GetCustomAttribute<Shim>() == null) continue;

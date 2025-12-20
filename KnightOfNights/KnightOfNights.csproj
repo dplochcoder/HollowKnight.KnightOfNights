@@ -27,7 +27,7 @@
     <EmbeddedResource Remove="**/Generated.tmp/**" />
     <None Remove="Unity\**" />
     <None Remove="**/Generated.tmp/**" />
-    <Compile Include="Unity\Assets\Scripts\SharedLib\*.cs" />
+    <Compile Include="Unity\Assets\Scripts\SharedLib\**\*.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Unity\Assets\AssetBundles\**" />
