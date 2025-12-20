@@ -254,7 +254,8 @@ public static class Build
             {
                 List<string> fattrStrs = [];
                 foreach (var h in f.GetCustomAttributes<HeaderAttribute>()) fattrStrs.Add($"[UnityEngine.Header(\"{h.header}\")]");
-                foreach (var t in f.GetCustomAttributes<TooltipAttribute>()) fattrStrs.Add($"[UnityEngine.TooltipAttribute(\"{t.tooltip}\")]");
+                foreach (var t in f.GetCustomAttributes<TooltipAttribute>()) fattrStrs.Add($"[UnityEngine.Tooltip(\"{t.tooltip}\")]");
+                foreach (var t in f.GetCustomAttributes<TextAreaAttribute>()) fattrStrs.Add($"[UnityEngine.TextArea({t.minLines}, {t.maxLines})]");
 
                 var fAttr = f.GetCustomAttribute<ShimField>();
                 var defaultValue = fAttr.DefaultValue;

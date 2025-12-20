@@ -1,12 +1,92 @@
 {
-  "Summit_EntryPlain": [
+  "Summit_BigWindClimb": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_EntryHall": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
       "WholeScene": false,
-      "MinX": 78.0,
+      "MinX": 51.0,
       "MaxX": 1000.0,
       "MinY": 0.0,
       "MaxY": 1000.0
+    }
+  ],
+  "Summit_EntryPlain": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_Intermission": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_SpikeTunnels": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_TransCliffs": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_Tunnels": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_WindCliffs": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
+    }
+  ],
+  "Summit_WindHops": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
+      "WholeScene": true,
+      "MinX": 0.0,
+      "MaxX": 0.0,
+      "MinY": 0.0,
+      "MaxY": 0.0
     }
   ]
 }
