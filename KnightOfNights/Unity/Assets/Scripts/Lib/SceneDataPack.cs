@@ -1,5 +1,4 @@
-﻿using KnightOfNights.Scripts.InternalLib;
-using Newtonsoft.Json;
+﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System.Collections.Generic;
 
@@ -120,12 +119,16 @@ namespace KnightOfNights.Scripts.Lib
             }
         }
 
-        private static string Serialize(object obj)
+        private static string Serialize<T>(T obj)
         {
-            var token = JToken.Parse(JsonConvert.SerializeObject(obj, new JsonSerializerSettings()
+            JsonSerializer serializer = new JsonSerializer
             {
                 TypeNameHandling = TypeNameHandling.Auto
-            }));
+            };
+            var stringWriter = new System.IO.StringWriter();
+            serializer.Serialize(stringWriter, obj, typeof(T));
+
+            var token = JToken.Parse(stringWriter.GetStringBuilder().ToString());
             FixTypes(token, true);
 
             return token.ToString(Formatting.Indented);
@@ -136,7 +139,10 @@ namespace KnightOfNights.Scripts.Lib
             var token = JToken.Parse(json);
             FixTypes(token, false);
 
-            return JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None));
+            return JsonConvert.DeserializeObject<T>(token.ToString(Formatting.None), new JsonSerializerSettings()
+            {
+                TypeNameHandling = TypeNameHandling.Auto
+            });
         }
     }
 }
