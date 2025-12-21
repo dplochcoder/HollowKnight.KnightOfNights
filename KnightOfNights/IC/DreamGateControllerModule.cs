@@ -63,8 +63,14 @@ internal class DreamGateControllerModule : AbstractModule<DreamGateControllerMod
         return true;
     }
 
+    private int setBlockers = 0;
+
+    public void AddSetBlocker() => setBlockers++;
+    public void RemoveSetBlocker() => setBlockers--;
+
     private bool CanSet()
     {
+        if (setBlockers > 0) return false;
         if (WindField.ActiveWindEffects(HeroController.instance.transform.position, WindTargetType.Hero).sqrMagnitude > 0) return false;
 
         return true;

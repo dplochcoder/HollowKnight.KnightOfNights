@@ -7,6 +7,7 @@ namespace KnightOfNights.IC;
 [PlandoSubmodule]
 internal class SceneDataModule : AbstractDataModule<SceneDataModule, Dictionary<string, List<object>>>
 {
+
     public IEnumerable<T> GetForScene<T>(string sceneName) => Data.TryGetValue(sceneName, out var values) ? values.OfType<T>() : [];
 
     public IEnumerable<T> GetForActiveScene<T>() => GetForScene<T>(GameManager.instance.sceneName);
@@ -33,6 +34,8 @@ internal class SceneDataModule : AbstractDataModule<SceneDataModule, Dictionary<
     public T? GetSingleOrDefault<T>(string sceneName) => TryGetSingle<T>(sceneName, out var value) ? value : default;
 
     public T? GetSingleOrDefaultActive<T>() => GetSingleOrDefault<T>(GameManager.instance.sceneName);
+
+    public IEnumerable<(string, T)> GetForAllScenes<T>() => Data.SelectMany(e => e.Value.OfType<T>().Select(v => (e.Key, v)));
 
     protected override bool Unity() => true;
 
