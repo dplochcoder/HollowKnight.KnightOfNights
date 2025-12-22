@@ -327,8 +327,16 @@ namespace KnightOfNights.Scripts.Lib
             var custom = bp.gameObject.FindParent<CustomBenchDataBehaviour>();
 
             bool changed = false;
-            if (bp.AreaName != custom.Data.AreaName) bp.AreaName = custom.Data.AreaName;
-            if (bp.MenuName != custom.Data.MenuName) bp.MenuName = custom.Data.MenuName;
+            if (bp.AreaName != custom.Data.AreaName)
+            {
+                bp.AreaName = custom.Data.AreaName;
+                changed = true;
+            }
+            if (bp.MenuName != custom.Data.MenuName)
+            {
+                bp.MenuName = custom.Data.MenuName;
+                changed = true;
+            }
 
             return ChangedResult(changed);
         }

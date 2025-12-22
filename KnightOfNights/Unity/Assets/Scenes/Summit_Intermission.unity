@@ -73338,7 +73338,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781532438149113176, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: targetScene
-      value: Summit_BigWIndClimb
+      value: Summit_Checkpoint
       objectReference: {fileID: 0}
     - target: {fileID: 4454224392089990979, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: m_RootOrder

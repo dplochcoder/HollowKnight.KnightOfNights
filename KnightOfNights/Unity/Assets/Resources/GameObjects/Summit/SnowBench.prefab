@@ -124,6 +124,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   AreaName: Summit
   MenuName: 
+  AdjustVector: {x: 0, y: 0.51, z: 0}
 --- !u!1 &1001285719772558536
 GameObject:
   m_ObjectHideFlags: 0

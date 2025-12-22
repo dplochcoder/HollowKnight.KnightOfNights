@@ -4,6 +4,7 @@ namespace KnightOfNights.Scripts.InternalLib
     {
         public string AreaName;
         public string MenuName;
+        public UnityEngine.Vector3 AdjustVector;
         
     }
 }

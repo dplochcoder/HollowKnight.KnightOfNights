@@ -14,15 +14,21 @@ internal class CharmControlToggler : MonoBehaviour
     private bool EnableChildren
     {
         get => field;
-        set {
+        set
+        {
             if (field == value) return;
 
             field = value;
             children.ForEach(o => o.SetActive(value));
         }
-    }
+    } = false;
 
-    private void Awake() => children.AddRange(gameObject.Children());
+    private void Awake()
+    {
+        children.AddRange(gameObject.Children());
+        Update();
+        children.ForEach(o => o.SetActive(EnableChildren));
+    }
 
     private void Update() => EnableChildren = EnableWithAnyCharms == CharmIds.EquippedAnyCharmsBesidesVoidHeart();
 }

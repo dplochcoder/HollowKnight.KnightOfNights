@@ -12,19 +12,17 @@ namespace KnightOfNights.IC;
 [PlandoSubmodule]
 internal class DreamGateControllerModule : AbstractModule<DreamGateControllerModule>
 {
-    private static readonly FsmID dreamnailId = new("Knight", "Dream Nail");
+    private static readonly FsmID dreamnailId = new("Dream Nail");
 
-    protected override void InitializeInternal() => Events.AddFsmEdit(dreamnailId, ModifyDreamnail);
+    protected override void InitializeInternal() => ItemChanger.Events.AddFsmEdit(dreamnailId, ModifyDreamnail);
 
-    protected override void UnloadInternal() => Events.RemoveFsmEdit(dreamnailId, ModifyDreamnail);
+    protected override void UnloadInternal() => ItemChanger.Events.RemoveFsmEdit(dreamnailId, ModifyDreamnail);
 
     private void ModifyDreamnail(PlayMakerFSM fsm)
     {
         fsm.GetFsmState("Can Warp?").AddFirstAction(new Lambda(() =>
         {
-            var pd = PlayerData.instance;
-            var essence = pd.GetInt(nameof(pd.dreamOrbs));
-            if (essence == 0) fsm.SendEvent("NO ESSENCE");
+            if (PlayerData.instance.GetInt(nameof(PlayerData.dreamOrbs)) <= 0) fsm.SendEvent("NO ESSENCE");
             else if (!CanWarp()) fsm.SendEvent("FAIL");
         }));
         fsm.GetFsmState("Can Set?").AddFirstAction(new Lambda(() =>

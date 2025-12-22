@@ -1,6 +1,5 @@
-﻿using ItemChanger;
-using KnightOfNights.Scripts.SharedLib;
-using System;
+﻿using KnightOfNights.Scripts.SharedLib;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -21,53 +20,52 @@ internal abstract class PersistentBehaviourManager<B, M> : MonoBehaviour where B
     [ShimField] public string Id = "";
     [ShimField] public GameObject? Prefab;
 
-    private static Action<Scene>? SceneChangedHandler
-    {
-        get => field;
-        set
-        {
-            if (field == value) return;
-
-            if (value != null) Events.OnSceneChange -= value;
-            Events.OnSceneChange += value;
-            field = value;
-        }
-    }
-    private static GameObject? existing = null;
-
-    public static B? Get() => existing?.GetComponent<B>();
+    private static readonly Dictionary<string, B> existing = [];
 
     public abstract M Self();
 
-    public static void Drop(B current)
+    public static bool TryGet(string id, out B instance)
+    {
+        if (existing.TryGetValue(id, out var obj) && obj.TryGetComponent<B>(out instance))
+            return true;
+
+#pragma warning disable CS8625 // Cannot convert null literal to non-nullable reference type.
+        instance = default;
+#pragma warning restore CS8625 // Cannot convert null literal to non-nullable reference type.
+        return false;
+    }
+
+    private void Drop(B current)
     {
         current.Stop();
         current.DoAfter(() => Destroy(current.gameObject), 10f);
-        if (existing?.gameObject != current.gameObject) return;
+        if (!TryGet(Id, out var prev) || prev != current) return;
 
-        existing = null;
-        SceneChangedHandler = null;
+        existing.Remove(Id);
     }
 
     protected void Awake()
     {
-        var prevObj = Get();
-        if (prevObj != null)
+        if (TryGet(Id, out var current))
         {
-            prevObj.SceneChanged(Self());
-            Destroy(gameObject);
+            current.SceneChanged(Self());
             return;
         }
 
-        existing = Instantiate(Prefab!);
-        existing!.name = $"Persistent_{Id}";
-        Get()!.AwakeWithManager(Self());
-        DontDestroyOnLoad(existing);
+        var obj = Instantiate(Prefab!);
+        DontDestroyOnLoad(obj);
 
-        SceneChangedHandler = scene =>
-        {
-            if (scene.GetComponentsInChildren<M>().Any(m => m.Id == Id)) return;
-            Drop(existing.GetComponent<B>());
-        };
+        current = obj.GetComponent<B>();
+        existing[Id] = current;
+        current.name = $"Persistent_{Id}";
+        current.AwakeWithManager(Self());
+
+        Util.Events.OnNextSceneChange += s => OnNextScene(current, s);
+    }
+
+    private void OnNextScene(B current, Scene scene)
+    {
+        if (scene.GetComponentsInChildren<M>(true).Any(m => m.Id == Id)) Util.Events.OnNextSceneChange += s => OnNextScene(current, s);
+        else Drop(current);
     }
 }

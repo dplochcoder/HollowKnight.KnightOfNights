@@ -1,7 +1,6 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using KnightOfNights.Scripts.InternalLib;
-using KnightOfNights.Scripts.SharedLib;
 using SFCore.Utils;
 using UnityEngine;
 

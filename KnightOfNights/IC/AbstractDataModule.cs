@@ -34,7 +34,7 @@ internal abstract class AbstractDataModule<M, T> : AbstractModule<M> where M : A
 
     private void Load()
     {
-        if (_data == null) return;
+        if (_data != null) return;
 
 #if DEBUG
         try

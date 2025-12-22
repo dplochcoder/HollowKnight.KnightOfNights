@@ -19,6 +19,14 @@ internal class HeroDetectorProxy : MonoBehaviour
 
     private void OnTriggerExit2D(Collider2D collider) => --detections;
 
+    private void OnDisable()
+    {
+        if (!prevDetected) return;
+
+        detections = 0;
+        Update();
+    }
+
     public void OnDetected(Action action)
     {
         if (Detected()) action();

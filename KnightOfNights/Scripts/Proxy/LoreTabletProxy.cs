@@ -16,10 +16,14 @@ internal class LoreTabletProxy : MonoBehaviour
         {
             SceneName = GameManager.instance.sceneName,
             X = transform.position.x,
-            Y = transform.position.y + 2.61f,
+            Y = transform.position.y,
             Text = new BoxedString(Text.Replace("\n", "<br>"))
         };
-        deployer.Deploy();
+
+        var obj = deployer.Deploy();
+        obj.transform.localScale = Vector3.one;
+        obj.transform.SetPositionZ(3.1f);
+
         Destroy(gameObject);
     }
 }

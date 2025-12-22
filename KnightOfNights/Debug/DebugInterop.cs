@@ -38,4 +38,7 @@ internal static class DebugInterop
         if (!GetModule<WarriorsNotesModule>(out var mod)) return;
         mod.HasWarriorsNotes = false;
     }
+
+    [BindableMethod(name = "Reveal Benches", category = CATEGORY)]
+    public static void RevealBenches() => BenchesModule.Get()?.RevealBenches();
 }

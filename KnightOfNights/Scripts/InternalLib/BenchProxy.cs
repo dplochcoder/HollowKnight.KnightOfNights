@@ -13,6 +13,7 @@ internal class BenchProxy : MonoBehaviour
 {
     [ShimField] public string AreaName = "";
     [ShimField] public string MenuName = "";
+    [ShimField] public Vector3 AdjustVector;
 
     private void Awake()
     {
@@ -20,8 +21,10 @@ internal class BenchProxy : MonoBehaviour
         var myBox = GetComponent<BoxCollider2D>();
 
         var bench = ObjectCache.GetNewBench();
+        bench.SetActive(true);
+
         bench.name = transform.parent.name;
-        bench.transform.position = transform.position;
+        bench.transform.position = transform.position with { z = 0.01f };
         bench.transform.localScale = transform.localScale;
         bench.transform.localRotation = Quaternion.identity;
         bench.GetComponent<SpriteRenderer>().sprite = sprite;
@@ -38,10 +41,9 @@ internal class BenchProxy : MonoBehaviour
         var vars = fsm.FsmVariables;
         vars.GetFsmBool("Tilter").Value = false;
         vars.GetFsmFloat("Tilt Amount").Value = 0;
-        vars.GetFsmVector3("Adjust Vector").Value = new(0, 0.1f, 0);
+        vars.GetFsmVector3("Adjust Vector").Value = AdjustVector;
 
         fsm.GetFsmState("Rest Burst").AddFirstAction(new Lambda(() => BenchesModule.Get()?.VisitBench(AreaName, MenuName)));
-
-        Destroy(gameObject);
+        gameObject.SetActive(false);
     }
 }

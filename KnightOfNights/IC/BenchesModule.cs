@@ -7,12 +7,25 @@ using UnityEngine;
 
 namespace KnightOfNights.IC;
 
+[PlandoSubmodule]
 internal class BenchesModule : AbstractModule<BenchesModule>
 {
     public Dictionary<string, HashSet<string>> VisitedCustomBenches = [];
 
     private readonly HashMultimap<string, string> MaybeVisitedCustomBenches = [];
     private readonly List<Bench> CustomBenches = [];
+
+    internal void RevealBenches()
+    {
+        bool changed = false;
+        foreach (var area in MaybeVisitedCustomBenches.Keys)
+        {
+            var names = VisitedCustomBenches.GetOrAddNew(area);
+            foreach (var name in MaybeVisitedCustomBenches.Get(area)) changed |= names.Add(name);
+        }
+
+        if (changed) UpdateBenchwarp();
+    }
 
     protected override void InitializeInternal() => SceneDataModule.GetDeferred().Do(InitializeInternal);
 
@@ -51,7 +64,7 @@ internal class BenchesModule : AbstractModule<BenchesModule>
     {
         if (!MaybeVisitedCustomBenches.Contains(bench.areaName, bench.name)) return false;
         if (!VisitedCustomBenches.TryGetValue(bench.areaName, out var benches)) return true;
-        return benches.Contains(bench.name);
+        return !benches.Contains(bench.name);
     }
 
     private IEnumerable<Bench> InjectBenches() => CustomBenches;
@@ -59,7 +72,11 @@ internal class BenchesModule : AbstractModule<BenchesModule>
     internal void VisitBench(string areaName, string menuName)
     {
         if (!VisitedCustomBenches.GetOrAddNew(areaName).Add(menuName)) return;
+        UpdateBenchwarp();
+    }
 
+    private void UpdateBenchwarp()
+    {
         Bench.RefreshBenchList();
         TopMenu.RebuildMenu();
     }

@@ -17,7 +17,9 @@ internal class BackgroundMusic : MonoBehaviour, IPersistentBehaviour<BackgroundM
 
         audio = gameObject.GetOrAddComponent<AudioSource>();
         audio.clip = Music!;
+        audio.loop = true;
         audio.outputAudioMixerGroup = AudioMixerGroups.Music();
+        audio.Play();
     }
 
     public void SceneChanged(BackgroundMusicManager newManager) { }
