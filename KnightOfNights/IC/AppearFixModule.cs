@@ -12,17 +12,9 @@ internal class AppearFixModule : AbstractModule<AppearFixModule>
 
     protected override AppearFixModule Self() => this;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        Events.AddFsmEdit(appearID, FixAppearFSM);
-    }
+    protected override void InitializeInternal() => Events.AddFsmEdit(appearID, FixAppearFSM);
 
-    public override void Unload()
-    {
-        Events.RemoveFsmEdit(appearID, FixAppearFSM);
-        base.Unload();
-    }
+    protected override void UnloadInternal() => Events.RemoveFsmEdit(appearID, FixAppearFSM);
 
     private void FixAppearFSM(PlayMakerFSM fsm)
     {

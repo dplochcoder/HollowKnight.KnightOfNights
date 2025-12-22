@@ -9,6 +9,22 @@
       "MaxY": 0.0
     }
   ],
+  "Summit_Boss": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
+      "RespawnMarkerName": "BenchProxy",
+      "AreaName": "Summit",
+      "MenuName": "Peak"
+    }
+  ],
+  "Summit_Checkpoint": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
+      "RespawnMarkerName": "BenchProxy",
+      "AreaName": "Summit",
+      "MenuName": "Alone"
+    }
+  ],
   "Summit_EntryHall": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",

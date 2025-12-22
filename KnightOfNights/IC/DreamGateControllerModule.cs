@@ -14,17 +14,9 @@ internal class DreamGateControllerModule : AbstractModule<DreamGateControllerMod
 {
     private static readonly FsmID dreamnailId = new("Knight", "Dream Nail");
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        Events.AddFsmEdit(dreamnailId, ModifyDreamnail);
-    }
+    protected override void InitializeInternal() => Events.AddFsmEdit(dreamnailId, ModifyDreamnail);
 
-    public override void Unload()
-    {
-        Events.RemoveFsmEdit(dreamnailId, ModifyDreamnail);
-        base.Unload();
-    }
+    protected override void UnloadInternal() => Events.RemoveFsmEdit(dreamnailId, ModifyDreamnail);
 
     private void ModifyDreamnail(PlayMakerFSM fsm)
     {

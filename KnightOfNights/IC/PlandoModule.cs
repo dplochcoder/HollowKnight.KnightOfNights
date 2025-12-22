@@ -13,10 +13,8 @@ internal class PlandoModule : AbstractModule<PlandoModule>
 
     protected override PlandoModule Self() => this;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
-        base.Initialize();
-
         // Add any other submodules.
         typeof(PlandoModule).Assembly.GetTypes().Where(t => t.IsDefined(typeof(PlandoSubmodule), false)).ForEach(t => ItemChangerMod.Modules.GetOrAdd(t));
 
@@ -24,12 +22,7 @@ internal class PlandoModule : AbstractModule<PlandoModule>
         On.GameManager.Update += Update;
     }
 
-    public override void Unload()
-    {
-        On.GameManager.Update -= Update;
-
-        base.Unload();
-    }
+    protected override void UnloadInternal() => On.GameManager.Update -= Update;
 
     private void Update(On.GameManager.orig_Update orig, GameManager self)
     {

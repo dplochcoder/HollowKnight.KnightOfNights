@@ -24,10 +24,8 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 
     public bool CompletedBossIntro = false;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
-        base.Initialize();
-
         ItemChangerMod.AddTransitionOverride(new(SceneNames.Mines_25, "top1"), TARGET_TRANSITION);
 
         foreach (var str in typeof(FallenGuardianModule).Assembly.GetManifestResourceNames())
@@ -44,13 +42,11 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
         coreModule.AddOnUnloadScene(OnUnloadScene);
     }
 
-    public override void Unload()
+    protected override void UnloadInternal()
     {
         sceneBundles.Values.ForEach(v => v?.Unload(true));
         coreModule!.RemoveOnBeforeSceneLoad(OnBeforeSceneLoad);
         coreModule.RemoveOnUnloadScene(OnUnloadScene);
-
-        base.Unload();
     }
 
     private void OnBeforeSceneLoad(string sceneName, Action cb)

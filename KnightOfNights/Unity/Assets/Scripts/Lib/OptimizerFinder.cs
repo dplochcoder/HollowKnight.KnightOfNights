@@ -1,6 +1,7 @@
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.Proxy;
 using KnightOfNights.Scripts.SharedLib;
+using KnightOfNights.Scripts.SharedLib.Data;
 using SFCore.MonoBehaviours;
 using System.Collections.Generic;
 using System.Linq;
@@ -146,6 +147,7 @@ namespace KnightOfNights.Scripts.Lib
             Update("RemoveObsoleteObjects()", RemoveObsoleteObjects());
             Update("FixScenery()", FixScenery());
             Update("FixTilemapScript()", FixTilemapScript());
+            Update("FixAll<BenchProxy>(...)", FixAll<BenchProxy>(FixBP));
             Update("FixAll<CameraLockAreaProxy>(...)", FixAll<CameraLockAreaProxy>(FixCLAP));
             Update("FixAll<HeroDetectorProxy>(...)", FixAll<HeroDetectorProxy>(FixHDP));
             Update("FixAll<HazardRespawnTrigger>(...)", FixAll<HazardRespawnTrigger>(FixHRT));
@@ -318,6 +320,17 @@ namespace KnightOfNights.Scripts.Lib
             }
 
             return changed;
+        }
+
+        private static FixResult FixBP(BenchProxy bp)
+        {
+            var custom = bp.gameObject.FindParent<CustomBenchDataBehaviour>();
+
+            bool changed = false;
+            if (bp.AreaName != custom.Data.AreaName) bp.AreaName = custom.Data.AreaName;
+            if (bp.MenuName != custom.Data.MenuName) bp.MenuName = custom.Data.MenuName;
+
+            return ChangedResult(changed);
         }
 
         private static FixResult FixCLAP(CameraLockAreaProxy clap)

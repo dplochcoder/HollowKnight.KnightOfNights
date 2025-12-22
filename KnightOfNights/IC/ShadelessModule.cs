@@ -25,24 +25,20 @@ internal class ShadelessModule : AbstractModule<ShadelessModule>
 
     protected override ShadelessModule Self() => this;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
-        base.Initialize();
-
         Events.AddFsmEdit(deathAnimId, ModifyDeathAnim);
         Events.AddLanguageEdit(new(NAME_KEY), FillName);
         Events.AddLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook += HookIsShadeless;
     }
 
-    public override void Unload()
+    protected override void UnloadInternal()
     {
         Events.RemoveFsmEdit(deathAnimId, ModifyDeathAnim);
         Events.RemoveLanguageEdit(new(NAME_KEY), FillName);
         Events.RemoveLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook -= HookIsShadeless;
-
-        base.Unload();
     }
 
     private void ModifyDeathAnim(PlayMakerFSM fsm)

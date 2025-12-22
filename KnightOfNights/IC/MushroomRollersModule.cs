@@ -13,17 +13,9 @@ internal class MushroomRollersModule : AbstractModule<MushroomRollersModule>
 {
     protected override MushroomRollersModule Self() => this;
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        Events.AddSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
-    }
+    protected override void InitializeInternal() => Events.AddSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
 
-    public override void Unload()
-    {
-        Events.RemoveSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
-        base.Unload();
-    }
+    protected override void UnloadInternal() => Events.RemoveSceneChangeEdit(SceneNames.Fungus2_23, MakeConsistentRollers);
 
     private void MakeConsistent(GameObject roller, bool jumpFirst)
     {

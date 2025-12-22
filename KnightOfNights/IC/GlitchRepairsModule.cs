@@ -15,13 +15,13 @@ internal class GlitchRepairsModule : AbstractModule<GlitchRepairsModule>
 
     protected override GlitchRepairsModule Self() => this;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
         On.HeroController.CanWallJump += OverrideCanWallJump;
         spellIds.ForEach(id => Events.AddFsmEdit(id, DisableSpellPogos));
     }
 
-    public override void Unload()
+    protected override void UnloadInternal()
     {
         On.HeroController.CanWallJump -= OverrideCanWallJump;
         spellIds.ForEach(id => Events.RemoveFsmEdit(id, DisableSpellPogos));

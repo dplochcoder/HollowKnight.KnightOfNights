@@ -1,18 +1,33 @@
 ﻿using ItemChanger.Modules;
+using PurenailCore.CollectionUtil;
 
 namespace KnightOfNights.IC;
 
 internal abstract class AbstractModule<M> : Module where M : AbstractModule<M>
 {
-    private static M? Instance;
+    private static Deferred<M> Instance = new();
 
-    internal static M? Get() => Instance;
+    internal static M? Get() => Instance.TryGet(out M value) ? value : null;
+
+    internal static Deferred<M> GetDeferred() => Instance;
 
     internal M? GetStatic() => Get();
 
     protected abstract M Self();
 
-    public override void Initialize() => Instance = Self();
+    protected virtual void InitializeInternal() { }
 
-    public override void Unload() => Instance = null;
+    public sealed override void Initialize()
+    {
+        InitializeInternal();
+        Instance.Set(Self());
+    }
+
+    protected virtual void UnloadInternal() { }
+
+    public sealed override void Unload()
+    {
+        UnloadInternal();
+        Instance = new();
+    }
 }

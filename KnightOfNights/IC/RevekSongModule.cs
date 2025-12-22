@@ -39,10 +39,8 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
 
     private void FixRevekSong(Transition t) => RevekSongSummon.revekActive = false;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
-        base.Initialize();
-
         PlandoModule.OnEveryFrame += UpdateRevekSong;
         Events.AddFsmEdit(dreamNailId, HookRevekSong);
         Events.AddLanguageEdit(new(NAME_KEY), FillName);
@@ -51,7 +49,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         Events.OnBeginSceneTransition += FixRevekSong;
     }
 
-    public override void Unload()
+    protected override void UnloadInternal()
     {
         PlandoModule.OnEveryFrame -= UpdateRevekSong;
         Events.RemoveFsmEdit(dreamNailId, HookRevekSong);
@@ -59,8 +57,6 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
         Events.RemoveLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook -= HookHasRevekSong;
         Events.OnBeginSceneTransition -= FixRevekSong;
-
-        base.Unload();
     }
 
     private void HookRevekSong(PlayMakerFSM fsm)

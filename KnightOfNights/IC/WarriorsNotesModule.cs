@@ -176,21 +176,17 @@ internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
 
     private bool HookHasWarriorsNotes(string name, bool orig) => name == nameof(HasWarriorsNotes) ? HasWarriorsNotes : orig;
 
-    public override void Initialize()
+    protected override void InitializeInternal()
     {
-        base.Initialize();
-
         Events.AddLanguageEdit(new(NAME_KEY), FillName);
         Events.AddLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook += HookHasWarriorsNotes;
     }
 
-    public override void Unload()
+    protected override void UnloadInternal()
     {
         Events.RemoveLanguageEdit(new(NAME_KEY), FillName);
         Events.RemoveLanguageEdit(new(DESC_KEY), FillDesc);
         ModHooks.GetPlayerBoolHook -= HookHasWarriorsNotes;
-
-        base.Unload();
     }
 }

@@ -10,3 +10,5 @@ Satchel
 MenuChanger
 RandoSettingsManager
 RandoPlus
+Benchwarp
+BenchRando

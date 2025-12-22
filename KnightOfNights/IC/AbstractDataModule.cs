@@ -73,11 +73,5 @@ internal abstract class AbstractDataModule<M, T> : AbstractModule<M> where M : A
 
     protected abstract string JsonName();
 
-    public override void Initialize()
-    {
-        base.Initialize();
-        Load();
-    }
-
-    public override void Unload() => base.Unload();
+    protected override void InitializeInternal() => Load();
 }
