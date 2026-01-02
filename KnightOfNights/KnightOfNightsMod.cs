@@ -1,5 +1,6 @@
 using KnightOfNights.IC;
 using KnightOfNights.Rando;
+using KnightOfNights.Scripts.Framework;
 using Modding;
 using System;
 using System.Collections;
@@ -19,6 +20,7 @@ public class KnightOfNightsMod : Mod, IGlobalSettings<GlobalSettings>
     {
         Instance = this;
         KnightOfNightsBundleAPI.Load();
+        WindField.Load();
 
         ShadelessModule.HookItemHelper();
         RevekSongModule.HookItemHelper();

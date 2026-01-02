@@ -134,5 +134,14 @@ internal class WindField : MonoBehaviour
         return velocity;
     }
 
-    static WindField() => HeroVelocityModifier.AddModifier(0, ModifyHeroVelocity);
+    private static bool loaded = false;
+    internal static void Load()
+    {
+        if (loaded) return;
+
+        loaded = true;
+        HeroVelocityModifier.AddModifier(0, ModifyHeroVelocity);
+    }
+
+    static WindField() => Load();
 }

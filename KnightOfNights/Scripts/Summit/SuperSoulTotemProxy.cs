@@ -4,7 +4,6 @@ using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.ModUtil;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -40,8 +39,8 @@ internal class SuperSoulTotem : MonoBehaviour
         data.sceneName = "BrettasHouse";
 
         var fsm = gameObject.LocateMyFSM("soul_totem");
-        fsm.GetFsmState("Close").AddFirstAction(new Lambda(() => fsm.FsmVariables.GetFsmInt("Value").Value = 3));
-        var hit = fsm.GetFsmState("Hit");
+        fsm.GetState("Close").AddFirstAction(new Lambda(() => fsm.FsmVariables.GetFsmInt("Value").Value = 3));
+        var hit = fsm.GetState("Hit");
         hit.AddFirstAction(new Lambda(() => fsm.FsmVariables.GetFsmInt("Value").Value = 3));
 
         var flinger = hit.GetFirstActionOfType<FlingObjectsFromGlobalPool>();

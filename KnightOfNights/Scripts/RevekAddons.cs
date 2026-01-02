@@ -3,7 +3,6 @@ using ItemChanger.Extensions;
 using ItemChanger.Internal;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -89,7 +88,7 @@ internal class RevekAddons : MonoBehaviour, IHitResponder
         SpawnSoul(obj.transform);
     }
 
-    private static readonly Lazy<List<AudioClip>> hurtClips = new(() => [.. KnightOfNightsPreloader.Instance.Revek.LocateMyFSM("Control").GetFsmState("Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips]);
+    private static readonly Lazy<List<AudioClip>> hurtClips = new(() => [.. KnightOfNightsPreloader.Instance.Revek.LocateMyFSM("Control").GetState("Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips]);
 
     internal static AudioClip GetHurtClip() => hurtClips.Get().Choose();
 }

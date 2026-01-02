@@ -1,7 +1,6 @@
 ﻿using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.SharedLib;
-using SFCore.Utils;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.FallenGuardian;
@@ -14,10 +13,10 @@ internal class MarkothNail(PlayMakerFSM fsm)
 
         var fsm = obj.LocateMyFSM("Control");
 
-        var initState = fsm.GetFsmState("Init");
+        var initState = fsm.GetState("Init");
         initState.ClearActions();
         initState.ClearTransitions();
-        initState.AddFsmTransition("FINISHED", "Antic Point");
+        initState.AddTransition("FINISHED", "Antic Point");
         initState.AddFirstAction(new Lambda(() =>
         {
             fsm.FsmVariables.GetFsmGameObject("Self").Value = fsm.gameObject;
@@ -25,7 +24,7 @@ internal class MarkothNail(PlayMakerFSM fsm)
             fsm.SendEvent("FINISHED");
         }));
 
-        var recycleState = fsm.GetFsmState("Recycle");
+        var recycleState = fsm.GetState("Recycle");
         recycleState.ClearActions();
         recycleState.AddFirstAction(new Lambda(() => Object.Destroy(obj)));
 

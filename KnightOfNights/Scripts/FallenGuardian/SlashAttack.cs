@@ -4,7 +4,6 @@ using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.CollectionUtil;
-using SFCore.Utils;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.FallenGuardian;
@@ -85,11 +84,11 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
 
-        var slashTeleInState = fsm.GetFsmState("Slash Tele In");
+        var slashTeleInState = fsm.GetState("Slash Tele In");
 
-        var initState = fsm.GetFsmState("Init");
+        var initState = fsm.GetState("Init");
         initState.ClearTransitions();
-        initState.AddFsmTransition("FINISHED", "Slash Tele In");
+        initState.AddTransition("FINISHED", "Slash Tele In");
 
         GameObject audioSrc = new("RevekAudioSource");
         audioSrc.transform.parent = HeroController.instance.transform;
@@ -102,7 +101,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             fsm.FsmVariables.GetFsmFloat("Y Distance").Value = spec.SpawnOffset.y;
         }));
 
-        var idleWait = fsm.GetFsmState("Slash Idle").GetFirstActionOfType<WaitRandom>();
+        var idleWait = fsm.GetState("Slash Idle").GetFirstActionOfType<WaitRandom>();
         idleWait.timeMin = spec.Telegraph;
         idleWait.timeMax = spec.Telegraph;
 
@@ -110,15 +109,15 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         slashHit.DoOnAwake(() =>
         {
             var tink = slashHit.LocateMyFSM("nail_clash_tink");
-            var blockedHitState = tink.GetFsmState("Blocked Hit");
-            blockedHitState.AddFsmTransition("ABORT", "Detecting");
+            var blockedHitState = tink.GetState("Blocked Hit");
+            blockedHitState.AddTransition("ABORT", "Detecting");
 
             // Move freeze moment and Nail parry calls to after direction validation.
             var actions = blockedHitState.Actions;
             (actions[0], actions[1], actions[2], actions[3]) = (actions[2], actions[3], actions[0], actions[1]);
             actions[2].Enabled = false;  // Disable FreezeMoment.
             // Prevent parries from disallowed directions.
-            blockedHitState.InsertFsmAction(new Lambda(() =>
+            blockedHitState.InsertAction(new Lambda(() =>
             {
                 var dir = tink.FsmVariables.GetFsmFloat("Attack Direction").Value;
                 if (!revekAddons.DirectionFilter(dir)) tink.SendEvent("ABORT");
@@ -132,21 +131,21 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             }), 2);
         });
 
-        var slashState = fsm.GetFsmState("Slash");
-        slashState.AddFsmTransition("PARRIED", "Hit");
+        var slashState = fsm.GetState("Slash");
+        slashState.AddTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = spec.TargetOffset;
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = spec.Deceleration;
 
-        fsm.GetFsmState("Slash Tele Out").AddFirstAction(new Lambda(() => SetResult(SlashAttackResult.NOT_PARRIED)));
-        fsm.GetFsmState("Damaged Pause").AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
+        fsm.GetState("Slash Tele Out").AddFirstAction(new Lambda(() => SetResult(SlashAttackResult.NOT_PARRIED)));
+        fsm.GetState("Damaged Pause").AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
 
-        var attackPause = fsm.GetFsmState("Attack Pause");
+        var attackPause = fsm.GetState("Attack Pause");
         var attackWait = attackPause.GetFirstActionOfType<WaitRandom>();
         attackWait.timeMin = 5;
         attackWait.timeMax = 5;
         attackPause.AddFirstAction(new Lambda(() => fsm.gameObject.DestroyAfter(3f)));
 
-        var hitState = fsm.GetFsmState("Hit");
+        var hitState = fsm.GetState("Hit");
         hitState.AddFirstAction(new Lambda(() =>
         {
             ParryPos = fsm.gameObject.transform.position;
@@ -166,7 +165,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
             clock?.Cancel();
             cancelled = true;
 
-            fsm.GetFsmState("Slash Tele Out").AddLastAction(new LambdaEveryFrame(() =>
+            fsm.GetState("Slash Tele Out").AddLastAction(new LambdaEveryFrame(() =>
             {
                 // Fix clip fighting.
                 var animator = fsm.gameObject.GetComponent<tk2dSpriteAnimator>();
@@ -179,7 +178,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
         }
 
         if (fsm.ActiveStateName == "Slash Idle" || fsm.ActiveStateName == "Slash Antic") TeleOut();
-        else fsm.GetFsmState("Slash Idle").AddFirstAction(new Lambda(TeleOut));
+        else fsm.GetState("Slash Idle").AddFirstAction(new Lambda(TeleOut));
     }
 
     private void SetResult(SlashAttackResult result)

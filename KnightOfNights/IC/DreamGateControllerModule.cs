@@ -4,7 +4,6 @@ using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.Framework;
 using KnightOfNights.Scripts.SharedLib.Data;
 using KnightOfNights.Util;
-using SFCore.Utils;
 using UnityEngine;
 
 namespace KnightOfNights.IC;
@@ -20,12 +19,12 @@ internal class DreamGateControllerModule : AbstractModule<DreamGateControllerMod
 
     private void ModifyDreamnail(PlayMakerFSM fsm)
     {
-        fsm.GetFsmState("Can Warp?").AddFirstAction(new Lambda(() =>
+        fsm.GetState("Can Warp?").AddFirstAction(new Lambda(() =>
         {
             if (PlayerData.instance.GetInt(nameof(PlayerData.dreamOrbs)) <= 0) fsm.SendEvent("NO ESSENCE");
             else if (!CanWarp()) fsm.SendEvent("FAIL");
         }));
-        fsm.GetFsmState("Can Set?").AddFirstAction(new Lambda(() =>
+        fsm.GetState("Can Set?").AddFirstAction(new Lambda(() =>
         {
             if (!CanSet()) fsm.SendEvent("FAIL");
         }));

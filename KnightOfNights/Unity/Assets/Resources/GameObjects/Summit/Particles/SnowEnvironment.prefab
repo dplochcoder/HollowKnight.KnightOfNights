@@ -1,0 +1,50 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3335534239636207327
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5183243440557330655}
+  - component: {fileID: 1435626366253792228}
+  m_Layer: 0
+  m_Name: SnowEnvironment
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5183243440557330655
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335534239636207327}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1435626366253792228
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3335534239636207327}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 37399541, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  SnowWalkClip: {fileID: 8300000, guid: 38621ac2c7d886b41899d923bc0452ad, type: 3}
+  SnowDashEffect: {fileID: 6321380713563392909, guid: cbe546d116628394294e97ee5d5182a0, type: 3}
+  SnowRunEffect: {fileID: 4160081366578699107, guid: e1c915bfeaeb3944e92312c0ffb4f683, type: 3}
+  SnowSoftLandEffect: {fileID: 4160081366578699107, guid: 8913118d947b94a42b848eafbf636599, type: 3}
+  SnowHardLandEffect: {fileID: 2671814018695528877, guid: 25e29c7761cf1d4469a14ed0d46160c3, type: 3}

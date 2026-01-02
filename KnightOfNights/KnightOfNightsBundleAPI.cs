@@ -1,6 +1,8 @@
-﻿using System;
+﻿using KnightOfNights.Scripts.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using UnityEngine;
 
 namespace KnightOfNights;
@@ -19,7 +21,11 @@ public static class KnightOfNightsBundleAPI
         loaded = true;
 
         shared = LoadCoreBundle();
-        foreach (var obj in shared.LoadAllAssets()) prefabs[obj.name] = obj;
+        foreach (var obj in shared.LoadAllAssets())
+        {
+            prefabs[obj.name] = obj;
+            if (obj is GameObject go) foreach (var i in go.GetComponents<Component>().OfType<IOnAssetLoad>()) i.OnAssetLoad();
+        }
     }
 
     public static T LoadPrefab<T>(string name) where T : UnityEngine.Object

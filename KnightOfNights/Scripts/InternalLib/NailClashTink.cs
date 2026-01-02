@@ -3,7 +3,6 @@ using ItemChanger.Extensions;
 using KnightOfNights.Scripts.Framework;
 using KnightOfNights.Scripts.SharedLib;
 using PurenailCore.ModUtil;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -36,8 +35,8 @@ internal class NailParrySingleton : SceneSingleton<NailParrySingleton>
         var audio = src.GetOrAddComponentSharedLib<AudioSource>();
         audio.pitch = Random.Range(0.85f, 1.15f);
 
-        var fsm = KnightOfNightsPreloader.Instance.NailClashTinkFSM;
-        audio.PlayOneShot(fsm.GetFsmState("Blocked Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips[0]);
+        var fsm = KnightOfNightsPreloader.Instance.NailClashTinkFSM!;
+        audio.PlayOneShot(fsm.GetState("Blocked Hit").GetFirstActionOfType<AudioPlayerOneShot>().audioClips[0]);
 
         Vector3 offset;
         if (attackDir <= 45)
@@ -66,7 +65,7 @@ internal class NailParrySingleton : SceneSingleton<NailParrySingleton>
         }
 
         var pos = hc.transform.position + offset;
-        fsm.GetFsmState("No Box Right").GetFirstActionOfType<SpawnObjectFromGlobalPool>().gameObject.Value.Spawn(pos);
+        fsm.GetState("No Box Right").GetFirstActionOfType<SpawnObjectFromGlobalPool>().gameObject.Value.Spawn(pos);
 
         yield return Coroutines.SleepSeconds(0.1f);
 

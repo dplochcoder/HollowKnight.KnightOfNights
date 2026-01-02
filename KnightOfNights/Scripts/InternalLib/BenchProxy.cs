@@ -3,7 +3,6 @@ using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.IC;
 using KnightOfNights.Scripts.SharedLib;
-using SFCore.Utils;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
@@ -43,7 +42,7 @@ internal class BenchProxy : MonoBehaviour
         vars.GetFsmFloat("Tilt Amount").Value = 0;
         vars.GetFsmVector3("Adjust Vector").Value = AdjustVector;
 
-        fsm.GetFsmState("Rest Burst").AddFirstAction(new Lambda(() => BenchesModule.Get()?.VisitBench(AreaName, MenuName)));
+        fsm.GetState("Rest Burst").AddFirstAction(new Lambda(() => BenchesModule.Get()?.VisitBench(AreaName, MenuName)));
         gameObject.SetActive(false);
     }
 }

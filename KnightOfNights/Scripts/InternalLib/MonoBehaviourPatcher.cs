@@ -5,19 +5,11 @@ using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
 
-public class MonobehaviourPatcher<M> where M : MonoBehaviour
+public class MonobehaviourPatcher<M>(System.Func<M> prefab, params string[] fieldNames) where M : MonoBehaviour
 {
-    private record Field
-    {
-        public FieldInfo fi;
-        public object value;
-    }
+    private record Field(FieldInfo FieldInfo, object Value) { }
 
-    private readonly Lazy<List<Field>> fields;
-
-    public MonobehaviourPatcher(System.Func<M> prefab, params string[] fieldNames)
-    {
-        fields = new(() =>
+    private readonly Lazy<List<Field>> fields = new(() =>
         {
             List<Field> list = [];
 
@@ -26,21 +18,13 @@ public class MonobehaviourPatcher<M> where M : MonoBehaviour
             foreach (var name in fieldNames)
             {
                 var fi = type.GetField(name, BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
-                if (fi != null)
-                {
-                    list.Add(new()
-                    {
-                        fi = fi,
-                        value = fi.GetValue(obj)
-                    });
-                }
+                if (fi != null) list.Add(new(fi, fi.GetValue(obj)));
                 else KnightOfNightsMod.LogError($"Bad field: {type.Name}.{name}");
             }
             return list;
         });
-    }
 
-    public void Patch(M component) => fields.Get().ForEach(f => f.fi.SetValue(component, f.value));
+    public void Patch(M component) => fields.Get().ForEach(f => f.FieldInfo.SetValue(component, f.Value));
 
     public M Patch(GameObject gameObject)
     {

@@ -9,7 +9,6 @@ using KnightOfNights.Util;
 using PurenailCore.CollectionUtil;
 using PurenailCore.GOUtil;
 using PurenailCore.SystemUtil;
-using SFCore.Utils;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -671,18 +670,18 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
                 var accel = stats!.GorbStormStats!.SpikeAccel;
                 var control = obj.LocateMyFSM("Control");
-                var poke = control.GetFsmState("Poke Out");
+                var poke = control.GetState("Poke Out");
                 poke.GetFirstActionOfType<SetVelocityAsAngle>().speed = 30 * accel;
                 poke.GetFirstActionOfType<DecelerateV2>().deceleration = 0.88f * Mathf.Pow(accel, 0.02f);
                 poke.GetFirstActionOfType<Wait>().time = 0.5f / accel;
-                control.GetFsmState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25 * accel;
+                control.GetState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25 * accel;
 
-                control.GetFsmState("Recycle").AddFirstAction(new Lambda(() =>
+                control.GetState("Recycle").AddFirstAction(new Lambda(() =>
                 {
                     poke.GetFirstActionOfType<SetVelocityAsAngle>().speed = 30;
                     poke.GetFirstActionOfType<DecelerateV2>().deceleration = 0.88f;
                     poke.GetFirstActionOfType<Wait>().time = 0.5f;
-                    control.GetFsmState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25;
+                    control.GetState("Fire").GetFirstActionOfType<SetVelocityAsAngle>().speed = 25;
                 }));
 
                 obj.SetActive(true);

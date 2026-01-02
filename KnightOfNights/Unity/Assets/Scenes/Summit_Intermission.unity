@@ -73334,7 +73334,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 781532438149113176, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: entryPoint
-      value: right2
+      value: right1
       objectReference: {fileID: 0}
     - target: {fileID: 781532438149113176, guid: 9289c39e97c47e14bb97de89b505d382, type: 3}
       propertyPath: targetScene
@@ -73621,6 +73621,10 @@ PrefabInstance:
     - target: {fileID: 8573360536410406466, guid: fbb9b7cb91f81b14582a813e91cc311a, type: 3}
       propertyPath: darknessLevel
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8573360536410406466, guid: fbb9b7cb91f81b14582a813e91cc311a, type: 3}
+      propertyPath: defaultIntensity
+      value: 0.8
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: fbb9b7cb91f81b14582a813e91cc311a, type: 3}

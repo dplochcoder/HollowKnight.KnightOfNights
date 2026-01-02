@@ -1,7 +1,6 @@
 ﻿using ItemChanger;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
-using SFCore.Utils;
 
 namespace KnightOfNights.IC;
 
@@ -18,8 +17,8 @@ internal class AppearFixModule : AbstractModule<AppearFixModule>
 
     private void FixAppearFSM(PlayMakerFSM fsm)
     {
-        var inertState = fsm.GetFsmState("Inert");
-        inertState.AddFsmTransition("REACTIVATE", "Away");
+        var inertState = fsm.GetState("Inert");
+        inertState.AddTransition("REACTIVATE", "Away");
         inertState.AddLastAction(new LambdaEveryFrame(() =>
         {
             var pd = PlayerData.instance;

@@ -48,11 +48,9 @@ public abstract class CoroutineElement
     public CoroutineElement Then(IEnumerator<CoroutineElement> next) => Then(Coroutines.Sequence(next));
 }
 
-public class CoroutineInstant : CoroutineElement
+public class CoroutineInstant(Action action) : CoroutineElement
 {
-    private readonly Action action;
-
-    public CoroutineInstant(Action action) => this.action = action;
+    private readonly Action action = action;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -66,11 +64,9 @@ public class CoroutineNever : CoroutineElement
     protected override CoroutineUpdate UpdateImpl(float deltaTime) => new(false, 0);
 }
 
-public class CoroutineLoop : CoroutineElement
+public class CoroutineLoop(Action<float> action) : CoroutineElement
 {
-    private readonly Action<float> action;
-
-    public CoroutineLoop(Action<float> action) => this.action = action;
+    private readonly Action<float> action = action;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -79,18 +75,12 @@ public class CoroutineLoop : CoroutineElement
     }
 }
 
-public class SleepSeconds : CoroutineElement
+public class SleepSeconds(float remaining) : CoroutineElement
 {
-    private readonly float orig;
-    private float remaining;
+    private readonly float orig = remaining;
+    private float remaining = remaining;
     private readonly CoroutinePercentUpdate? percentUpdate;
     private readonly CoroutineTimeUpdate? timeUpdate;
-
-    public SleepSeconds(float remaining)
-    {
-        this.orig = remaining;
-        this.remaining = remaining;
-    }
 
     public SleepSeconds(float remaining, CoroutinePercentUpdate percentUpdate) : this(remaining) => this.percentUpdate = percentUpdate;
 
@@ -113,16 +103,10 @@ public class SleepSeconds : CoroutineElement
     }
 }
 
-public class SleepFrames : CoroutineElement
+public class SleepFrames(int remaining, Action<float>? deltaConsumer = null) : CoroutineElement
 {
-    private int remaining;
-    private readonly Action<float>? deltaConsumer;
-
-    public SleepFrames(int remaining, Action<float>? deltaConsumer = null)
-    {
-        this.remaining = remaining;
-        this.deltaConsumer = deltaConsumer;
-    }
+    private int remaining = remaining;
+    private readonly Action<float>? deltaConsumer = deltaConsumer;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -148,13 +132,11 @@ public class SleepUntil : CoroutineElement
     }
 }
 
-public class SleepUntilTimeout : CoroutineElement
+public class SleepUntilTimeout(SleepUntil sleepUntil, SleepSeconds timeout) : CoroutineElement
 {
-    private readonly CoroutineOneOf choice;
+    private readonly CoroutineOneOf choice = new([sleepUntil, timeout]);
 
     public bool TimedOut { get; private set; }
-
-    public SleepUntilTimeout(SleepUntil sleepUntil, SleepSeconds timeout) => choice = new([sleepUntil, timeout]);
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -164,17 +146,10 @@ public class SleepUntilTimeout : CoroutineElement
     }
 }
 
-public class SleepUntilCondHolds : CoroutineElement
+public class SleepUntilCondHolds(Func<bool> condition, float time) : CoroutineElement
 {
-    private readonly Func<bool> condition;
-    private readonly float time;
-
-    public SleepUntilCondHolds(Func<bool> condition, float time)
-    {
-        this.condition = condition;
-        this.time = time;
-    }
-
+    private readonly Func<bool> condition = condition;
+    private readonly float time = time;
     private SleepSeconds? timer;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
@@ -203,24 +178,18 @@ public class CoroutineGenerator(Func<float, CoroutineElement> generator) : Corou
 
 public class CoroutineTime
 {
-    public float deltaTime { get; private set; }
+    public float DeltaTime { get; private set; }
 
-    public CoroutineTime(out Action<float> setter) => setter = t => deltaTime = t;
+    public CoroutineTime(out Action<float> setter) => setter = t => DeltaTime = t;
 }
 
-public class CoroutineSequence : CoroutineElement
+public class CoroutineSequence(IEnumerator<CoroutineElement> coroutine, CoroutineSequence.StopCondition? stopCondition = null) : CoroutineElement
 {
     public delegate bool StopCondition();
 
-    private readonly IEnumerator<CoroutineElement> coroutine;
-    private readonly StopCondition? stopCondition;
+    private readonly IEnumerator<CoroutineElement> coroutine = coroutine;
+    private readonly StopCondition? stopCondition = stopCondition;
     private CoroutineElement? current;
-
-    public CoroutineSequence(IEnumerator<CoroutineElement> coroutine, StopCondition? stopCondition = null)
-    {
-        this.coroutine = coroutine;
-        this.stopCondition = stopCondition;
-    }
 
     public static CoroutineSequence Create(IEnumerator<CoroutineElement> coroutine, StopCondition? stopCondition = null) => new(coroutine, stopCondition);
 
@@ -271,16 +240,10 @@ public class DeltaAwareCoroutineSequence : CoroutineSequence
     protected override void SetCurrentDelta(float deltaTime) => deltaSetter(deltaTime);
 }
 
-public class CoroutineDisposable : CoroutineElement
+public class CoroutineDisposable(CoroutineElement required, CoroutineElement disposable) : CoroutineElement
 {
-    private readonly CoroutineElement required;
-    private CoroutineElement? disposable;
-
-    public CoroutineDisposable(CoroutineElement required, CoroutineElement disposable)
-    {
-        this.required = required;
-        this.disposable = disposable;
-    }
+    private readonly CoroutineElement required = required;
+    private CoroutineElement? disposable = disposable;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -301,13 +264,11 @@ public class CoroutineDisposable : CoroutineElement
     }
 }
 
-public class CoroutineOneOf : CoroutineElement
+public class CoroutineOneOf(List<CoroutineElement> choices) : CoroutineElement
 {
-    private readonly List<CoroutineElement> choices;
+    private readonly List<CoroutineElement> choices = choices;
 
     public int Choice { get; private set; } = -1;
-
-    public CoroutineOneOf(List<CoroutineElement> choices) => this.choices = choices;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -326,11 +287,9 @@ public class CoroutineOneOf : CoroutineElement
     }
 }
 
-public class CoroutineAllOf : CoroutineElement
+public class CoroutineAllOf(List<CoroutineElement> requirements) : CoroutineElement
 {
-    private readonly List<CoroutineElement> requirements;
-
-    public CoroutineAllOf(List<CoroutineElement> requirements) => this.requirements = requirements;
+    private readonly List<CoroutineElement> requirements = requirements;
 
     protected override CoroutineUpdate UpdateImpl(float deltaTime)
     {
@@ -420,12 +379,5 @@ public static class Coroutines
         return SleepUntil(() => !animator.IsPlaying());
     }
 
-    public static CoroutineElement PlayAnimations(Animator animator, List<RuntimeAnimatorController> controllers)
-    {
-        IEnumerator<CoroutineElement> Routine()
-        {
-            foreach (var controller in controllers) yield return PlayAnimation(animator, controller);
-        }
-        return Sequence(controllers.Select(c => PlayAnimation(animator, c)));
-    }
+    public static CoroutineElement PlayAnimations(Animator animator, List<RuntimeAnimatorController> controllers) => Sequence(controllers.Select(c => PlayAnimation(animator, c)));
 }

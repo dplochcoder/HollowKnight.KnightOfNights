@@ -227,7 +227,7 @@ public static class Build
         if (type.IsEnum)
         {
             header = $"enum {type.Name}";
-            foreach (var v in type.GetEnumValues()) fieldStrs.Add($"{v},");
+            foreach (var v in type.GetEnumValues()) fieldStrs.Add($"{v} = {Convert.ToInt32(v)},");
         }
         else if (type.IsInterface)
         {

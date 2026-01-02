@@ -3,7 +3,6 @@ using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -28,14 +27,14 @@ internal class PancakePool : MonoBehaviour
 
         var fsm = obj.LocateMyFSM("Control");
 
-        fsm.GetFsmState("Check Pos").ClearActions();
+        fsm.GetState("Check Pos").ClearActions();
 
         // Immediately contract.
         // fsm.GetFsmState("Antic").AddLastAction(new Lambda(() => fsm.SendEvent("FINISHED")));
 
-        var antic2State = fsm.GetFsmState("Antic 2");
+        var antic2State = fsm.GetState("Antic 2");
         antic2State.ClearTransitions();
-        antic2State.AddFsmTransition("FIRE", "Down");
+        antic2State.AddTransition("FIRE", "Down");
 
         var fire = fsm.AddFsmBool("Fire", false);
         var playSound = fsm.AddFsmBool("PlaySound", true);
@@ -47,7 +46,7 @@ internal class PancakePool : MonoBehaviour
             fsm.SendEvent("FIRE");
         }));
 
-        fsm.GetFsmState("Land").AddFirstAction(new Lambda(() =>
+        fsm.GetState("Land").AddFirstAction(new Lambda(() =>
         {
             if (!playSound.Value) return;
             KnightOfNightsPreloader.Instance.ElderHuImpactClip?.PlayAtPosition(new(HeroController.instance.transform.position.x, fsm.gameObject.transform.position.y));
@@ -71,11 +70,11 @@ internal class PancakePool : MonoBehaviour
 
         var fsm = obj.LocateMyFSM("Control");
 
-        var downState = fsm.GetFsmState("Down");
+        var downState = fsm.GetState("Down");
         downState.GetFirstActionOfType<FloatCompare>().float2 = minY + 4.01f;
         downState.GetFirstActionOfType<SetVelocity2d>().y = -speed;
 
-        fsm.GetFsmState("Land").GetFirstActionOfType<SetPosition>().y = minY + 3.72f;
+        fsm.GetState("Land").GetFirstActionOfType<SetPosition>().y = minY + 3.72f;
         fsm.FsmVariables.GetFsmBool("PlaySound").Value = playSound;
 
         return new(obj.LocateMyFSM("Control").FsmVariables.GetFsmBool("Fire"));

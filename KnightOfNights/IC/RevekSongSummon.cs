@@ -6,7 +6,6 @@ using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts;
 using KnightOfNights.Scripts.Framework;
 using PurenailCore.CollectionUtil;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ internal class RevekSongSummon
         state.AddFirstAction(new LambdaEveryFrame(() => t.Translate(WindField.HeroWindEffects() * Time.deltaTime, Space.World)));
     }
 
-    private static HashSet<InterceptRevekSummon> interceptors = [];
+    private static readonly HashSet<InterceptRevekSummon> interceptors = [];
 
     internal static void AddInterceptor(InterceptRevekSummon interceptor) => interceptors.Add(interceptor);
 
@@ -52,10 +51,10 @@ internal class RevekSongSummon
         fsm.Fsm.GlobalTransitions = [];
         foreach (var state in fsm.FsmStates) state.RemoveTransitionsOn("TAKE DAMAGE");
 
-        fsm.GetFsmState("Appear Pause").GetFirstActionOfType<Wait>().time.Value = 0.5f;
+        fsm.GetState("Appear Pause").GetFirstActionOfType<Wait>().time.Value = 0.5f;
 
         Wrapped<int> consecutiveHits = new(0);
-        var idleState = fsm.GetFsmState("Slash Idle");
+        var idleState = fsm.GetState("Slash Idle");
         var idleWait = idleState.GetFirstActionOfType<WaitRandom>();
         idleState.AddFirstAction(new Lambda(() =>
         {
@@ -64,23 +63,23 @@ internal class RevekSongSummon
             idleWait.timeMax.Value = wait;
         }));
 
-        var attackPauseState = fsm.GetFsmState("Attack Pause");
+        var attackPauseState = fsm.GetState("Attack Pause");
         var wait = attackPauseState.GetFirstActionOfType<WaitRandom>();
         wait.timeMin.Value = 1.2f;
         wait.timeMax.Value = 1.2f;
         attackPauseState.AddFirstAction(new Lambda(() => consecutiveHits.Value = 0));
 
-        var ghostCheckPauseState = fsm.GetFsmState("Ghost Check Pause");
+        var ghostCheckPauseState = fsm.GetState("Ghost Check Pause");
         ghostCheckPauseState.ClearTransitions();
-        ghostCheckPauseState.AddFsmTransition("FINISHED", "Set Angle");
+        ghostCheckPauseState.AddTransition("FINISHED", "Set Angle");
 
         GameObject audioSrc = new("RevekAudioSource");
         audioSrc.transform.parent = HeroController.instance.transform;
-        fsm.GetFsmState("Slash Tele In").GetFirstActionOfType<AudioPlayerOneShotSingle>().spawnPoint = audioSrc;
+        fsm.GetState("Slash Tele In").GetFirstActionOfType<AudioPlayerOneShotSingle>().spawnPoint = audioSrc;
 
-        var damagedPauseState = fsm.GetFsmState("Damaged Pause");
+        var damagedPauseState = fsm.GetState("Damaged Pause");
         var damagedWait = damagedPauseState.GetFirstActionOfType<WaitRandom>();
-        fsm.GetFsmState("Damaged Pause").AddFirstAction(new Lambda(() =>
+        fsm.GetState("Damaged Pause").AddFirstAction(new Lambda(() =>
         {
             float wait = 0f;
             if (consecutiveHits.Value == 3)
@@ -93,7 +92,7 @@ internal class RevekSongSummon
             damagedWait.timeMax.Value = wait;
         }));
 
-        fsm.GetFsmState("Set Angle").AddLastAction(new Lambda(() =>
+        fsm.GetState("Set Angle").AddLastAction(new Lambda(() =>
         {
             if (consecutiveHits.Value == 3)
             {
@@ -108,10 +107,10 @@ internal class RevekSongSummon
             fsm.FsmVariables.GetFsmFloat("Y Distance").Value = 3f;
         }));
 
-        MoveWithHero(fsm.GetFsmState("Slash Antic"));
+        MoveWithHero(fsm.GetState("Slash Antic"));
 
-        var slashState = fsm.GetFsmState("Slash");
-        slashState.AddFsmTransition("PARRIED", "Hit");
+        var slashState = fsm.GetState("Slash");
+        slashState.AddTransition("PARRIED", "Hit");
         slashState.GetFirstActionOfType<FireAtTarget>().position.Value = new(0, -1.5f, 0);
         slashState.GetFirstActionOfType<DecelerateV2>().deceleration.Value = 0.925f;
         MoveWithHero(slashState);

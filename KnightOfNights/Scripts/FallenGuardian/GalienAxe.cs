@@ -1,7 +1,6 @@
 ﻿using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
-using SFCore.Utils;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.FallenGuardian;
@@ -30,17 +29,17 @@ internal class GalienAxe : MonoBehaviour
         var ctrl = obj.LocateMyFSM("Control");
         ctrl.FsmVariables.GetFsmVector3("Float Vector").Value = new(0, bounds.min.y + stats.AxeFloatHeight);
 
-        var emergeState = ctrl.GetFsmState("Emerge");
+        var emergeState = ctrl.GetState("Emerge");
         emergeState.GetFirstActionOfType<iTweenRotateTo>().time = stats.AxeEmergeTime;
         emergeState.GetFirstActionOfType<iTweenMoveTo>().time = stats.AxeEmergeTime;
 
-        var startSpinState = ctrl.GetFsmState("Start Spin");
+        var startSpinState = ctrl.GetState("Start Spin");
         startSpinState.GetFirstActionOfType<FloatAdd>().add = -1800 / stats.AxeSpinTime;
         startSpinState.GetFirstActionOfType<Wait>().time = stats.AxeSpinTime;
         startSpinState.GetFirstActionOfType<EaseFloat>().time = stats.AxeSpinTime;
         startSpinState.GetFirstActionOfType<FadeAudio>().time = stats.AxeSpinTime / 2;
 
-        ctrl.GetFsmState("Decel").GetFirstActionOfType<FadeAudio>().time = stats.AxeDecelTime;
+        ctrl.GetState("Decel").GetFirstActionOfType<FadeAudio>().time = stats.AxeDecelTime;
 
         var attack = obj.LocateMyFSM("Attack");
 
@@ -51,13 +50,13 @@ internal class GalienAxe : MonoBehaviour
         vars.GetFsmFloat("Wall L X").Value = bounds.min.x + 2.1f;
         vars.GetFsmFloat("Wall R X").Value = bounds.max.x - 2.1f;
 
-        var anticState = attack.GetFsmState("Antic");
+        var anticState = attack.GetState("Antic");
         var move = anticState.GetFirstActionOfType<iTweenMoveBy>();
         move.time = stats.AxeAnticTime;
         move.vector.Value = new(0, stats.AxeAnticRiseY, 0);
         anticState.RemoveActionsOfType<FindGameObject>();
 
-        var chaseState = attack.GetFsmState("Chase");
+        var chaseState = attack.GetState("Chase");
         var chaseAction = chaseState.GetFirstActionOfType<ChaseObjectGround>();
         chaseAction.speedMax = stats.AxeMaxSpeed;
         chaseAction.acceleration = stats.AxeAccel;
@@ -66,18 +65,18 @@ internal class GalienAxe : MonoBehaviour
         tests[0].float2 = stats.AxeTimer;
         tests[1].float2 = bounds.min.y + 7.25f;
 
-        attack.GetFsmState("Floor Bounce").RemoveActionsOfType<RandomFloat>();
-        attack.GetFsmState("Wall L").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.min.x, obj.transform.position.y), 1f)));
-        attack.GetFsmState("Wall R").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.max.x, obj.transform.position.y), -1f)));
-        attack.GetFsmState("Wall Y").ClearActions();
+        attack.GetState("Floor Bounce").RemoveActionsOfType<RandomFloat>();
+        attack.GetState("Wall L").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.min.x, obj.transform.position.y), 1f)));
+        attack.GetState("Wall R").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.max.x, obj.transform.position.y), -1f)));
+        attack.GetState("Wall Y").ClearActions();
 
-        var decelState = attack.GetFsmState("Decel");
+        var decelState = attack.GetState("Decel");
         decelState.GetFirstActionOfType<Wait>().time = stats.AxeDecelTime;
         decelState.GetFirstActionOfType<FloatAddV2>().add = 800 / stats.AxeDecelTime;
 
         var axe = obj.AddComponent<GalienAxe>();
         axe.timeToAntic = stats.WaitAnticAfterSpawn;
-        attack.GetFsmState("Recel").AddFirstAction(new Lambda(() => axe.Despawn()));
+        attack.GetState("Recel").AddFirstAction(new Lambda(() => axe.Despawn()));
 
         obj.SetActive(true);
         return axe;
