@@ -17,7 +17,7 @@ namespace KnightOfNights.Scripts.SharedLib.Data
 
         public override object GetSceneData()
         {
-            Data.RespawnMarkerName = gameObject.GetComponentInChildren<BenchProxy>().name;
+            Data.RespawnMarkerName = name;
             return Data;
         }
     }
