@@ -82,7 +82,7 @@ internal class RevekSongSummon
         fsm.GetState("Damaged Pause").AddFirstAction(new Lambda(() =>
         {
             float wait = 0f;
-            if (consecutiveHits.Value == 3)
+            if (++consecutiveHits.Value == 3)
             {
                 wait = 4.5f;
                 revekActive = false;
