@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5183243440557330655}
   - component: {fileID: 1435626366253792228}
   m_Layer: 0
-  m_Name: SnowEnvironment
+  m_Name: EnvironmentProvider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -46,5 +46,5 @@ MonoBehaviour:
   SnowWalkClip: {fileID: 8300000, guid: 38621ac2c7d886b41899d923bc0452ad, type: 3}
   SnowDashEffect: {fileID: 6321380713563392909, guid: cbe546d116628394294e97ee5d5182a0, type: 3}
   SnowRunEffect: {fileID: 4160081366578699107, guid: e1c915bfeaeb3944e92312c0ffb4f683, type: 3}
-  SnowSoftLandEffect: {fileID: 4160081366578699107, guid: 8913118d947b94a42b848eafbf636599, type: 3}
-  SnowHardLandEffect: {fileID: 2671814018695528877, guid: 25e29c7761cf1d4469a14ed0d46160c3, type: 3}
+  SnowSoftLandEffect: {fileID: 326464418328763877, guid: 2ca474d78e2ba2748a062849e377c477, type: 3}
+  SnowHardLandEffect: {fileID: 4216820351590122425, guid: c73c66e0d75af4b46bd06b27f640d532, type: 3}

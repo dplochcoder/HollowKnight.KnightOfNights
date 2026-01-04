@@ -11,9 +11,19 @@ internal class CustomEnviroRegion : MonoBehaviour
 
     private static readonly HashSet<CustomEnviroRegion> active = [];
 
-    private void OnDisable() => active.Remove(this);
+    private void OnDisable() => DoDeactivate();
 
-    private void OnTriggerEnter2D()
+    private void OnTriggerEnter2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "HeroBox") DoActivate();
+    }
+
+    private void OnTriggerExit2D(Collider2D collider)
+    {
+        if (collider.gameObject.tag == "HeroBox") DoDeactivate();
+    }
+
+    private void DoActivate()
     {
         if (!active.Add(this)) return;
 
@@ -23,7 +33,7 @@ internal class CustomEnviroRegion : MonoBehaviour
         HeroController.instance.checkEnvironment();
     }
 
-    private void OnTriggerExit2D()
+    private void DoDeactivate()
     {
         if (!active.Remove(this) || active.Count > 0) return;
 
