@@ -7,13 +7,13 @@ TextureImporter:
     second: Plat04
   - first:
       213: 5671470939701258765
-    second: Ground07
+    second: SnowGround01
   - first:
       213: 1400197751283254613
-    second: Ground08
+    second: SnowGround02
   - first:
       213: -1504453029926636402
-    second: Ground09
+    second: SnowGround03
   - first:
       213: -6232560839268125972
     second: Snow02
@@ -295,7 +295,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground06
+      name: IceGround06
       rect:
         serializedVersion: 2
         x: 42
@@ -316,7 +316,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground05
+      name: IceGround05
       rect:
         serializedVersion: 2
         x: 75
@@ -337,10 +337,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground04
+      name: IceGround04
       rect:
         serializedVersion: 2
-        x: 88
+        x: 91
         y: 811
         width: 430
         height: 226
@@ -358,7 +358,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground01
+      name: IceGround01
       rect:
         serializedVersion: 2
         x: 584
@@ -589,7 +589,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground03
+      name: IceGround03
       rect:
         serializedVersion: 2
         x: 76
@@ -631,10 +631,10 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground02
+      name: IceGround02
       rect:
         serializedVersion: 2
-        x: 598
+        x: 601
         y: 676
         width: 445
         height: 170
@@ -736,7 +736,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground07
+      name: SnowGround01
       rect:
         serializedVersion: 2
         x: 1527
@@ -757,7 +757,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground08
+      name: SnowGround02
       rect:
         serializedVersion: 2
         x: 1530
@@ -778,7 +778,7 @@ TextureImporter:
       edges: []
       weights: []
     - serializedVersion: 2
-      name: Ground09
+      name: SnowGround03
       rect:
         serializedVersion: 2
         x: 1492
