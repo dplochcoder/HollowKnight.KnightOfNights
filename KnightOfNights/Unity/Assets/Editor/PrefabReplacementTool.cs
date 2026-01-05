@@ -52,8 +52,8 @@ class PrefabReplacementTool : EditorTool
                     }
                     else if (e.keyCode == KeyCode.Escape)
                     {
-                        e.Use();
                         Deactivate();
+                        e.Use();
                     }
                     break;
                 }

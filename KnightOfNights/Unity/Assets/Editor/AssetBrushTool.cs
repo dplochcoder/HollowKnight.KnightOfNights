@@ -17,6 +17,8 @@ class AssetBrushTool : EditorTool
     private AssetBrush brush;
     private int group;
     private int instance;
+    private int xSign = 1;
+    private int scalePower = 0;
 
     private readonly Stack<GameObject> history = new Stack<GameObject>();
     private GameObject selection;
@@ -25,25 +27,119 @@ class AssetBrushTool : EditorTool
 
     public override bool IsAvailable() => true;
 
+    private void OnHierarchyGUI(int instanceId, Rect selectionRect)
+    {
+        HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Keyboard));
+
+        var e = Event.current;
+        if (e.type == EventType.KeyDown && HandleKeyEvent(e.keyCode)) e.Use();
+    }
+
     public override void OnActivated()
     {
-        base.OnActivated();
-
         brush = previousBrush;
         group = previousGroup;
         instance = previousInstance;
+        xSign = 1;
+        scalePower = 0;
 
         UpdateSelection(true);
+        LogGroup();
+
+        EditorApplication.hierarchyWindowItemOnGUI += OnHierarchyGUI;
     }
 
     private Vector2 lastMouseMove;
     private bool dragging = false;
     private Quaternion origQuat;
     private Vector2 origRadius;
+    private Vector3 origScale;
+
+    private void UpdateScale()
+    {
+        Vector3 scale = origScale;
+        scale.x *= xSign;
+        var p = Mathf.Pow(1.05f, scalePower);
+        scale.x *= p;
+        scale.y *= p;
+        selection.transform.localScale = scale;
+    }
+
+    private void LogGroup() => Debug.Log($"Group: {brush.Groups[group].name}");
+
+    private bool HandleKeyEvent(KeyCode code)
+    {
+        if (code == KeyCode.Space) UpdateSelection(false);
+        else if (code == KeyCode.DownArrow)
+        {
+            scalePower--;
+            UpdateScale();
+        }
+        else if (code == KeyCode.UpArrow)
+        {
+            scalePower++;
+            UpdateScale();
+        }
+        else if (code == KeyCode.W)
+        {
+            if (++group == brush.Groups.Count) group = 0;
+            UpdateSelection(true);
+            LogGroup();
+        }
+        else if (code == KeyCode.S)
+        {
+            if (--group == -1) group = brush.Groups.Count - 1;
+            UpdateSelection(true);
+            LogGroup();
+        }
+        else if (code == KeyCode.Q)
+        {
+            if (--instance == -1) instance = brush.Groups[group].Instances.Count - 1;
+            UpdateSelection(true);
+        }
+        else if (code == KeyCode.E)
+        {
+            if (++instance == brush.Groups[group].Instances.Count) instance = 0;
+            UpdateSelection(true);
+        }
+        else if (code == KeyCode.F)
+        {
+            xSign *= -1;
+            UpdateScale();
+        }
+        else if (code == KeyCode.R)
+        {
+            var quat = selection.transform.localRotation;
+            var euler = quat.eulerAngles;
+            euler.z += 90;
+            quat.eulerAngles = euler;
+            selection.transform.localRotation = quat;
+        }
+        else if (code == KeyCode.Z)
+        {
+            if (history.Count > 0) DestroyImmediate(history.Pop());
+        }
+        else if (code == KeyCode.X)
+        {
+            scalePower = 0;
+            xSign = 1;
+            UpdateScale();
+            selection.transform.localRotation = Quaternion.identity;
+        }
+        else if (code == KeyCode.Escape)
+        {
+            while (history.Count > 0) DestroyImmediate(history.Pop());
+            Deactivate();
+        }
+        else return false;
+
+        return true;
+    }
 
     public override void OnToolGUI(EditorWindow window)
     {
         bool isSceneView = window is SceneView;
+        Vector2 mousePoint = Vector3.zero;
 
         HandleUtility.AddDefaultControl(GUIUtility.GetControlID(FocusType.Keyboard));
 
@@ -52,75 +148,18 @@ class AssetBrushTool : EditorTool
         {
             case EventType.KeyDown:
                 {
-                    if (e.keyCode == KeyCode.Space)
-                    {
-                        UpdateSelection(false);
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.W)
-                    {
-                        if (++group == brush.Groups.Count) group = 0;
-                        Debug.Log("HI WE HERE DOING THING");
-                        UpdateSelection(true);
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.S)
-                    {
-                        if (--group == -1) group = brush.Groups.Count - 1;
-                        UpdateSelection(true);
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.Q)
-                    {
-                        if (--instance == -1) instance = brush.Groups[group].Instances.Count - 1;
-                        UpdateSelection(true);
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.E)
-                    {
-                        if (++instance == brush.Groups[group].Instances.Count) instance = 0;
-                        UpdateSelection(true);
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.F)
-                    {
-                        var scale = selection.transform.localScale;
-                        scale.x *= -1;
-                        selection.transform.localScale = scale;
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.R)
-                    {
-                        var quat = selection.transform.localRotation;
-                        var euler = quat.eulerAngles;
-                        euler.z += 90;
-                        quat.eulerAngles = euler;
-                        selection.transform.localRotation = quat;
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.Z)
-                    {
-                        if (history.Count > 0) DestroyImmediate(history.Pop());
-                        e.Use();
-                    }
-                    else if (e.keyCode == KeyCode.Escape)
-                    {
-                        while (history.Count > 0) DestroyImmediate(history.Pop());
-                        e.Use();
-
-                        Deactivate();
-                    }
+                    if (HandleKeyEvent(e.keyCode)) e.Use();
                     break;
                 }
             case EventType.MouseMove:
                 {
                     dragging = false;
-                    if (isSceneView && !Tools.viewToolActive && GetPlanePointFromMouse(out var point))
+                    if (isSceneView && !Tools.viewToolActive && GetPlanePointFromMouse(out mousePoint))
                     {
-                        lastMouseMove = point;
+                        lastMouseMove = mousePoint;
                         Vector3 pos = selection.transform.position;
-                        pos.x = point.x;
-                        pos.y = point.y;
+                        pos.x = mousePoint.x;
+                        pos.y = mousePoint.y;
                         selection.transform.position = pos;
                         EditorUtility.SetDirty(selection);
 
@@ -130,11 +169,11 @@ class AssetBrushTool : EditorTool
                 }
             case EventType.MouseDrag:
                 {
-                    if (isSceneView && !Tools.viewToolActive && GetPlanePointFromMouse(out var point) && (point - lastMouseMove).magnitude >= 0.5f)
+                    if (isSceneView && !Tools.viewToolActive && GetPlanePointFromMouse(out mousePoint) && (mousePoint - lastMouseMove).magnitude >= 0.5f)
                     {
                         if (dragging)
                         {
-                            var radius = (point - lastMouseMove).normalized;
+                            var radius = (mousePoint - lastMouseMove).normalized;
                             var angle1 = Mathf.Atan2(origRadius.y, origRadius.x);
                             var angle2 = Mathf.Atan2(radius.y, radius.x);
 
@@ -148,7 +187,7 @@ class AssetBrushTool : EditorTool
                         else
                         {
                             dragging = true;
-                            origRadius = (point - lastMouseMove).normalized;
+                            origRadius = (mousePoint - lastMouseMove).normalized;
                             origQuat = selection.transform.localRotation;
                         }
 
@@ -237,21 +276,23 @@ class AssetBrushTool : EditorTool
             PrefabUtility.SetPropertyModifications(selection, PrefabUtility.GetPropertyModifications(template));
         }
         else selection = Instantiate(template, parent);
+        origScale = template.transform.localScale;
 
         selection.name = UniqueName(template.name, parent);
 
         position.z = template.transform.position.z;
         selection.transform.position = position;
         selection.transform.rotation = rotation;
-        selection.transform.localScale = scale;
+        UpdateScale();
+
         EditorUtility.SetDirty(selection);
     }
 
     public override void OnWillBeDeactivated()
     {
-        if (selection != null) DestroyImmediate(selection);
+        EditorApplication.hierarchyWindowItemOnGUI -= OnHierarchyGUI;
 
-        base.OnWillBeDeactivated();
+        if (selection != null) DestroyImmediate(selection);
     }
 
     private static System.Type previousToolType;
