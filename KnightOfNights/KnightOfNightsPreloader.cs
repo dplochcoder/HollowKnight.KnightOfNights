@@ -31,6 +31,9 @@ internal class KnightOfNightsPreloader : Preloader
     [PrefabPreload(SceneNames.Deepnest_40, "Galien Mini Hammer")]
     public GameObject? GalienMiniAxe { get; private set; }
 
+    [Preload(SceneNames.Fungus1_16_alt, "green_grass_3")]
+    public GameObject? Grass { get; private set; }
+
     [Preload(SceneNames.Crossroads_13, "_Enemies/Worm")]
     public GameObject? Goam { get; private set; }
 
