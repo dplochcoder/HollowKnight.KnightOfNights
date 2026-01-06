@@ -285,6 +285,7 @@ class AssetBrushTool : EditorTool
         selection.transform.rotation = rotation;
         UpdateScale();
 
+        Selection.activeTransform = selection.transform;
         EditorUtility.SetDirty(selection);
     }
 
