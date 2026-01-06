@@ -16,6 +16,9 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Mines_11, "Crystal Crawler")]
     public GameObject? CrystalCrawler { get; private set; }
 
+    [Preload(SceneNames.Ruins1_28, "Direction Pole Stag")]
+    public GameObject? DirectionPoleStag { get; private set; }
+
     [ResourcePreload("dream_enter_pt_2")]
     public AudioClip? DreamEnterClip { get; private set; }
 
