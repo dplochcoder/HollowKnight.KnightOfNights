@@ -20,9 +20,12 @@ namespace KnightOfNights.Scripts.Lib
         public float MinScale;
         public float MaxScale;
 
+        private const int VERSION = 1;
+
         public override bool Optimize()
         {
             int hash = Seed;
+            Hash.Update(ref hash, VERSION);
             Hash.Update(ref hash, Density);
             Hash.Update(ref hash, Granularity);
             Hash.Update(ref hash, MaxGap);
