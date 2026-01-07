@@ -16,9 +16,7 @@ public class ObjectBounce : MonoBehaviour
 
     public float pitchMax = 1f;
 
-    [SerializeField]
-    private bool playAnimationOnBounce = false;
+    public bool playAnimationOnBounce = false;
 
-    [SerializeField]
-    private bool sendFSMEvent = false;
+    public bool sendFSMEvent = false;
 }
