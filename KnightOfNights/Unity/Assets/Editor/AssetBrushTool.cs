@@ -270,12 +270,7 @@ class AssetBrushTool : EditorTool
         previousInstance = instance;
 
         var parent = GetDefaultParent();
-        if (PrefabUtility.IsAnyPrefabInstanceRoot(template))
-        {
-            selection = (GameObject)PrefabUtility.InstantiatePrefab(PrefabUtility.GetCorrespondingObjectFromSource(template), parent);
-            PrefabUtility.SetPropertyModifications(selection, PrefabUtility.GetPropertyModifications(template));
-        }
-        else selection = Instantiate(template, parent);
+        selection = KnightOfNights.Scripts.SharedLib.UnityEditorShims.InstantiateMaybePrefab(template, parent);
         origScale = template.transform.localScale;
 
         selection.name = UniqueName(template.name, parent);

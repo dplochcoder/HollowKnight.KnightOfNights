@@ -29,6 +29,17 @@ namespace KnightOfNights.Scripts.SharedLib
         // [UnityEditor.MenuItem("GameObject/2D Object/ReplaceBeltSprite")]
         // public static void ReplaceBeltSprite(UnityEditor.MenuCommand command) => ReplaceWithPrefab(command.context as GameObject, "GameObjects/CrystalCore/Conveyor/BeltSprite");
 
+        public static GameObject InstantiateMaybePrefab(this GameObject src, Transform parent)
+        {
+            if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(src))
+            {
+                var obj = UnityEditor.PrefabUtility.InstantiatePrefab(UnityEditor.PrefabUtility.GetCorrespondingObjectFromSource(src), parent);
+                UnityEditor.PrefabUtility.SetPropertyModifications(obj, UnityEditor.PrefabUtility.GetPropertyModifications(src));
+                return (GameObject)obj;
+            }
+            else return Object.Instantiate(src, parent);
+        }
+
         private static GameObject swapper;
 
         private static void SwapImpl(GameObject obj)
