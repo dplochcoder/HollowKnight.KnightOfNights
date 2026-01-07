@@ -40,6 +40,11 @@ namespace KnightOfNights.Scripts.SharedLib
             else return Object.Instantiate(src, parent);
         }
 
+        public static void DeleteAll<T>() where T : Component
+        {
+            foreach (var t in Object.FindObjectsOfType<T>(true)) Object.DestroyImmediate(t);
+        }
+
         private static GameObject swapper;
 
         private static void SwapImpl(GameObject obj)
