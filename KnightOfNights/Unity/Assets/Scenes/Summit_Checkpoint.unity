@@ -57219,10 +57219,6 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8573360536410406466, guid: fbb9b7cb91f81b14582a813e91cc311a, type: 3}
-      propertyPath: darknessLevel
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8573360536410406466, guid: fbb9b7cb91f81b14582a813e91cc311a, type: 3}
       propertyPath: defaultIntensity
       value: 0.5
       objectReference: {fileID: 0}

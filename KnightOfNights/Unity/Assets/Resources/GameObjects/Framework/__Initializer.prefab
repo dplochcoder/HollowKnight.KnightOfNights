@@ -49,7 +49,7 @@ MonoBehaviour:
   isWindy: 0
   isTremorZone: 0
   environmentType: 0
-  darknessLevel: -1
+  darknessLevel: 0
   noLantern: 0
   saturation: 0.7
   ignorePlatformSaturationModifiers: 0
