@@ -1,3 +1,4 @@
+using KnightOfNights.Scripts.Framework;
 using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.Proxy;
 using KnightOfNights.Scripts.SharedLib;
@@ -148,6 +149,7 @@ namespace KnightOfNights.Scripts.Lib
             Update("FixScenery()", FixScenery());
             Update("FixTilemapScript()", FixTilemapScript());
             Update("FixAll<BenchProxy>(...)", FixAll<BenchProxy>(FixBP));
+            Update("FixBlurPlane()", FixAll<BlurPlaneProxy>(FixBPP));
             Update("FixAll<CameraLockAreaProxy>(...)", FixAll<CameraLockAreaProxy>(FixCLAP));
             Update("FixAll<HeroDetectorProxy>(...)", FixAll<HeroDetectorProxy>(FixHDP));
             Update("FixAll<HazardRespawnTrigger>(...)", FixAll<HazardRespawnTrigger>(FixHRT));
@@ -335,6 +337,18 @@ namespace KnightOfNights.Scripts.Lib
             if (bp.MenuName != custom.Data.MenuName)
             {
                 bp.MenuName = custom.Data.MenuName;
+                changed = true;
+            }
+
+            return ChangedResult(changed);
+        }
+
+        private static FixResult FixBPP(BlurPlaneProxy bpp)
+        {
+            bool changed = false;
+            if (!bpp.gameObject.activeSelf)
+            {
+                bpp.gameObject.SetActive(true);
                 changed = true;
             }
 
