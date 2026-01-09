@@ -19,6 +19,8 @@ internal class BigSlashStats : MonoBehaviour
 [Shim]
 internal class DiveStats : MonoBehaviour
 {
+    [ShimField] public GameObject? SnowDivePrefab;
+
     [ShimField] public float ImpactScale;
     [ShimField] public float PlungeSpeed;
     [ShimField] public float RetreatSpeed;

@@ -2,6 +2,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
 {
     public class DiveStats : UnityEngine.MonoBehaviour
     {
+        public UnityEngine.GameObject SnowDivePrefab;
         public float ImpactScale;
         public float PlungeSpeed;
         public float RetreatSpeed;

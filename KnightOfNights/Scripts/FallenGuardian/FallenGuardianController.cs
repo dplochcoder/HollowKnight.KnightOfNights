@@ -55,9 +55,9 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     [ShimField] public int StaggerCount;
     [ShimField] public float StaggerDistance;
 
-    [ShimField] public GameObject? DiveWarningParticles;
     [ShimField] public GameObject? StaggerBurst;
     [ShimField] public GameObject? TeleportBurst;
+    [ShimField] public GameObject? DeathAnim;
 
     [ShimField] public RuntimeAnimatorController? BigSlashController;
     [ShimField] public RuntimeAnimatorController? DiveAnticLoopController;
@@ -126,7 +126,6 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yFixer.enabled = false;
         pancakePool = gameObject.AddComponent<PancakePool>();
 
-        DiveWarningParticles?.FixSpawnBug();
         StaggerBurst?.FixSpawnBug();
         TeleportBurst?.FixSpawnBug();
 
@@ -161,8 +160,14 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         if (FacePlayer(reverseFacing)) flipTimer = FLIP_COOLDOWN;
     }
 
+    private bool makeHeroInvuln = false;
+
     private void Update()
     {
+        if (makeHeroInvuln) HeroController.instance.cState.invulnerable = true;
+
+        if (healthManager!.hp <= 0) return;
+
         stats = PhaseStats.Where(s => healthManager!.hp >= s.MinHP).First();
 
         var pos = transform.position;
@@ -228,16 +233,11 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
     private IEnumerator<CoroutineElement> RunBoss()
     {
-
         IEnumerator<SlashAttackSequence> tutorial = SpecTutorial();
         if (FallenGuardianModule.Get()!.CompletedBossIntro)
         {
             List<SlashAttackSequence> empty = [];
             tutorial = empty.GetEnumerator();
-        }
-        else
-        {
-            // TODO: Aura farm intro.
         }
 
         while (tutorial.MoveNext())
@@ -257,15 +257,16 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             }
         }
 
-        if (FallenGuardianModule.Get()!.CompletedBossIntro)
-            yield return Coroutines.SleepSeconds(1);
-        else
+        if (!FallenGuardianModule.Get()!.CompletedBossIntro)
         {
             FallenGuardianModule.Get()!.CompletedBossIntro = true;
-
-            // TODO: Aura farm escalation pause.
-            yield return Coroutines.SleepSeconds(EscalationPause);
+            yield return Coroutines.SleepSeconds(EscalationPause - 1f);
         }
+
+        KnightOfNightsPreloader.Instance.NormalSnapshot?.TransitionTo(0);
+        GameManager.instance.AudioManager.ApplyMusicCue(KnightOfNightsPreloader.Instance.DreamFightMusic!, 0, 1f, false);
+
+        yield return Coroutines.SleepSeconds(1);
 
         if (CharmIds.HeavyBlow.IsEquipped()) --StaggerCount;
 
@@ -285,9 +286,12 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             if (oneof.Choice == 1)
             {
                 OnDeath?.Invoke();
-                yield break;
+                makeHeroInvuln = true;
+
+                // Death stagger never ends.
+                yield return Coroutines.Sequence(ExecuteStagger(true));
             }
-            else if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger());
+            else if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger(false));
 
             // Continue to next attack.
         }
@@ -303,6 +307,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         internal float? MagnitudeMultiplier;
     }
     private StaggerParams? staggerParams;
+    private HitInstance? lastHit;
 
     private static StaggerParams MakeStaggerParams(SlashAttack attack) => new()
     {
@@ -327,16 +332,28 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         return true;
     }
 
-    private IEnumerator<CoroutineElement> ExecuteStagger()
+    private IEnumerator<CoroutineElement> Echo(AudioClip clip, float delay, float decay, int times)
+    {
+        float volume = 1;
+        for (int i = 0; i < times; i++)
+        {
+            clip.PlayAtPosition(transform.position, 1f, volume);
+
+            yield return Coroutines.SleepSeconds(delay);
+            volume *= decay;
+        }
+    }
+
+    private IEnumerator<CoroutineElement> ExecuteStagger(bool deathStagger)
     {
         var stats = this.stats!.StaggerStats!;
 
-        var prevParams = staggerParams!;
+        var prevParams = staggerParams;
         staggerParams = null;
         OnStagger?.Invoke();
         OnStagger = null;
 
-        var pos = prevParams.Pos;
+        var pos = prevParams?.Pos ?? lastPos;
 
         // Force hero distance.
         Vector2 kPos = HeroController.instance.transform.position;
@@ -355,19 +372,33 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         }
 
         transform.position = pos;
-        transform.localScale = new(prevParams.FacingLeft ? 1 : -1, 1, 1);
+        transform.localScale = new((prevParams?.FacingLeft ?? transform.localScale.x > 0) ? 1 : -1, 1, 1);
         StaggerBurst?.Spawn(pos);
         KnightOfNightsPreloader.Instance.StunEffect!.Spawn(pos);
 
-        if (!recoil!.IsRecoiling && prevParams.DamageDirection.HasValue && prevParams.MagnitudeMultiplier.HasValue)
+        if (prevParams != null && !recoil!.IsRecoiling && prevParams.DamageDirection.HasValue && prevParams.MagnitudeMultiplier.HasValue)
             recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(prevParams.DamageDirection.Value), prevParams.MagnitudeMultiplier.Value);
+        else if (lastHit != null && !recoil!.IsRecoiling)
+            recoil.RecoilByDirection(DirectionUtils.GetCardinalDirection(lastHit.Value.Direction), lastHit.Value.MagnitudeMultiplier);
 
         SetTangible(false);
         animator!.runtimeAnimatorController = StaggerController!;
         yield return Coroutines.SleepSeconds(stats.Invuln);
 
+        if (deathStagger)
+        {
+            var clip = RevekAddons.GetHurtClip();
+            this.StartLibCoroutine(Echo(clip, 0.15f, 0.9f, 12));
+
+            var death = Instantiate(DeathAnim!, transform);
+            death.SetActive(true);
+        }
+
         bobber?.ResetRandom(stats.OscillationRadius, stats.OscillationPeriod);
         SetTangible(true);
+
+        if (deathStagger) yield return Coroutines.Never();
+
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
 
         yield return Coroutines.OneOf(
@@ -861,7 +892,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
             var minY = Bounds().min.y - (mainPlatform ? 0 : 8);
             bool playSound = mainPlatform && !playedSound;
-            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, playSound));
+            ret.Add(pancakePool!.SpawnPancake(new(X(i), y, z), launchPitch, stats.PancakeSpeed, minY, playSound, mainPlatform ? stats.SnowLandPrefab : null));
             playedSound |= playSound;
         }
         return ret;
@@ -1407,6 +1438,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         }
 
         var p = landing.Value;
+        stats.SnowDivePrefab?.Spawn(p);
+
         p.y -= 0.25f;
         Shockwave.SpawnTwo(p, new(stats.ShockwaveXScale, stats.ShockwaveYScale), stats.ShockwaveSpeed).ForEach(o => recyclables.Add(o));
         if (tallWave) TallWave.SpawnTwo(p, stats.TallShockwaveSpeed).ForEach(o => recyclables.Add(o));

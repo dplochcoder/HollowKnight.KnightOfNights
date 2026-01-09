@@ -1,12 +1,15 @@
-﻿using KnightOfNights.Scripts.Proxy;
+﻿using KnightOfNights.IC;
+using KnightOfNights.Scripts.InternalLib;
+using KnightOfNights.Scripts.Proxy;
 using KnightOfNights.Scripts.SharedLib;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.FallenGuardian;
 
 [Shim]
-internal class FallenGuardianContainer : MonoBehaviour
+internal class FallenGuardianContainer : RevekSongSuppressor
 {
     [ShimField] public HeroDetectorProxy? Trigger;
     [ShimField] public FallenGuardianController? Boss;
@@ -14,14 +17,41 @@ internal class FallenGuardianContainer : MonoBehaviour
     [ShimField] public BoxCollider2D? DaggerBox;
     [ShimField] public BoxCollider2D? GorbStormFinaleBox;
 
-    private void OnEnable() => StartCoroutine(Run());
+    [ShimField] public List<GameObject> DeactivateOnFight = [];
+    [ShimField] public List<GameObject> ActivateOnFight = [];
+    [ShimField] public List<ParticleSystem> DetectionParticles = [];
+    [ShimField] public CameraLockAreaProxy? ActivateCameraOnFight;
+
+    protected override void OnEnable()
+    {
+        base.OnEnable();
+
+        fightStarted = false;
+        Trigger?.Listen(() =>
+        {
+            if (!fightStarted) DetectionParticles.ForEach(p => p.Play());
+        }, () => DetectionParticles.ForEach(p => p.Stop()));
+
+        StartCoroutine(Run());
+    }
+
+    private bool fightStarted = false;
 
     private IEnumerator Run()
     {
-        yield return new WaitUntil(() => Trigger!.Detected());
-        // FIXME: Music
+        yield return new WaitUntil(() => fightStarted);
+
+        DeactivateOnFight.ForEach(o => o.SetActive(false));
+        DetectionParticles.ForEach(p => p.Stop());
+        ActivateOnFight.ForEach(o => o.SetActive(true));
+        ActivateCameraOnFight?.transform.parent.gameObject.SetActive(true);
 
         Boss!.gameObject.SetActive(true);
-        // FIXME: Camera, hazards, death
+    }
+
+    protected override bool InterceptRevekSong(List<FluteNote> song)
+    {
+        if (!fightStarted && Trigger!.Detected()) fightStarted = true;
+        return true;
     }
 }

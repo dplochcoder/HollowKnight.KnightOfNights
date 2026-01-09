@@ -65,9 +65,12 @@ internal class GalienAxe : MonoBehaviour
         tests[0].float2 = stats.AxeTimer;
         tests[1].float2 = bounds.min.y + 7.25f;
 
-        attack.GetState("Floor Bounce").RemoveActionsOfType<RandomFloat>();
-        attack.GetState("Wall L").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.min.x, obj.transform.position.y), 1f)));
-        attack.GetState("Wall R").AddFirstAction(new Lambda(() => SpawnWallPrefab(stats.WallImpactLPrefab!, new(bounds.max.x, obj.transform.position.y), -1f)));
+        var floorBounceState = attack.GetState("Floor Bounce");
+        floorBounceState.RemoveActionsOfType<RandomFloat>();
+        floorBounceState.AddFirstAction(new Lambda(() => SpawnPrefab(stats.SnowImpactPrefab!, new(obj.transform.position.x, bounds.min.y))));
+
+        attack.GetState("Wall L").AddFirstAction(new Lambda(() => SpawnPrefab(stats.WallImpactLPrefab!, new(bounds.min.x, obj.transform.position.y), 1f)));
+        attack.GetState("Wall R").AddFirstAction(new Lambda(() => SpawnPrefab(stats.WallImpactLPrefab!, new(bounds.max.x, obj.transform.position.y), -1f)));
         attack.GetState("Wall Y").ClearActions();
 
         var decelState = attack.GetState("Decel");
@@ -84,7 +87,7 @@ internal class GalienAxe : MonoBehaviour
 
     private float bounceTime;
 
-    private static void SpawnWallPrefab(GameObject prefab, Vector2 pos, float scale)
+    private static void SpawnPrefab(GameObject prefab, Vector2 pos, float scale = 1f)
     {
         var obj = prefab.Spawn(pos);
         obj.transform.localScale = new(scale, 1, 1);

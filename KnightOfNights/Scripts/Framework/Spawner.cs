@@ -7,12 +7,13 @@ namespace KnightOfNights.Scripts.Framework;
 internal class Spawner : MonoBehaviour
 {
     [ShimField] public GameObject? Prefab;
+    [ShimField] public Vector3 Offset;
 
     private float delay;
 
     private void OnEnable()
     {
-        Prefab?.Spawn(transform.position, transform.rotation);
+        Prefab?.Spawn(transform.position + Offset, transform.rotation);
         delay = 0;
     }
 

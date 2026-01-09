@@ -37,8 +37,6 @@ internal class WindField : MonoBehaviour
     [ShimField] public float ParticleWindAccel;
     [ShimField] public float ParticleTargetMultiplier;
 
-    // TODO: Sound
-
     private readonly RectMultimap<WFZCallbackRecord> windZoneCallbacks = [];
     private float windAccum;
 

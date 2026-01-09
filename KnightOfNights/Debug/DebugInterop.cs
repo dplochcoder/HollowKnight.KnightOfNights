@@ -41,4 +41,11 @@ internal static class DebugInterop
 
     [BindableMethod(name = "Reveal Benches", category = CATEGORY)]
     public static void RevealBenches() => BenchesModule.Get()?.RevealBenches();
+
+    [BindableMethod(name = "Toggle Summit", category = CATEGORY)]
+    public static void ToggleSummit()
+    {
+        if (!GetModule<FallenGuardianModule>(out var mod)) return;
+        mod.DefeatedBoss = !mod.DefeatedBoss;
+    }
 }

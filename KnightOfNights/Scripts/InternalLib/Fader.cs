@@ -1,4 +1,5 @@
-﻿using KnightOfNights.Scripts.SharedLib;
+﻿using HutongGames.PlayMaker.Actions;
+using KnightOfNights.Scripts.SharedLib;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.InternalLib;
@@ -8,6 +9,7 @@ internal class Fader : MonoBehaviour
 {
     [ShimField] public Color StartColor;
     [ShimField] public Color EndColor;
+    [ShimField] public float Delay;
     [ShimField] public float Duration;
 
     private SpriteRenderer? renderer;
@@ -20,8 +22,8 @@ internal class Fader : MonoBehaviour
     private void Update()
     {
         timer += Time.deltaTime;
-        if (timer > Duration) timer = Duration;
 
-        if (renderer != null) renderer.color = Color.Lerp(StartColor, EndColor, timer / Duration);
+        var p = MathExt.Clamp((timer - Delay) / Duration, 0, 1);
+        renderer?.color = Color.Lerp(StartColor, EndColor, p);
     }
 }

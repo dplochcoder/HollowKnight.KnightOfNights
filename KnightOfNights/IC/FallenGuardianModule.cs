@@ -1,20 +1,30 @@
 ﻿using ItemChanger;
 using KnightOfNights.Build;
+using KnightOfNights.Scripts.FallenGuardian;
 using KnightOfNights.Scripts.SharedLib;
+using Newtonsoft.Json;
 using PurenailCore.ICUtil;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace KnightOfNights.IC;
+
+internal class CrownTransition : ITransition
+{
+    [JsonIgnore]
+    public string SceneName => (FallenGuardianModule.Get()?.DefeatedBoss ?? false) ? SceneNames.Mines_34 : SummitSceneNames.Summit_EntryHall;
+
+    [JsonIgnore]
+    public string GateName => "bot1";
+}
 
 [PlandoSubmodule]
 internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 {
-    private static readonly Transition TARGET_TRANSITION = new("Summit_EntryHall", "bot1");
-
     private const string PREFIX = "KnightOfNights.Unity.Assets.AssetBundles.";
 
     private static string AssetBundleName(string sceneName) => sceneName.Replace("_", "").ToLower();
@@ -23,10 +33,12 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
     private SceneLoaderModule? coreModule;
 
     public bool CompletedBossIntro = false;
+    public bool DefeatedBoss = false;
 
     protected override void InitializeInternal()
     {
-        ItemChangerMod.AddTransitionOverride(new(SceneNames.Mines_25, "top1"), TARGET_TRANSITION);
+        ItemChangerMod.AddTransitionOverride(new(SceneNames.Mines_25, "top1"), new CrownTransition());
+        Events.AddSceneChangeEdit(SceneNames.Mines_34, SpawnRespawnMarker);
 
         foreach (var str in typeof(FallenGuardianModule).Assembly.GetManifestResourceNames())
         {
@@ -44,9 +56,20 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 
     protected override void UnloadInternal()
     {
+        Events.RemoveSceneChangeEdit(SceneNames.Mines_34, SpawnRespawnMarker);
         sceneBundles.Values.ForEach(v => v?.Unload(true));
         coreModule!.RemoveOnBeforeSceneLoad(OnBeforeSceneLoad);
         coreModule.RemoveOnUnloadScene(OnUnloadScene);
+    }
+
+    private void SpawnRespawnMarker(Scene scene)
+    {
+        GameObject obj = new(DeathAnimWarp.MARKER_NAME);
+        obj.transform.position = new(50f, 56f, 0f);
+        obj.tag = "RespawnPoint";
+
+        var marker = obj.AddComponent<RespawnMarker>();
+        marker.respawnFacingRight = false;
     }
 
     private void OnBeforeSceneLoad(string sceneName, Action cb)

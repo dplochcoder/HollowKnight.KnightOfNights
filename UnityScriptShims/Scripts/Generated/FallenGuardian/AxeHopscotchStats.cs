@@ -3,6 +3,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
     public class AxeHopscotchStats : UnityEngine.MonoBehaviour
     {
         public UnityEngine.GameObject WallImpactLPrefab;
+        public UnityEngine.GameObject SnowImpactPrefab;
         public float AxeAccel;
         public float AxeAnticTime;
         public float AxeBounceSpeed;

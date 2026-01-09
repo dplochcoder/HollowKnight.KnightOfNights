@@ -33,7 +33,7 @@ internal static class GameObjectExtensions
         while (!co.Update(Time.deltaTime).done) yield return 0;
     }
 
-    public static void PlayAtPosition(this AudioClip self, Vector2 pos, float pitch = 1f)
+    public static void PlayAtPosition(this AudioClip self, Vector2 pos, float pitch = 1f, float volume = 1f)
     {
         var obj = new GameObject();
         obj.transform.position = pos;
@@ -44,7 +44,7 @@ internal static class GameObjectExtensions
         IEnumerator Routine()
         {
             yield return null;
-            audio.PlayOneShot(self);
+            audio.PlayOneShot(self, volume);
 
             yield return new WaitUntil(() => !audio.isPlaying);
             yield return null;

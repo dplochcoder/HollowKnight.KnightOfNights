@@ -7,6 +7,7 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 internal class AxeHopscotchStats : MonoBehaviour
 {
     [ShimField] public GameObject? WallImpactLPrefab;
+    [ShimField] public GameObject? SnowImpactPrefab;
 
     [ShimField] public float AxeAccel;
     [ShimField] public float AxeAnticTime;

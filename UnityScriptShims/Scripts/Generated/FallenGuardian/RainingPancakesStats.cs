@@ -2,6 +2,7 @@ namespace KnightOfNights.Scripts.FallenGuardian
 {
     public class RainingPancakesStats : UnityEngine.MonoBehaviour
     {
+        public UnityEngine.GameObject SnowLandPrefab;
         public float DiveHeightMax;
         public float DiveHeightMin;
         public float DiveXBuffer;

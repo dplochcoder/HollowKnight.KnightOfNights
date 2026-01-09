@@ -3,6 +3,7 @@ using ItemChanger.Extensions;
 using PurenailCore.ModUtil;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Audio;
 
 namespace KnightOfNights;
 
@@ -21,6 +22,9 @@ internal class KnightOfNightsPreloader : Preloader
 
     [ResourcePreload("dream_enter_pt_2")]
     public AudioClip? DreamEnterClip { get; private set; }
+
+    [PrefabPreload(SceneNames.Fungus1_35, "DreamFight")]
+    public MusicCue? DreamFightMusic { get; private set; }
 
     [Preload(SceneNames.Fungus2_32, "Ring Holder/1")]
     public GameObject? ElderHuPancake { get; private set; }
@@ -70,6 +74,9 @@ internal class KnightOfNightsPreloader : Preloader
 
     [PrefabPreload(SceneNames.Fungus1_35, "No Eyes Head")]
     public GameObject? NoEyesHead { get; private set; }
+
+    [ResourcePreload("Normal")]
+    public AudioMixerSnapshot? NormalSnapshot { get; private set; }
 
     [Preload(SceneNames.Town, "_Managers/PlayMaker Unity 2D")]
     public GameObject? PlayMaker { get; private set; }

@@ -8,9 +8,9 @@ namespace KnightOfNights.Scripts.InternalLib;
 [Shim]
 internal class RevekSongSuppressor : MonoBehaviour
 {
-    private void OnEnable() => RevekSongSummon.AddInterceptor(InterceptRevekSong);
+    protected virtual void OnEnable() => RevekSongSummon.AddInterceptor(InterceptRevekSong);
 
-    private void OnDisable() => RevekSongSummon.RemoveInterceptor(InterceptRevekSong);
+    protected virtual void OnDisable() => RevekSongSummon.RemoveInterceptor(InterceptRevekSong);
 
     protected virtual bool InterceptRevekSong(List<FluteNote> song) => true;
 }

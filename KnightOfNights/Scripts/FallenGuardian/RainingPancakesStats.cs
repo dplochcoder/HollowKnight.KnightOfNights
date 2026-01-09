@@ -7,6 +7,8 @@ namespace KnightOfNights.Scripts.FallenGuardian;
 [Shim]
 internal class RainingPancakesStats : MonoBehaviour
 {
+    [ShimField] public GameObject? SnowLandPrefab;
+
     [ShimField] public float DiveHeightMax;
     [ShimField] public float DiveHeightMin;
     [ShimField] public float DiveXBuffer;

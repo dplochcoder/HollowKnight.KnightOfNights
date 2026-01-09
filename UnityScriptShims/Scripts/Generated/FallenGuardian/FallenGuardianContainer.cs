@@ -7,6 +7,10 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public UnityEngine.BoxCollider2D Arena;
         public UnityEngine.BoxCollider2D DaggerBox;
         public UnityEngine.BoxCollider2D GorbStormFinaleBox;
+        public System.Collections.Generic.List<UnityEngine.GameObject> DeactivateOnFight;
+        public System.Collections.Generic.List<UnityEngine.GameObject> ActivateOnFight;
+        public System.Collections.Generic.List<UnityEngine.ParticleSystem> DetectionParticles;
+        public KnightOfNights.Scripts.Proxy.CameraLockAreaProxy ActivateCameraOnFight;
         
     }
 }

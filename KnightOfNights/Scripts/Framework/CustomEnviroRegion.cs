@@ -13,15 +13,9 @@ internal class CustomEnviroRegion : MonoBehaviour
 
     private void OnDisable() => DoDeactivate();
 
-    private void OnTriggerEnter2D(Collider2D collider)
-    {
-        if (collider.gameObject.tag == "HeroBox") DoActivate();
-    }
+    private void OnTriggerEnter2D(Collider2D collider) => DoActivate();
 
-    private void OnTriggerExit2D(Collider2D collider)
-    {
-        if (collider.gameObject.tag == "HeroBox") DoDeactivate();
-    }
+    private void OnTriggerExit2D(Collider2D collider) => DoDeactivate();
 
     private void DoActivate()
     {

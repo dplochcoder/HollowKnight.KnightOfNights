@@ -63,6 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallImpactLPrefab: {fileID: 7206719451512712455, guid: 5b2dedc83ccdb3c46a43a0c8fafc3c54, type: 3}
+  SnowImpactPrefab: {fileID: 2671814018695528877, guid: 25e29c7761cf1d4469a14ed0d46160c3, type: 3}
   AxeAccel: 0.5
   AxeAnticTime: 0.3
   AxeBounceSpeed: 21.3333
@@ -293,6 +294,7 @@ MonoBehaviour:
   m_Script: {fileID: -1017068393, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SnowLandPrefab: {fileID: 4160081366578699107, guid: 51dfa31407c27834d9f2f93e5ee19ebd, type: 3}
   DiveHeightMax: 8.5
   DiveHeightMin: 7
   DiveXBuffer: 1
@@ -495,6 +497,7 @@ MonoBehaviour:
   m_Script: {fileID: 1126755919, guid: 3ba14d27f15518547b0c05c14c861bae, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  SnowDivePrefab: {fileID: 2671814018695528877, guid: 821c464dba4cddc4dbe6a28b0f1b46c6, type: 3}
   ImpactScale: 2
   PlungeSpeed: 40
   RetreatSpeed: 4
