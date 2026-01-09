@@ -33,7 +33,10 @@ internal class GrassProxy : MonoBehaviour
         grassObj.transform.localPosition = GrassPreview!.transform.localPosition;
         grassObj.transform.localScale = GrassPreview.transform.localScale;
         grassObj.transform.localRotation = GrassPreview.transform.localRotation;
-        grassObj.AddComponent<SpriteFixer>().Sprite = GrassPreview.GetComponent<SpriteRenderer>().sprite;
+
+        var previewRenderer = GrassPreview.GetComponent<SpriteRenderer>();
+        grassObj.GetComponent<SpriteRenderer>().sortingLayerID = previewRenderer.sortingLayerID;
+        grassObj.AddComponent<SpriteFixer>().Sprite = previewRenderer.sprite;
 
         var renderer = grassObj.GetComponent<SpriteRenderer>();
         renderer.color = GrassPreview.GetComponent<SpriteRenderer>().color;
@@ -53,7 +56,9 @@ internal class GrassProxy : MonoBehaviour
         emission.rateOverTime = NumParticles / deathParticles.main.duration;
 
         GrassParticles!.shader = Shader.Find("Sprites/Default");
-        deathObj.GetComponent<ParticleSystemRenderer>().material = GrassParticles;
+        var deathRenderer = deathObj.GetComponent<ParticleSystemRenderer>();
+        deathRenderer.material = GrassParticles;
+        deathRenderer.sortingLayerID = previewRenderer.sortingLayerID;
 
         gameObject.SetActive(false);
     }
