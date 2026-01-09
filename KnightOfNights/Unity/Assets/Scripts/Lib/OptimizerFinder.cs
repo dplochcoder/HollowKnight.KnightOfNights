@@ -147,6 +147,7 @@ namespace KnightOfNights.Scripts.Lib
             Update("Lighting()", UpdateLighting());
             Update("RemoveObsoleteObjects()", RemoveObsoleteObjects());
             Update("FixScenery()", FixScenery());
+            Update("FixOrder()", FixOrder());
             Update("FixTilemapScript()", FixTilemapScript());
             Update("FixAll<BenchProxy>(...)", FixAll<BenchProxy>(FixBP));
             Update("FixBlurPlane()", FixAll<BlurPlaneProxy>(FixBPP));
@@ -284,6 +285,88 @@ namespace KnightOfNights.Scripts.Lib
             if (go.GetComponent<SpritePatcher>() == null)
             {
                 go.AddComponent<SpritePatcher>();
+                changed = true;
+            }
+
+            return changed;
+        }
+
+        private static void ParseOrdinal(string name, out string prefix, out int ordinal)
+        {
+            if (name.EndsWith(")"))
+            {
+                int idx = name.LastIndexOf(" (");
+                if (idx > 0)
+                {
+                    prefix = name.Substring(0, idx);
+                    var substr = name.Substring(idx + 2, name.Length - 3 - idx);
+                    if (int.TryParse(substr, out ordinal)) return;
+                }
+            }
+
+            prefix = name;
+            ordinal = 0;
+        }
+
+        private static string PrintOrdinal(string prefix, int ordinal) => ordinal == 0 ? prefix : $"{prefix} ({ordinal})";
+
+        private static int CompareNames(Transform a, Transform b)
+        {
+            ParseOrdinal(a.name, out var prefixA, out var ordinalA);
+            ParseOrdinal(b.name, out var prefixB, out var ordinalB);
+
+            if (prefixA != prefixB) return prefixA.CompareTo(prefixB);
+            else return ordinalA.CompareTo(ordinalB);
+        }
+
+        private static bool FixOrder()
+        {
+            bool changed = false;
+            var queue = new Queue<GameObject>();
+            foreach (var obj in UnityEngine.SceneManagement.SceneManager.GetActiveScene().GetRootGameObjects()) queue.Enqueue(obj);
+
+            while (queue.Count > 0)
+            {
+                var obj = queue.Dequeue();
+                if (UnityEditor.PrefabUtility.IsAnyPrefabInstanceRoot(obj)) continue;
+
+                var orig = new List<Transform>();
+                foreach (Transform t in obj.transform)
+                {
+                    orig.Add(t);
+                    queue.Enqueue(t.gameObject);
+                }
+                var sorted = new List<Transform>(orig);
+                sorted.Sort(CompareNames);
+
+                bool diff = false;
+                var ordinals = new Dictionary<string, int>();
+                for (int i = 0; i < sorted.Count; i++)
+                {
+                    if (sorted[i].GetSiblingIndex() != i) diff = true;
+
+                    ParseOrdinal(sorted[i].name, out var prefix, out var ordinal);
+                    int newOrdinal = ordinals.TryGetValue(prefix, out var o) ? o + 1 : 0;
+                    ordinals[prefix] = newOrdinal;
+
+                    var name = PrintOrdinal(prefix, newOrdinal);
+                    if (sorted[i].name != name)
+                    {
+                        diff = true;
+                        sorted[i].name = name;
+                    }
+                }
+
+                if (!diff) continue;
+
+                foreach (var t in sorted)
+                {
+                    t.SetParent(null, true);
+                    UnityEditorShims.MarkDirty(t.gameObject);
+                }
+                foreach (var t in sorted) t.SetParent(obj.transform, true);
+
+                UnityEditorShims.MarkDirty(obj);
                 changed = true;
             }
 
