@@ -107,7 +107,9 @@ internal class SlashAttackSequenceBehaviour : MonoBehaviour
         Callback?.Invoke(SlashAttackResult.NOT_PARRIED);
         Callback = null;
         cancelled = true;
-        activeAttacks.ForEach(c => c.Cancel());
+
+        List<SlashAttack> attacks = [.. activeAttacks];
+        attacks.ForEach(c => c.Cancel());
     }
 
     private void OnDestroy() => Cancel();
