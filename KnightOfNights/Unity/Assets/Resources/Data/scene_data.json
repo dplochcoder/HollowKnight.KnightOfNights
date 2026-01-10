@@ -12,7 +12,7 @@
   "Summit_Boss": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
-      "RespawnMarkerName": "Bench",
+      "RespawnMarkerName": "Bench-RespawnMarker",
       "AreaName": "Summit",
       "MenuName": "Peak"
     }
@@ -20,7 +20,7 @@
   "Summit_Checkpoint": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
-      "RespawnMarkerName": "Bench",
+      "RespawnMarkerName": "Bench-RespawnMarker",
       "AreaName": "Summit",
       "MenuName": "Alone"
     }

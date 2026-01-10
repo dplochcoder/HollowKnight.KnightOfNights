@@ -20,9 +20,10 @@ internal class BenchProxy : MonoBehaviour
         var myBox = GetComponent<BoxCollider2D>();
 
         var bench = ObjectCache.GetNewBench();
+        bench.tag = "RespawnPoint";
         bench.SetActive(true);
 
-        bench.name = transform.parent.name;
+        bench.name = transform.parent.name + "-RespawnMarker";
         bench.transform.position = transform.position with { z = 0.01f };
         bench.transform.localScale = transform.localScale;
         bench.transform.localRotation = Quaternion.identity;

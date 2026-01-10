@@ -17,7 +17,7 @@ namespace KnightOfNights.Scripts.SharedLib.Data
 
         public override object GetSceneData()
         {
-            Data.RespawnMarkerName = name;
+            Data.RespawnMarkerName = name + "-RespawnMarker";
             return Data;
         }
     }
