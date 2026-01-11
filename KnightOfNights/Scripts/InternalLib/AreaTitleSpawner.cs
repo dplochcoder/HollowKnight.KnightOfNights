@@ -13,13 +13,13 @@ internal class AreaTitleSpawner : MonoBehaviour, IPersistentBehaviour<AreaTitleS
     public void AwakeWithManager(AreaTitleSpawnerManager initManager)
     {
         var visited = PDBool == "" || PlayerData.instance.GetBool(PDBool);
-        if (initManager.Trigger != null && !visited) initManager.Trigger.OnDetected(() => AreaTitleUtil.Spawn(AreaKey, PDBool));
+        if (initManager.Trigger != null && !visited) initManager.Trigger.OnDetected(new Once(() => AreaTitleUtil.Spawn(AreaKey, PDBool)));
         else AreaTitleUtil.Spawn(AreaKey, PDBool);
     }
 
     public void SceneChanged(AreaTitleSpawnerManager newManager) { }
 
-    public void Stop() { }
+    public void Stop() => Destroy(gameObject);
 }
 
 [Shim]
