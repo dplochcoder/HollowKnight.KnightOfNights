@@ -1,8 +1,8 @@
 ﻿using ItemChanger;
-using ItemChanger.StartDefs;
 using KnightOfNights.Build;
 using KnightOfNights.Scripts.FallenGuardian;
 using KnightOfNights.Scripts.SharedLib;
+using Modding;
 using Newtonsoft.Json;
 using PurenailCore.ICUtil;
 using System;
@@ -11,7 +11,6 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Timeline;
 
 namespace KnightOfNights.IC;
 
@@ -36,11 +35,15 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 
     public bool CompletedBossIntro = false;
     public bool DefeatedBoss = false;
+    public bool VisitedSummit = false;
 
     protected override void InitializeInternal()
     {
         ItemChangerMod.AddTransitionOverride(new(SceneNames.Mines_25, "top1"), new CrownTransition());
         Events.AddSceneChangeEdit(SceneNames.Mines_34, SpawnRespawnMarker);
+        ModHooks.LanguageGetHook += LanguageGetHook;
+        ModHooks.GetPlayerBoolHook += GetVisitedSummit;
+        ModHooks.SetPlayerBoolHook += SetVisitedSummit;
 
         foreach (var str in typeof(FallenGuardianModule).Assembly.GetManifestResourceNames())
         {
@@ -59,6 +62,9 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
     protected override void UnloadInternal()
     {
         Events.RemoveSceneChangeEdit(SceneNames.Mines_34, SpawnRespawnMarker);
+        ModHooks.LanguageGetHook -= LanguageGetHook;
+        ModHooks.GetPlayerBoolHook -= GetVisitedSummit;
+        ModHooks.SetPlayerBoolHook -= SetVisitedSummit;
 
         sceneBundles.Values.ForEach(v => v?.Unload(true));
         coreModule!.RemoveOnBeforeSceneLoad(OnBeforeSceneLoad);
@@ -72,6 +78,32 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
         obj.tag = "RespawnPoint";
         obj.AddComponent<RespawnMarker>().respawnFacingRight = false;
     }
+
+    internal const string REVEK_KEY = "REVEK_BOSS";
+    internal const string SUMMIT_KEY = "SUMMIT_AREA";
+
+    private string LanguageGetHook(string key, string sheetTitle, string orig) => key switch
+    {
+        $"{REVEK_KEY}_SUPER" => "Fallen Guardian",
+        $"{REVEK_KEY}_MAIN" => "Revek",
+        $"{REVEK_KEY}_SUB" => "",
+        $"{SUMMIT_KEY}_SUPER" => "",
+        $"{SUMMIT_KEY}_MAIN" => "The Summit",
+        $"{SUMMIT_KEY}_SUB" => "",
+        _ => orig
+    };
+
+    private bool GetVisitedSummit(string name, bool orig) => name switch
+    {
+        nameof(VisitedSummit) => VisitedSummit,
+        _ => orig
+    };
+
+    private bool SetVisitedSummit(string name, bool value) => name switch
+    {
+        nameof(VisitedSummit) => VisitedSummit = value,
+        _ => value
+    };
 
     private void OnBeforeSceneLoad(string sceneName, Action cb)
     {

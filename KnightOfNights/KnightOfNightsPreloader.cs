@@ -1,7 +1,6 @@
 ﻿using ItemChanger;
 using ItemChanger.Extensions;
 using PurenailCore.ModUtil;
-using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -11,6 +10,9 @@ namespace KnightOfNights;
 internal class KnightOfNightsPreloader : Preloader
 {
     public static readonly KnightOfNightsPreloader Instance = new();
+
+    [Preload(SceneNames.Fungus2_03, "Area Title Controller")]
+    public GameObject? AreaTitleController { get; private set; }
 
     [ResourcePreload("Arrow Prompt")]
     public GameObject? ArrowPrompt { get; private set; }

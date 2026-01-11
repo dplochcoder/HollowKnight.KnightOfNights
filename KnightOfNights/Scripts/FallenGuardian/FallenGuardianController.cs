@@ -278,6 +278,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         var dreamArea = Instantiate(KnightOfNightsPreloader.Instance.DreamAreaEffect!, Vector3.zero, Quaternion.identity);
         dreamArea.SetActive(true);
 
+        AreaTitleUtil.Spawn(FallenGuardianModule.REVEK_KEY);
+
         yield return Coroutines.SleepSeconds(1);
 
         if (CharmIds.HeavyBlow.IsEquipped()) --StaggerCount;
