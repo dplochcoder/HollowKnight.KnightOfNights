@@ -135,6 +135,8 @@ namespace KnightOfNights.Scripts.SharedLib
             foreach (var item in self) action(item);
         }
 
+        public static void ForEachShared<T>(this IEnumerable<T> self, Action<T> action) => self.ForEach(action);
+
         public static void ForEachCopied<T>(this IEnumerable<T> self, Action<T> action)
         {
             var list = new List<T>();

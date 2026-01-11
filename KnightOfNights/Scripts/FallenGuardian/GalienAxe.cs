@@ -85,8 +85,6 @@ internal class GalienAxe : MonoBehaviour
         return axe;
     }
 
-    private float bounceTime;
-
     private static void SpawnPrefab(GameObject prefab, Vector2 pos, float scale = 1f)
     {
         var obj = prefab.Spawn(pos);
@@ -110,7 +108,6 @@ internal class GalienAxe : MonoBehaviour
 
     private void Update()
     {
-        bounceTime += Time.deltaTime;
         if (ctrl!.ActiveStateName == "Init") ctrl.SendEvent("READY");
 
         if (timeToAntic <= 0) return;

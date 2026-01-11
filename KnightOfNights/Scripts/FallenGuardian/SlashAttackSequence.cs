@@ -12,10 +12,11 @@ internal abstract class SlashAttackSequence
     public abstract float Tail();
 
     // Returns a cancellation callback.
-    public System.Action Play(System.Action<SlashAttackResult> callback)
+    public System.Action Play(FallenGuardianController controller, System.Action<SlashAttackResult> callback)
     {
         GameObject obj = new();
         var b = obj.AddComponent<SlashAttackSequenceBehaviour>();
+        b.Controller = controller;
         b.Attacks = [.. AttackSequence()];
         b.Callback = callback;
         return b.CancelAndDestroy;
@@ -45,6 +46,7 @@ internal class FlippableSlashAttackSequence(List<(float, SlashAttackSpec)> specs
 
 internal class SlashAttackSequenceBehaviour : MonoBehaviour
 {
+    internal FallenGuardianController? Controller;
     internal List<(float, SlashAttackSpec)> Attacks = [];
     internal System.Action<SlashAttackResult>? Callback;
 
@@ -65,7 +67,7 @@ internal class SlashAttackSequenceBehaviour : MonoBehaviour
             else
             {
                 ++launchedAttacks;
-                var attack = SlashAttack.Spawn(spec);
+                var attack = SlashAttack.Spawn(Controller!, spec);
                 activeAttacks.Add(attack);
 
                 attack.OnResult += result =>

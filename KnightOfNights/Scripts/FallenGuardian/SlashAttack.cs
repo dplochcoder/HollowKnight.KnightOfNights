@@ -29,13 +29,18 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
     private ParticleClock? clock;
     private RevekAddons? revekAddons;
 
-    public static SlashAttack Spawn(SlashAttackSpec spec)
+    public static SlashAttack Spawn(FallenGuardianController controller, SlashAttackSpec spec)
     {
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
         revek.transform.position = new(-100, -100);
 
         SlashAttack attack = new(spec, revek.LocateMyFSM("Control"));
         attack.SpawnImpl(spec);
+
+        void OnDeath() => attack.Cancel();
+        controller.OnDeath += OnDeath;
+        attack.OnResult += _ => controller.OnDeath -= OnDeath;
+
         return attack;
     }
 

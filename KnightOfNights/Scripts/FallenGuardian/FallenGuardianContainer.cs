@@ -20,7 +20,6 @@ internal class FallenGuardianContainer : RevekSongSuppressor
     [ShimField] public List<GameObject> DeactivateOnFight = [];
     [ShimField] public List<GameObject> ActivateOnFight = [];
     [ShimField] public List<ParticleSystem> DetectionParticles = [];
-    [ShimField] public CameraLockAreaProxy? ActivateCameraOnFight;
 
     protected override void OnEnable()
     {
@@ -44,7 +43,6 @@ internal class FallenGuardianContainer : RevekSongSuppressor
         DeactivateOnFight.ForEach(o => o.SetActive(false));
         DetectionParticles.ForEach(p => p.Stop());
         ActivateOnFight.ForEach(o => o.SetActive(true));
-        ActivateCameraOnFight?.transform.parent.gameObject.SetActive(true);
 
         Boss!.gameObject.SetActive(true);
     }

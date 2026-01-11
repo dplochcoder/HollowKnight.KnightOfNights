@@ -63,7 +63,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   WallImpactLPrefab: {fileID: 7206719451512712455, guid: 5b2dedc83ccdb3c46a43a0c8fafc3c54, type: 3}
-  SnowImpactPrefab: {fileID: 2671814018695528877, guid: 25e29c7761cf1d4469a14ed0d46160c3, type: 3}
+  SnowImpactPrefab: {fileID: 2671814018695528877, guid: e7166c54b010a514fb7f5be9f0adb7ba, type: 3}
   AxeAccel: 0.5
   AxeAnticTime: 0.3
   AxeBounceSpeed: 21.3333

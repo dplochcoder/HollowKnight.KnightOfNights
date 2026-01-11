@@ -10,7 +10,6 @@ namespace KnightOfNights.Scripts.FallenGuardian
         public System.Collections.Generic.List<UnityEngine.GameObject> DeactivateOnFight;
         public System.Collections.Generic.List<UnityEngine.GameObject> ActivateOnFight;
         public System.Collections.Generic.List<UnityEngine.ParticleSystem> DetectionParticles;
-        public KnightOfNights.Scripts.Proxy.CameraLockAreaProxy ActivateCameraOnFight;
         
     }
 }

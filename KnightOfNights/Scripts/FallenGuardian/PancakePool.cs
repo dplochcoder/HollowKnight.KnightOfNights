@@ -3,6 +3,7 @@ using HutongGames.PlayMaker.Actions;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
 using KnightOfNights.Scripts.InternalLib;
+using KnightOfNights.Scripts.SharedLib;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,6 +21,19 @@ internal class PancakePool : MonoBehaviour
     private readonly Queue<GameObject> inactive = [];
 
     private readonly GameObject prefab = KnightOfNightsPreloader.Instance.ElderHuPancake!;
+
+    internal FallenGuardianController? Controller
+    {
+        get => field;
+        set
+        {
+            field?.OnDeath -= OnDeath;
+            field = value;
+            field?.OnDeath += OnDeath;
+        }
+    }
+
+    private void OnDeath() => active.ForEach(o => o.SetActive(false));
 
     private GameObject SpawnNew(Vector2 pos, float minY)
     {

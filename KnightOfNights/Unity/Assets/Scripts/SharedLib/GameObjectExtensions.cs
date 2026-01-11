@@ -23,6 +23,31 @@ namespace KnightOfNights.Scripts.SharedLib
 
         public static GameObject Coalesce(this GameObject self) => self == null ? null : self;
 
+        public static Bounds GetRealBounds(this Collider2D self)
+        {
+            bool enabled = self.enabled;
+            self.enabled = true;
+
+            var inactive = new List<GameObject>();
+            var obj = self.gameObject;
+            while (obj != null && !self.gameObject.activeInHierarchy)
+            {
+                if (!obj.activeSelf)
+                {
+                    obj.SetActive(true);
+                    inactive.Add(obj);
+                }
+                obj = obj.transform.parent?.gameObject;
+            }
+
+            var bounds = self.bounds;
+
+            foreach (var o in inactive) o.SetActive(false);
+            self.enabled = enabled;
+
+            return bounds;
+        }
+
         public static void SetParent(this GameObject self, GameObject parent) => self.transform.SetParent(parent.transform);
 
         public static void Unparent(this GameObject self) => self.transform.parent = null;

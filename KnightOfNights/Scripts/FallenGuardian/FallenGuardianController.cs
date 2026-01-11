@@ -125,6 +125,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yFixer = gameObject.AddComponent<YFixer>();
         yFixer.enabled = false;
         pancakePool = gameObject.AddComponent<PancakePool>();
+        pancakePool.Controller = this;
 
         StaggerBurst?.FixSpawnBug();
         TeleportBurst?.FixSpawnBug();
@@ -141,6 +142,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
     private void OnDestroy()
     {
         foreach (var go in recyclables) go.Recycle();
+        HeroController.instance.cState.invulnerable = false;
     }
 
     private Vector2 lastPos;
@@ -249,7 +251,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
                 yield return Coroutines.SleepSeconds(SequenceDelay);
 
                 Wrapped<SlashAttackResult?> result = new(null);
-                sequence.Play(r => result.Value = r);
+                sequence.Play(this, r => result.Value = r);
 
                 yield return Coroutines.SleepUntil(() => result.Value.HasValue);
                 if (result.Value == SlashAttackResult.NOT_PARRIED) continue;
@@ -263,13 +265,36 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             yield return Coroutines.SleepSeconds(EscalationPause - 1f);
         }
 
-        KnightOfNightsPreloader.Instance.NormalSnapshot?.TransitionTo(0);
-        GameManager.instance.AudioManager.ApplyMusicCue(KnightOfNightsPreloader.Instance.DreamFightMusic!, 0, 1f, false);
+        GameObject musicObj = new();
+
+        var music = musicObj.AddComponent<AudioSource>();
+        music.clip = KnightOfNightsPreloader.Instance.DreamFightMusicClip ?? throw new System.ArgumentException("WHEREISTHEMUSIC");
+        music.loop = true;
+        music.outputAudioMixerGroup = AudioMixerGroups.Music();
+        music.volume = 1;
+        musicObj.SetActive(true);
+        music.Play();
+
+        var dreamArea = Instantiate(KnightOfNightsPreloader.Instance.DreamAreaEffect!, Vector3.zero, Quaternion.identity);
+        dreamArea.SetActive(true);
 
         yield return Coroutines.SleepSeconds(1);
 
         if (CharmIds.HeavyBlow.IsEquipped()) --StaggerCount;
 
+        yield return Coroutines.SleepUntil(() => healthManager!.hp <= 0).WithDisposable(Coroutines.Sequence(LoopAttacks()));
+
+        makeHeroInvuln = true;
+        yFixer?.enabled = false;
+        xFixer?.enabled = false;
+        music.Stop();
+        OnDeath?.Invoke();
+
+        yield return Coroutines.Sequence(ExecuteStagger(true));
+    }
+
+    private IEnumerator<CoroutineElement> LoopAttacks()
+    {
         AttackChoice previousAttack = AttackChoice.UltraInstinct;
         while (true)
         {
@@ -279,19 +304,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             RecordChoice(attack);
             var oneof = Coroutines.OneOf(
                 ExecuteAttack(attack),
-                Coroutines.SleepUntil(() => healthManager!.hp <= 0),
                 Coroutines.SleepUntil(() => staggerParams != null));
             yield return oneof;
 
-            if (oneof.Choice == 1)
-            {
-                OnDeath?.Invoke();
-                makeHeroInvuln = true;
-
-                // Death stagger never ends.
-                yield return Coroutines.Sequence(ExecuteStagger(true));
-            }
-            else if (oneof.Choice == 2) yield return Coroutines.Sequence(ExecuteStagger(false));
+            if (oneof.Choice == 1) yield return Coroutines.Sequence(ExecuteStagger(false));
 
             // Continue to next attack.
         }
@@ -533,6 +549,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         Wrapped<int> despawns = new(0);
         List<GalienAxe> axes = [];
+
+        void DespawnAxes() => axes.ForEach(a => a.Despawn());
+        OnDeath += DespawnAxes;
+
         for (int i = 0; i < xs.Count; i++)
         {
             if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenAxeSpawns);
@@ -563,7 +583,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         {
             if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenSlashAttacks);
 
-            var attack = SlashAttack.Spawn(MathExt.CoinFlip() ? SlashAttackSpec.LEFT : SlashAttackSpec.RIGHT);
+            var attack = SlashAttack.Spawn(this, MathExt.CoinFlip() ? SlashAttackSpec.LEFT : SlashAttackSpec.RIGHT);
             attack.OnResult += result =>
             {
                 if (result != SlashAttackResult.PARRIED) return;
@@ -572,16 +592,17 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
                 lastAttack.Value = attack;
                 healthManager!.hp -= attack.DamageDealt;
 
-                if (++parries.Value == stats.NumSlashAttacks && MaybeStagger(attack))
-                    axes.ForEach(a => a.Despawn());
+                if (++parries.Value == stats.NumSlashAttacks && MaybeStagger(attack)) DespawnAxes();
             };
 
             attacks.Add(attack);
         }
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
-        axes.ForEach(a => a.Despawn());
+        DespawnAxes();
         yield return Coroutines.SleepSeconds(stats.GracePeriod2);
+
+        OnDeath -= DespawnAxes;
     }
 
     [ShimMethod]
@@ -681,7 +702,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
     }
 
-    private IEnumerator<CoroutineElement> LaunchGorbSpikes(int count, float offset, int numBursts, float wait, float pitchIncrement)
+    private IEnumerator<CoroutineElement> LaunchGorbSpikes(HashSet<GameObject> sink, int count, float offset, int numBursts, float wait, float pitchIncrement)
     {
         var prefab = KnightOfNightsPreloader.Instance.GorbSpear!;
         prefab.FixSpawnBug();
@@ -716,6 +737,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
                 }));
 
                 obj.SetActive(true);
+                sink.Add(obj);
             }
 
             angle += off;
@@ -735,6 +757,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
             var kPos = HeroController.instance.transform.position;
             return new(kPos.x + Random.Range(xMin, xMax), Container!.Arena!.bounds.min.y + Random.Range(stats.SmallYMin, stats.SmallYMax));
         }
+
+        HashSet<GameObject> spears = [];
+        void DespawnSpears() => spears.ForEachShared(s => s.Recycle());
+        OnDeath += DespawnSpears;
 
         var left = MathExt.CoinFlip();
         bool first = true;
@@ -762,7 +788,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
                 yield return Coroutines.SleepSeconds(stats.WaitAfterTeleport);
             }
 
-            yield return Coroutines.Sequence(LaunchGorbSpikes(stats.SpokeCountSmall, stats.SpokeRotationSmall, stats.BurstCountSmall, stats.WaitSpikeSmall, stats.PitchIncrementSmall));
+            yield return Coroutines.Sequence(LaunchGorbSpikes(spears, stats.SpokeCountSmall, stats.SpokeRotationSmall, stats.BurstCountSmall, stats.WaitSpikeSmall, stats.PitchIncrementSmall));
             yield return Coroutines.SleepSeconds(stats.WaitBeforeTeleport);
         }
 
@@ -789,7 +815,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         OnCastSpell += () => spell.Value = true;
         yield return Coroutines.SleepUntil(() => spell.Value = true);
 
-        yield return Coroutines.Sequence(LaunchGorbSpikes(stats.SpokeCountFinale, stats.SpokeRotationFinale, stats.BurstCountFinale, stats.WaitSpikeFinale, stats.PitchIncrementFinale));
+        yield return Coroutines.Sequence(LaunchGorbSpikes(spears, stats.SpokeCountFinale, stats.SpokeRotationFinale, stats.BurstCountFinale, stats.WaitSpikeFinale, stats.PitchIncrementFinale));
         yield return Coroutines.SleepSeconds(stats.WaitAfterFinale);
 
         Wrapped<bool> teleport = new(false);
@@ -798,6 +824,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yield return Coroutines.SleepUntil(() => teleport.Value = true);
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
+
+        OnDeath -= DespawnSpears;
     }
 
     private const int NUM_PANCAKES = 17;
@@ -980,6 +1008,10 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         var stats = this.stats!.ShieldCycloneStats!;
 
         List<MarkothNail> nails = [];
+
+        void DespawnNails() => nails.ForEach(n => n.Despawn());
+        OnDeath += DespawnNails;
+
         for (int i = 0; i < stats.NumDaggerSpawns; i++)
         {
             if (i != 0) yield return Coroutines.SleepSeconds(stats.WaitBetweenDaggerSpawns);
@@ -1012,9 +1044,12 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         yield return Coroutines.SleepSeconds(stats.WaitAfterShieldTeleport);
         KnightOfNightsPreloader.Instance.RevekAttackClips.Choose().PlayAtPosition(transform.position);
 
+        List<MarkothShieldWave> waves = [];
+        void DespawnWaves() => waves.ForEach(w => w.Despawn());
+        OnDeath += DespawnWaves;
+
         float offset = Random.Range(0f, 360f);
         float flipOffset = offset;
-        List<MarkothShieldWave> waves = [];
         bool flipped = MathExt.CoinFlip();
         for (int i = 0; i < stats.NumShieldWaves; i++)
         {
@@ -1036,6 +1071,9 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         this.StartLibCoroutine(Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, TeleportOutController!]));
 
         yield return Coroutines.SleepSeconds(stats.GracePeriod);
+
+        OnDeath -= DespawnNails;
+        OnDeath -= DespawnWaves;
     }
 
     private static List<List<int>> GenSlashAmbushGroupings()
@@ -1091,7 +1129,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         var stats = this.stats!.SlashAmbushStats!;
 
         Wrapped<int> parries = new(0);
-        List<SlashAttack> attacks = [.. GenSlashAmbushSpecs().Select(SlashAttack.Spawn)];
+        List<SlashAttack> attacks = [.. GenSlashAmbushSpecs().Select(a => SlashAttack.Spawn(this, a))];
         attacks.ForEach(a =>
         {
             a.OnResult += result =>
@@ -1169,7 +1207,7 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         Wrapped<int> remaining = new(specs.Count);
         foreach (var spec in specs)
         {
-            var attack = SlashAttack.Spawn(spec);
+            var attack = SlashAttack.Spawn(this, spec);
             attack.OnResult += result =>
             {
                 --remaining.Value;
@@ -1261,6 +1299,14 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         List<XeroNail> left = [];
         List<XeroNail> right = [];
+
+        void DespawnInstant()
+        {
+            left.ForEach(l => l.Despawn());
+            right.ForEach(r => r.Despawn());
+        }
+        OnDeath += DespawnInstant;
+
         KnightOfNightsPreloader.Instance.DreamEnterClip?.PlayAtPosition(transform.position);
         for (int i = 0; i < stats.NumNailsPerWing; i++)
         {
@@ -1357,6 +1403,8 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
 
         yield return Coroutines.PlayAnimations(animator!, [SpellLoopToSwordController!, SwordToDiveAnticNoLoopController!]);
         yield return Coroutines.SleepSeconds(stats.GracePeriod).WithDisposable(Coroutines.Sequence(Dive(true)));
+
+        OnDeath -= DespawnInstant;
     }
 
     private UnityEngine.Bounds Bounds() => Container!.Arena!.bounds;
@@ -1518,6 +1566,4 @@ internal class FallenGuardianController : MonoBehaviour, IParryResponder
         var prev = healthManager!.hp;
         return Coroutines.SleepUntil(() => healthManager!.hp < prev);
     }
-
-    private CoroutineElement DeferredOnTakeDamage() => Coroutines.Deferred(_ => OnTakeDamage());
 }

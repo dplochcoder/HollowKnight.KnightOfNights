@@ -25,7 +25,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2870460914088541025, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: InitialModule.startSpeed.scalar
-      value: 18
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 2870460914088541025, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: InitialModule.startSize.minScalar
@@ -41,11 +41,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2870460914088541025, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: InitialModule.startSpeed.minScalar
-      value: 10
+      value: 14
       objectReference: {fileID: 0}
     - target: {fileID: 2870460914088541025, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: InitialModule.gravityModifier.scalar
-      value: 3.5
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2870460914088541025, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: InitialModule.startLifetime.minScalar
@@ -98,6 +98,14 @@ PrefabInstance:
     - target: {fileID: 4711435924049290687, guid: 8913118d947b94a42b848eafbf636599, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353907635750039873, guid: 8913118d947b94a42b848eafbf636599, type: 3}
+      propertyPath: m_SortingLayer
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8353907635750039873, guid: 8913118d947b94a42b848eafbf636599, type: 3}
+      propertyPath: m_SortingLayerID
+      value: -1717784197
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8913118d947b94a42b848eafbf636599, type: 3}

@@ -1,6 +1,7 @@
 ﻿using ItemChanger;
 using ItemChanger.Extensions;
 using PurenailCore.ModUtil;
+using SFCore.Utils;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Audio;
@@ -20,11 +21,16 @@ internal class KnightOfNightsPreloader : Preloader
     [Preload(SceneNames.Ruins1_28, "Direction Pole Stag")]
     public GameObject? DirectionPoleStag { get; private set; }
 
+    [PrefabPreload(SceneNames.Tutorial_01, "dream_area_effect")]
+    public GameObject? DreamAreaEffect { get; private set; }
+
     [ResourcePreload("dream_enter_pt_2")]
     public AudioClip? DreamEnterClip { get; private set; }
 
     [PrefabPreload(SceneNames.Fungus1_35, "DreamFight")]
-    public MusicCue? DreamFightMusic { get; private set; }
+    public MusicCue? DreamFightMusicCue { get; private set; }
+
+    public AudioClip? DreamFightMusicClip => DreamFightMusicCue?.GetChannelInfo(MusicChannels.Main).Clip;
 
     [Preload(SceneNames.Fungus2_32, "Ring Holder/1")]
     public GameObject? ElderHuPancake { get; private set; }

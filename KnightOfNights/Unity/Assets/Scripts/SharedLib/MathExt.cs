@@ -293,7 +293,7 @@ namespace KnightOfNights.Scripts.SharedLib
             BoxCollider2D[] colliders = box.gameObject.GetComponents<BoxCollider2D>();
             bool first = box == colliders[0];
 
-            var bounds = box.bounds;
+            var bounds = box.GetRealBounds();
             float x1 = Snap(bounds.min.x, epsilon);
             float y1 = Snap(bounds.min.y, epsilon);
             float x2 = Snap(bounds.max.x, epsilon);

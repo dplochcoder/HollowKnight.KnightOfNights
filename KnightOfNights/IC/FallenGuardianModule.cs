@@ -1,4 +1,5 @@
 ﻿using ItemChanger;
+using ItemChanger.StartDefs;
 using KnightOfNights.Build;
 using KnightOfNights.Scripts.FallenGuardian;
 using KnightOfNights.Scripts.SharedLib;
@@ -10,6 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Timeline;
 
 namespace KnightOfNights.IC;
 
@@ -57,6 +59,7 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
     protected override void UnloadInternal()
     {
         Events.RemoveSceneChangeEdit(SceneNames.Mines_34, SpawnRespawnMarker);
+
         sceneBundles.Values.ForEach(v => v?.Unload(true));
         coreModule!.RemoveOnBeforeSceneLoad(OnBeforeSceneLoad);
         coreModule.RemoveOnUnloadScene(OnUnloadScene);
@@ -67,9 +70,7 @@ internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
         GameObject obj = new(DeathAnimWarp.MARKER_NAME);
         obj.transform.position = new(50f, 56f, 0f);
         obj.tag = "RespawnPoint";
-
-        var marker = obj.AddComponent<RespawnMarker>();
-        marker.respawnFacingRight = false;
+        obj.AddComponent<RespawnMarker>().respawnFacingRight = false;
     }
 
     private void OnBeforeSceneLoad(string sceneName, Action cb)
