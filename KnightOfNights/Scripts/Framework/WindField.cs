@@ -29,16 +29,11 @@ internal enum WindTargetType
 internal class WindField : MonoBehaviour
 {
     [ShimField] public WindFieldAggregator Aggregator;
-    [ShimField] public float Prewarm;
-    [ShimField] public float DownTime;
-    [ShimField] public float TransitionTime;
-    [ShimField] public float UpTime;
     [ShimField] public float HeroWindAccel;
     [ShimField] public float ParticleWindAccel;
     [ShimField] public float ParticleTargetMultiplier;
 
     private readonly RectMultimap<WFZCallbackRecord> windZoneCallbacks = [];
-    private float windAccum;
 
     private static readonly HashSet<WindField> windFields = [];
 
@@ -67,14 +62,16 @@ internal class WindField : MonoBehaviour
             vectors.Add(windSpeed);
         }
 
+        if (vectors.Count == 0) return Vector2.zero;
+
         float multiplier = windTargetType switch { WindTargetType.Hero => 1, WindTargetType.Particle => ParticleTargetMultiplier, _ => throw windTargetType.InvalidEnum() };
         return Aggregator switch
         {
             WindFieldAggregator.Sum => vectors.Sum(),
-            WindFieldAggregator.Average => vectors.Sum() / Math.Max(1, vectors.Count),
+            WindFieldAggregator.Average => vectors.Sum() / vectors.Count,
             WindFieldAggregator.MaxMagnitude => vectors.SelectMin(v => -v.sqrMagnitude),
             _ => throw Aggregator.InvalidEnum()
-        } * windAccum * multiplier;
+        } * multiplier;
     }
 
     private void OnEnable()
@@ -84,10 +81,6 @@ internal class WindField : MonoBehaviour
         foreach (var windZone in gameObject.GetComponentsInChildren<WindFieldZone>())
             foreach (var (rect, cb) in windZone.GetCallbacks())
                 windZoneCallbacks.Add(rect, new WFZCallbackRecord(windZone.Priority, cb));
-
-        var routine = Coroutines.Sequence(Routine());
-        routine.Update(Prewarm);
-        this.StartLibCoroutine(routine);
     }
 
     private void OnDisable()
@@ -95,25 +88,6 @@ internal class WindField : MonoBehaviour
         windFields.Remove(this);
         idGen.Release(Id);
         Id = -1;
-    }
-
-    private IEnumerator<CoroutineElement> Routine()
-    {
-        while (true)
-        {
-            yield return Coroutines.SleepSeconds(DownTime);
-            yield return Coroutines.SleepSecondsUpdatePercent(TransitionTime, p =>
-            {
-                windAccum = (1 + Mathf.Sin((p - 0.5f) * Mathf.PI)) / 2;
-                return false;
-            });
-            yield return Coroutines.SleepSeconds(UpTime);
-            yield return Coroutines.SleepSecondsUpdatePercent(TransitionTime, p =>
-            {
-                windAccum = (1 + Mathf.Sin((0.5f - p) * Mathf.PI)) / 2;
-                return false;
-            });
-        }
     }
 
     private Vector2 heroWindEffect;
