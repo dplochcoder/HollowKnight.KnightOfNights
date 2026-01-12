@@ -12,7 +12,7 @@ See [SHO](https://www.smallhomothetyorganization.org/rando/plandoguide) for how 
 
 ## Rando Integration
 
-Knight of Nights introduces a new item named which is integral to the plando experience. If desired, you can add this item to your randos.
+Knight of Nights introduces a new item which is integral to the plando experience. If desired, you can add this item to your randos.
 
 There is no general logic integration for this item and I have no plans to add it later; it is too grand a task. Thus even when added to rando, using it is never logically required.
 
@@ -44,4 +44,5 @@ This mod was primarily developed by me, dplochcoder ("Purenail"), but features c
 
   Background music is first [Horizon](https://celestestrawberryjam.bandcamp.com/track/horizon-2), then [Frostbounce](https://celestestrawberryjam.bandcamp.com/track/frostbounce). Both are available for free as part of the [Celeste Strawberry Jam Colab](https://celeste.ink/wiki/Strawberry_Jam_Collab), but feel free to support the creators on Bandcamp or elsewhere as well.
 </details>
+
 
