@@ -40932,6 +40932,34 @@
           "Name": "ScatternestInteropModule"
         },
         {
+          "$type": "SpicyRando.IC.ElderHuModule, SpicyRando",
+          "Name": "ElderHuModule"
+        },
+        {
+          "$type": "SpicyRando.IC.GalienModule, SpicyRando",
+          "Name": "GalienModule"
+        },
+        {
+          "$type": "SpicyRando.IC.GorbModule, SpicyRando",
+          "Name": "GorbModule"
+        },
+        {
+          "$type": "SpicyRando.IC.MarkothModule, SpicyRando",
+          "Name": "MarkothModule"
+        },
+        {
+          "$type": "SpicyRando.IC.MarmuModule, SpicyRando",
+          "Name": "MarmuModule"
+        },
+        {
+          "$type": "SpicyRando.IC.NoEyesModule, SpicyRando",
+          "Name": "NoEyesModule"
+        },
+        {
+          "$type": "SpicyRando.IC.XeroModule, SpicyRando",
+          "Name": "XeroModule"
+        },
+        {
           "$type": "KnightOfNights.IC.PlandoModule, KnightOfNights",
           "Name": "PlandoModule"
         }
@@ -73585,57 +73613,57 @@
       },
       {
         "id": 378,
-        "location": "Pale_Ore-Crystal_Peak",
-        "item": "Mantis_Claw",
-        "costs": [],
-        "vanilla": false
-      },
-      {
-        "id": 379,
-        "location": "Whispering_Root-Crystal_Peak",
-        "item": "Awoken_Dream_Nail",
-        "costs": [],
-        "vanilla": false
-      },
-      {
-        "id": 380,
-        "location": "Soul_Totem-Hallownest_Crown",
-        "item": "Crystal_Heart",
-        "costs": [],
-        "vanilla": false
-      },
-      {
-        "id": 381,
         "location": "Wanderer's_Journal-Greenpath_Stag",
         "item": "Hunter's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 382,
+        "id": 379,
         "location": "Hallownest_Seal-Fog_Canyon_East",
         "item": "Journal_Entry-Charged_Lumafly",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 383,
+        "id": 380,
         "location": "Rancid_Egg-Crystal_Peak_Tall_Room",
         "item": "Wanderer's_Journal",
         "costs": [],
         "vanilla": false
       },
       {
-        "id": 384,
+        "id": 381,
+        "location": "King_Fragment",
+        "item": "Resting_Grounds_Stag",
+        "costs": [],
+        "vanilla": false
+      },
+      {
+        "id": 382,
         "location": "Boss_Essence-No_Eyes",
+        "item": "MoreDoors-Crown_Key",
+        "costs": [],
+        "vanilla": false
+      },
+      {
+        "id": 383,
+        "location": "Soul_Totem-Hallownest_Crown",
+        "item": "Lifeblood_Cocoon_Large",
+        "costs": [],
+        "vanilla": false
+      },
+      {
+        "id": 384,
+        "location": "Pale_Ore-Crystal_Peak",
         "item": "Void_Heart",
         "costs": [],
         "vanilla": false
       },
       {
         "id": 385,
-        "location": "King_Fragment",
-        "item": "Resting_Grounds_Stag",
+        "location": "Whispering_Root-Crystal_Peak",
+        "item": "Mantis_Claw",
         "costs": [],
         "vanilla": false
       },
@@ -81862,10 +81890,7 @@
   },
   "ICDLTolerances": {},
   "SearchResultsListModel": {
-    "Bookmarks": [
-      343,
-      381
-    ],
+    "Bookmarks": [],
     "Hidden": []
   },
   "RouteListModel": {
