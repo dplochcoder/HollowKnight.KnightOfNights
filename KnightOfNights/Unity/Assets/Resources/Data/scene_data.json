@@ -45,6 +45,14 @@
       "MaxY": 0.0
     }
   ],
+  "Summit_Final": [
+    {
+      "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
+      "RespawnMarkerName": "Bench-RespawnMarker",
+      "AreaName": "Summit",
+      "MenuName": "Peak"
+    }
+  ],
   "Summit_Intermission": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.ForbidCharmWarp, KnightOfNights",
