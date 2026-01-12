@@ -1,14 +1,12 @@
+Benchwarp
 DebugMod
 ItemChanger
+MenuChanger
 PurenailCore
 Randomizer 4
 RandomizerCore
 RandomizerCore.Json
-SFCore
-
-Satchel
-MenuChanger
-RandoSettingsManager
 RandoPlus
-Benchwarp
-BenchRando
+RandoSettingsManager
+Satchel
+SFCore
