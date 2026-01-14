@@ -1,6 +1,7 @@
 ﻿using ItemChanger;
 using ItemChanger.Extensions;
 using ItemChanger.FsmStateActions;
+using KnightOfNights.Scripts.InternalLib;
 using Modding;
 using SFCore;
 using System.Collections.Generic;
@@ -41,7 +42,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
 
     protected override void InitializeInternal()
     {
-        PlandoModule.OnEveryFrame += UpdateRevekSong;
+        OnEveryFrame.Event += UpdateRevekSong;
         Events.AddFsmEdit(dreamNailId, HookRevekSong);
         Events.AddLanguageEdit(new(NAME_KEY), FillName);
         Events.AddLanguageEdit(new(DESC_KEY), FillDesc);
@@ -51,7 +52,7 @@ internal class RevekSongModule : AbstractModule<RevekSongModule>
 
     protected override void UnloadInternal()
     {
-        PlandoModule.OnEveryFrame -= UpdateRevekSong;
+        OnEveryFrame.Event -= UpdateRevekSong;
         Events.RemoveFsmEdit(dreamNailId, HookRevekSong);
         Events.RemoveLanguageEdit(new(NAME_KEY), FillName);
         Events.RemoveLanguageEdit(new(DESC_KEY), FillDesc);
