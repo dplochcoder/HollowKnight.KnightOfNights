@@ -23,7 +23,7 @@ internal abstract class ColliderWindFieldZone : WindFieldZone
     {
         foreach (var collider in GetComponentsInChildren<Collider2D>())
         {
-            var containmentFunc = collider.QuantizedContainmentTest(4f);
+            var containmentFunc = collider.QuantizedContainmentTest(0.25f);
             bool Callback(Vector2 pos, out Vector2 windSpeed)
             {
                 windSpeed = Vector2.zero;

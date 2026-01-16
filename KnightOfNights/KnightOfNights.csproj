@@ -353,7 +353,4 @@
     <Folder Include="Resources\Data\" />
     <Folder Include="Resources\Sprites\" />
   </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="NetTopologySuite" Version="2.6.0" />
-  </ItemGroup>
 </Project>
