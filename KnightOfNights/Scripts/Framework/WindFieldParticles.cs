@@ -1,5 +1,6 @@
 ﻿using KnightOfNights.Scripts.InternalLib;
 using KnightOfNights.Scripts.SharedLib;
+using System.Linq;
 using UnityEngine;
 
 namespace KnightOfNights.Scripts.Framework;
@@ -26,6 +27,7 @@ internal class WindFieldParticles : MonoBehaviour
     private void LateUpdate()
     {
         if (particleWindData == null) return;
+        if (WindField.ActiveWindFields().Count() == 0) return;
 
         using var session = particleWindData.NewSession(p => new(p.position));
         for (int i = 0; i < session.Count; i++)
