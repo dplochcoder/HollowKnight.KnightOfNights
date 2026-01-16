@@ -139,8 +139,8 @@ public static class Build
         var modFolder = Path.Combine(managed, "Mods/KnightOfNights");
         if (!Directory.Exists(modFolder)) Directory.CreateDirectory(modFolder);
 
-        List<string> files = ["KnightOfNights.dll", "KnightOfNights.pdb", "NetTopologySuite.dll"];
-        foreach (var file in files) CopyFile(Path.Combine(root, $"KnightOfNights/bin/{(RELEASE_MODE ? "Release" : "Debug")}/net472/{file}"), Path.Combine(managed, $"Mods/KnightOfNights/{file}"));
+        List<string> files = ["KnightOfNights.dll", "KnightOfNights.pdb"];
+        foreach (var file in files) CopyFile(Path.Combine(root, $"KnightOfNights/bin/{(RELEASE_MODE ? "Release" : "Debug")}/net472/{file}"), Path.Combine(managed, $"Mods/Knight of Nights/{file}"));
     }
 
     private static void CopyFile(string src, string dst)
