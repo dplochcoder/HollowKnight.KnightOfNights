@@ -50,7 +50,7 @@
       "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
       "RespawnMarkerName": "Bench-RespawnMarker",
       "AreaName": "Summit",
-      "MenuName": "Peak"
+      "MenuName": "The Summit"
     }
   ],
   "Summit_Intermission": [
