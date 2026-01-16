@@ -9,14 +9,6 @@
       "MaxY": 0.0
     }
   ],
-  "Summit_Boss": [
-    {
-      "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",
-      "RespawnMarkerName": "Bench-RespawnMarker",
-      "AreaName": "Summit",
-      "MenuName": "Peak"
-    }
-  ],
   "Summit_Checkpoint": [
     {
       "$type": "KnightOfNights.Scripts.SharedLib.Data.CustomBenchData, KnightOfNights",

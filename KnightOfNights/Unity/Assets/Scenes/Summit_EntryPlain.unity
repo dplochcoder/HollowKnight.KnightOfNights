@@ -27301,10 +27301,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Aggregator: 0
-  Prewarm: 2
-  DownTime: 1
-  TransitionTime: 1
-  UpTime: 1e+20
   HeroWindAccel: 10
   ParticleWindAccel: 10
   ParticleTargetMultiplier: 1.5

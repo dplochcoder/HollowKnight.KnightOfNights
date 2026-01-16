@@ -232,7 +232,7 @@ public class MainMenuExtensions
         int scenesUnfixed = 0;
         int scenesErrored = 0;
         var sceneNames = new HashSet<string>();
-        var pack = SceneDataPack.Load();
+        var pack = new SceneDataPack();
         foreach (var path in ForEachScene())
         {
             var scene = SceneManager.GetActiveScene();
