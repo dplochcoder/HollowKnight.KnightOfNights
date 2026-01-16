@@ -42,6 +42,7 @@ internal class RevekSongSummon
         revekActive = true;
 
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
+        revek.name = "Revek Song Summon";
         revek.AddComponent<RevekAddons>().HealOnNailParry = true;
 
         revek.transform.position = new(-100, -100);

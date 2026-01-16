@@ -32,6 +32,7 @@ internal class SlashAttack(SlashAttackSpec spec, PlayMakerFSM fsm)
     public static SlashAttack Spawn(FallenGuardianController controller, SlashAttackSpec spec)
     {
         var revek = Object.Instantiate(KnightOfNightsPreloader.Instance.Revek!);
+        revek.name = "Revek Slash Attack";
         revek.transform.position = new(-100, -100);
 
         SlashAttack attack = new(spec, revek.LocateMyFSM("Control"));
