@@ -7,7 +7,6 @@ using SFCore;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class ShadelessModule : AbstractModule<ShadelessModule>
 {
     private static readonly FsmID deathAnimId = new("Hero Death", "Hero Death Anim");

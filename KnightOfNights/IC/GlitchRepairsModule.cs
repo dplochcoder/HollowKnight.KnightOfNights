@@ -8,7 +8,6 @@ using UnityEngine;
 namespace KnightOfNights.IC;
 
 // Disables WCS (Wall-cling storage) glitch; easy to activate with wind, buggy.
-[PlandoSubmodule]
 internal class GlitchRepairsModule : AbstractModule<GlitchRepairsModule>
 {
     private static readonly List<FsmID> spellIds = [new("Fireball(Clone)", "Fireball Control"), new("Scr Heads 2", "FSM")];

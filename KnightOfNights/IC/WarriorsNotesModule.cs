@@ -5,7 +5,6 @@ using System.Linq;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class WarriorsNotesModule : AbstractModule<WarriorsNotesModule>
 {
     private const string NAME_KEY = "INV_WARRIORS_NOTES_NAME";

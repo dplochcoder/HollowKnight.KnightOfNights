@@ -1,19 +1,27 @@
 ﻿using ItemChanger;
 using KnightOfNights.Scripts.SharedLib;
-using System;
 using System.Linq;
 
 namespace KnightOfNights.IC;
-
-internal class PlandoSubmodule : Attribute { }
 
 internal class PlandoModule : AbstractModule<PlandoModule>
 {
     protected override PlandoModule Self() => this;
 
+    private void Add<T>() where T : AbstractModule<T>, new() => ItemChangerMod.Modules.GetOrAdd<T>();
+
     protected override void InitializeInternal()
     {
-        // Add any other submodules.
-        typeof(PlandoModule).Assembly.GetTypes().Where(t => t.IsDefined(typeof(PlandoSubmodule), false)).ForEach(t => ItemChangerMod.Modules.GetOrAdd(t));
+        Add<AppearFixModule>();
+        Add<ArchivesHazardModule>();
+        Add<BenchesModule>();
+        Add<DreamGateControllerModule>();
+        Add<FallenGuardianModule>();
+        Add<GlitchRepairsModule>();
+        Add<MushroomRollersModule>();
+        Add<RevekSongModule>();
+        Add<SceneDataModule>();
+        Add<ShadelessModule>();
+        Add<WarriorsNotesModule>();
     }
 }

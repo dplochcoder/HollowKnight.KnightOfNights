@@ -5,7 +5,6 @@ using UnityEngine.SceneManagement;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class ArchivesHazardModule : AbstractModule<ArchivesHazardModule>
 {
     protected override ArchivesHazardModule Self() => this;

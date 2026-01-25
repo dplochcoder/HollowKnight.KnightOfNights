@@ -1,4 +1,5 @@
 ﻿using ItemChanger;
+using KnightOfNights.Build;
 using KnightOfNights.Scripts.FallenGuardian;
 using KnightOfNights.Scripts.SharedLib;
 using Modding;
@@ -22,7 +23,6 @@ internal class CrownTransition : ITransition
     public string GateName => "bot1";
 }
 
-[PlandoSubmodule]
 internal class FallenGuardianModule : AbstractModule<FallenGuardianModule>
 {
     private const string PREFIX = "KnightOfNights.Unity.Assets.AssetBundles.";

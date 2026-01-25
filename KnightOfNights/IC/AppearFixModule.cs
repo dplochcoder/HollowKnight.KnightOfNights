@@ -4,7 +4,6 @@ using ItemChanger.FsmStateActions;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class AppearFixModule : AbstractModule<AppearFixModule>
 {
     private static readonly FsmID appearID = new("Appear");

@@ -14,7 +14,6 @@ internal enum FluteNote
     Right
 }
 
-[PlandoSubmodule]
 internal class RevekSongModule : AbstractModule<RevekSongModule>
 {
     private const string NAME_KEY = "INV_REVEK_SONG_NAME";

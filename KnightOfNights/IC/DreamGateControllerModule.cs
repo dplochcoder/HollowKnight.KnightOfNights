@@ -8,7 +8,6 @@ using UnityEngine;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class DreamGateControllerModule : AbstractModule<DreamGateControllerModule>
 {
     private static readonly FsmID dreamnailId = new("Dream Nail");

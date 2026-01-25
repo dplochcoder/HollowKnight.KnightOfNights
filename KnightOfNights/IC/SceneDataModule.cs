@@ -4,7 +4,6 @@ using System.Linq;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class SceneDataModule : AbstractDataModule<SceneDataModule, SortedDictionary<string, List<object>>>
 {
     public IEnumerable<T> GetForScene<T>(string sceneName) => Data.TryGetValue(sceneName, out var values) ? values.OfType<T>() : [];

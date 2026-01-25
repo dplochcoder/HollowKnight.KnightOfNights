@@ -7,7 +7,6 @@ using UnityEngine;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class BenchesModule : AbstractModule<BenchesModule>
 {
     public Dictionary<string, HashSet<string>> VisitedCustomBenches = [];

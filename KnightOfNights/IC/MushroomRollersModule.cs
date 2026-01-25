@@ -8,7 +8,6 @@ using UnityEngine.SceneManagement;
 
 namespace KnightOfNights.IC;
 
-[PlandoSubmodule]
 internal class MushroomRollersModule : AbstractModule<MushroomRollersModule>
 {
     protected override MushroomRollersModule Self() => this;
