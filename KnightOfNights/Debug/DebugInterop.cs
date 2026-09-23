@@ -62,6 +62,6 @@ internal static class DebugInterop
         }
 
         mod.CompletedBossIntro = !mod.CompletedBossIntro;
-        Console.AddLine(mod.CompletedBossIntro ? "Boss intro marked incomplete." : "Boss intro marked complete.");
+        Console.AddLine(mod.CompletedBossIntro ? "Boss intro marked complete." : "Boss intro marked incomplete.");
     }
 }
