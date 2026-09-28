@@ -10,8 +10,6 @@
     <Copyright>Copyright © dplochcoder 2025</Copyright>
     <Authors>dplochcoder</Authors>
     <NoWarn>7035</NoWarn>
-    <AssemblyVersion>2.0.10.0</AssemblyVersion>
-    <FileVersion>2.0.10.0</FileVersion>
     <Deterministic>false</Deterministic>
     <OutputPath>bin\$(Configuration)\</OutputPath>
     <LangVersion>latest</LangVersion>
@@ -19,6 +17,7 @@
     <HollowKnightRefs>..\API</HollowKnightRefs>
     <ExportDir>bin\Publish</ExportDir>
   </PropertyGroup>
+  <Import Project="../Version.props" />
   <Import Project="../LocalOverrides.targets" Condition="Exists('../LocalOverrides.targets')" />
   <ItemGroup>
     <Compile Remove="Unity\**" />
